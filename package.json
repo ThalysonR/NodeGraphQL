@@ -8,7 +8,8 @@
     "build": "tsc",
     "test": "jest -o",
     "tslint": "tslint -c tslint.json -p tsconfig.json",
-    "prod": "npm run build && node dist/app.js"
+    "prod": "npm run build && node dist/app.js",
+    "testCoverage": "jest --coverage --coverageDirectory=output/coverage/jest"
   },
   "jest": {
     "transform": {
@@ -22,6 +23,10 @@
       "jsx",
       "json",
       "node"
+    ],
+    "coverageReporters": [
+      "text",
+      "cobertura"
     ]
   },
   "repository": {
