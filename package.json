@@ -6,7 +6,7 @@
   "scripts": {
     "dev": "nodemon --watch 'src/' --exec 'npm run tslint && npm run test && ts-node src/app.ts' -e ts",
     "build": "tsc",
-    "test": "jest",
+    "test": "jest -o",
     "tslint": "tslint -c tslint.json -p tsconfig.json",
     "prod": "npm run build && node dist/app.js"
   },
