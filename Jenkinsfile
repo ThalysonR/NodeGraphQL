@@ -1,19 +1,4 @@
 #!/bin/groovy
-def getRepo(String branch) {
-  def finalBranch = branch.replace('origin/', '')
-  def repo
-  switch(finalBranch) {
-    case 'master':
-          repo = 'frontend-releases'
-          break
-      case 'homologacao':
-          repo = 'frontend-homologacao'
-          break
-      default:
-          repo = 'frontend-desenv'
-  }
-  return repo
-}
 
 pipeline {
     agent any
@@ -22,7 +7,7 @@ pipeline {
         PKG = readJSON file: 'package.json'
         PKG_NAME = "${PKG['name']}"
         PKG_VERSION = "${PKG['version']}"
-        REPOSITORY = getRepo("${GIT_BRANCH}")
+        REPOSITORY = 'node-desenv'
     }
 
   tools {
