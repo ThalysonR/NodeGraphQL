@@ -38,7 +38,7 @@ pipeline {
             steps {
                 script {
                     sh 'npm run build'
-                    sh 'tar -czvf dist.tar.gz dist/'
+                    sh 'tar -czvf dist.tar.gz dist/*'
                 }
             }
         }
