@@ -25,15 +25,6 @@ export const onError = (server: Server) => {
     }
 };
 
-export const onListening = (server: Server) => {
-    return (): void => {
-        const addr = server.address();
-        // @ts-ignore
-        const bind = (typeof addr === 'string') ? `pipe ${addr}` : `http://${addr.address}:${addr.port}`;
-        console.log(`Listening at ${bind}...`);
-    }
-};
-
 export const handleError = (error: Error) => {
     const errorMessage: string = `${error.name}: ${error.message}`;
     const env: any = process.env.NODE_ENV;

@@ -12,7 +12,9 @@ export const tokenResolvers = {
                 where: {login},
                 attributes: ['id_usuario', 'senha']
             }).then((usuario) => {
-                const errorMessage: string = 'Unauthorized, wrong email or password!';
+                db.sequelize.close();
+
+                const errorMessage: string = 'As informações de login ou senha estão incorretas!';
                 if (!usuario || !usuario.isPassword(usuario.get('senha'), senha)) { throw new Error(errorMessage); }
 
                 const payload = {sub: usuario.get('id_usuario')};

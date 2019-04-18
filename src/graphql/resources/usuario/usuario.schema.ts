@@ -1,5 +1,4 @@
 const usuarioTypes = `
-
     # User definition type
     type Usuario {
         id_usuario: ID!
@@ -12,6 +11,7 @@ const usuarioTypes = `
 
 const usuarioQueries = `
     getUsuarios: [Usuario!]
+    getPerfilUsuario: Usuario
 `;
 
 const usuarioMutations = `

@@ -1,18 +1,15 @@
-import express = require('express');
 import {resolvers, typeDefs} from './graphql/schema';
 import db from './models';
 import * as jwt from "jsonwebtoken";
 import {JWT_SECRET} from "./utils/utils";
 
-const {ApolloServer} = require('apollo-server-express');
+const {ApolloServer} = require('apollo-server');
 
 class App {
 
-    public app: express.Application;
     public apollo: any;
 
     constructor() {
-        this.app = express();
         this.init();
     }
 
@@ -22,8 +19,9 @@ class App {
 
     private middleware(): void {
         this.apollo = new ApolloServer({
-            typeDefs, resolvers, context: ({req} : any) => {
-
+            typeDefs,
+            resolvers,
+            context: ({req}: any) => {
                 const authorization: string = req.headers.authorization as string;
                 const token: string = authorization ? authorization.split(' ')[1] : '';
 
@@ -34,7 +32,7 @@ class App {
                     };
                 }
 
-                jwt.verify(token, JWT_SECRET, (err: any, decoded: any): any => {
+                return jwt.verify(token, JWT_SECRET, (err: any, decoded: any) => {
                     if (err) {
                         return {
                             authorization,
@@ -42,31 +40,17 @@ class App {
                         };
                     }
 
-                    db.Usuario.findById(decoded.sub, {
-                        attributes: ['id_usuario', 'login']
-                    }).then((user: any): any => {
-                        if (user) {
-                            return {
-                                authorization,
-                                db,
-                                authUser: {
-                                    id: user.get('id_usuario'),
-                                    login: user.get('login')
-                                }
-                            };
+                    return {
+                        authorization,
+                        db,
+                        authUser: {
+                            id: decoded.sub
                         }
-                    });
+                    };
                 });
-                return {
-                    authorization,
-                    db
-                };
             }
         });
-
-        const app = this.app;
-        this.apollo.applyMiddleware({app});
     }
 }
 
-export default new App().app;
+export default new App().apollo;

@@ -7,10 +7,10 @@
     "dialect": "postgres"
   },
   "test": {
-    "username": "root",
-    "password": "1234",
-    "database": "",
-    "host": "127.0.0.1",
+    "username": "pemaza",
+    "password": "pemaza",
+    "database": "pgfil",
+    "host": "192.168.151.84",
     "dialect": "postgres",
     "logging": false
   },
