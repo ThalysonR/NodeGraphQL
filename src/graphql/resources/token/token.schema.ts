@@ -1,11 +1,12 @@
 const tokenTypes = `
-    type Token {
+    type Credencial {
         token: String!
+        usuario: Usuario
     }
 `;
 
 const tokenMutations = `
-    createToken(login: String!, senha: String!): Token
+    createToken(login: String!, senha: String!): Credencial
 `;
 
 export {

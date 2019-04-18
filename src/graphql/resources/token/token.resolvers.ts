@@ -10,9 +10,15 @@ export const tokenResolvers = {
 
             return db.Usuario.findOne({
                 where: {login},
-                attributes: ['id_usuario', 'senha']
+                attributes: ['id_usuario', 'senha'],
+                include: [{
+                    model: db.Perfil,
+                    through: {
+                        attributes: ['nome_perfil']
+                    },
+                    as: 'perfis'
+                }]
             }).then((usuario) => {
-                db.sequelize.close();
 
                 const errorMessage: string = 'As informações de login ou senha estão incorretas!';
                 if (!usuario || !usuario.isPassword(usuario.get('senha'), senha)) { throw new Error(errorMessage); }
@@ -20,9 +26,14 @@ export const tokenResolvers = {
                 const payload = {sub: usuario.get('id_usuario')};
 
                 return {
-                    token: jwt.sign(payload, JWT_SECRET)
+                    token: jwt.sign(payload, JWT_SECRET),
+                    usuario: {
+                        perfil: {
+                            nome_perfil: usuario.perfis[0] != null ? usuario.perfis[0].nome_perfil : ''
+                        }
+                    }
                 }
-            });
+            })
         }
     }
 };

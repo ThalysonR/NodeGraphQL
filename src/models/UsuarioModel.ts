@@ -1,6 +1,7 @@
 import * as Sequelize from 'sequelize';
 import { BaseModelInterface } from '../interfaces/BaseModelInterface';
 import { ModelsInterface } from '../interfaces/ModelsInterface';
+import {PerfilInstance} from "./PerfilModel";
 // import { compareSync } from 'bcryptjs';
 // import {encode} from "punycode";
 
@@ -13,6 +14,7 @@ export interface UsuarioAttributes {
 }
 
 export interface UsuarioInstance extends Sequelize.Instance<UsuarioAttributes>, UsuarioAttributes {
+    perfis: PerfilInstance;
     isPassword(encodedPassword: string, password: string): boolean;
 }
 
@@ -55,7 +57,15 @@ export default (sequelize: Sequelize.Sequelize, DataTypes: Sequelize.DataTypes):
             timestamps: false
         });
 
-    Usuario.associate = (models: ModelsInterface): void => {};
+    Usuario.associate = (models: ModelsInterface): void => {
+        Usuario.belongsToMany(models.Perfil,{
+            as: 'perfis',
+            through: 'usuarios_perfil',
+            foreignKey: 'id_usuario',
+            otherKey: 'id_perfil',
+            timestamps: false
+        });
+    };
 
     Usuario.prototype.isPassword = (encodedPassword: string, password: string): boolean => {
         // return compareSync(password, encodedPassword);
