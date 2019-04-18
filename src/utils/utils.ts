@@ -4,7 +4,6 @@ export const normalizePort = (val: number | string): number => {
 
 export const handleError = (error: Error) => {
     const errorMessage: string = `${error.name}: ${error.message}`;
-    const env: any = process.env.NODE_ENV;
     return Promise.reject(new Error(errorMessage));
 };
 
