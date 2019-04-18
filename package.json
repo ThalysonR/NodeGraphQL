@@ -30,7 +30,8 @@
       "lcov"
     ],
     "collectCoverageFrom": [
-      "**/src/**/*.ts"
+      "**/src/**/*.ts",
+      "!**/src/{app,index}.ts"
     ]
   },
   "repository": {

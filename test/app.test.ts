@@ -1,7 +1,7 @@
-import {ApolloServerBase, gql} from 'apollo-server-core';
+import { ApolloServerBase, gql } from 'apollo-server-core';
 import createTestClient from "./createTestClient";
 import database from './../src/models';
-import {resolvers, typeDefs as typeDefsSchema} from "../src/graphql/schema";
+import { resolvers, typeDefs as typeDefsSchema } from "../src/graphql/schema";
 
 describe("Authentication", () => {
     const typeDefs = gql(`
@@ -10,7 +10,7 @@ describe("Authentication", () => {
 
     const myTestServer = new ApolloServerBase({
         typeDefs,
-        context: () => ({db: database}),
+        context: () => ({ db: database }),
         resolvers
     });
 
@@ -23,7 +23,7 @@ describe("Authentication", () => {
             }
         `;
         const client = createTestClient(myTestServer);
-        const clientRes = await client.mutate({query});
+        const clientRes = await client.mutate({ query });
 
         expect(clientRes.data).toHaveProperty("createToken.token");
         expect(clientRes.errors).toBeUndefined();
@@ -39,7 +39,7 @@ describe("Authentication", () => {
             }
         `;
         const client = createTestClient(myTestServer);
-        const clientRes = await client.mutate({query});
+        const clientRes = await client.mutate({ query });
 
         // @ts-ignore
         expect(clientRes.data.createToken).toBeNull();
