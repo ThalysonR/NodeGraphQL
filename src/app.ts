@@ -1,9 +1,9 @@
-import {resolvers, typeDefs} from './graphql/schema';
+import { resolvers, typeDefs } from './graphql/schema';
 import db from './models';
 import * as jwt from "jsonwebtoken";
-import {JWT_SECRET} from "./utils/utils";
+import { JWT_SECRET } from "./utils/utils";
 
-const {ApolloServer} = require('apollo-server');
+const { ApolloServer } = require('apollo-server');
 
 class App {
 
@@ -21,7 +21,7 @@ class App {
         this.apollo = new ApolloServer({
             typeDefs,
             resolvers,
-            context: ({req}: any) => {
+            context: ({ req }: any) => {
                 const authorization: string = req.headers.authorization as string;
                 const token: string = authorization ? authorization.split(' ')[1] : '';
 

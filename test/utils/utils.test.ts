@@ -18,7 +18,7 @@ describe('handleError', () => {
         error.name = 'Erro1';
 
         await expect(utils.handleError(error)).rejects.toEqual(new Error(`${error.name}: ${error.message}`));
-    })
+    });
 });
 
 describe('throwError', () => {
