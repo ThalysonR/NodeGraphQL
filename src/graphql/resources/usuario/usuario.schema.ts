@@ -6,12 +6,18 @@ const usuarioTypes = `
         login: String!
         email: String!
         senha: String!
+        
+        perfil: Perfil!
     }
+    
+    type Perfil{
+        nome_perfil: String!
+    }    
 `;
 
 const usuarioQueries = `
     getUsuarios: [Usuario!]
-    getPerfilUsuario: Usuario
+    getPerfilUsuario: Perfil
 `;
 
 const usuarioMutations = `
