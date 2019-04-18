@@ -37,6 +37,17 @@ pipeline {
                 }
             }
         }
+        stage('Sonarqube') {
+            environment {
+                scannerHome = tool 'SonarQubeScanner'
+            }
+
+            steps {
+                withSonarQubeEnv('SonarQubeScanner') {
+                    sh "${scannerHome}/bin/sonar-scanner"
+                }
+            }
+        }
         stage('Build') {
             steps {
                 script {
