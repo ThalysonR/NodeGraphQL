@@ -26,7 +26,8 @@
     ],
     "coverageReporters": [
       "text",
-      "cobertura"
+      "cobertura",
+      "lcov"
     ],
     "collectCoverageFrom": [
       "**/src/**/*.ts"
