@@ -5,7 +5,8 @@ import * as jwt from 'jsonwebtoken';
 describe('Test verify token resolver', () => {
     it('Should throw when no authorization token provided', () => {
         const resolver = verifyTokenResolver((_, __, ___, ____) => { });
-        expect(resolver).toThrow();
+        // @ts-ignore
+        expect(() => resolver(null, [], {}, null)).toThrow();
     });
 
     it('Should throw when jwt is invalid', () => {
