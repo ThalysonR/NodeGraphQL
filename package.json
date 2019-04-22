@@ -26,10 +26,13 @@
     ],
     "coverageReporters": [
       "text",
-      "cobertura"
+      "cobertura",
+      "lcov"
     ],
     "collectCoverageFrom": [
-      "**/src/**/*.ts"
+      "**/src/**/*.ts",
+      "!**/src/{app,index}.ts",
+      "!**/src/models/index.ts"
     ]
   },
   "repository": {
@@ -67,6 +70,7 @@
     "jest": "^24.7.1",
     "nodemon": "^1.18.11",
     "prettier": "1.17.0",
+    "sequelize-mock": "^0.10.2",
     "ts-jest": "^24.0.2",
     "ts-node": "^8.1.0",
     "tslint": "^5.16.0",

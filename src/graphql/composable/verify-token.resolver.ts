@@ -1,11 +1,10 @@
 import * as jwt from 'jsonwebtoken';
-import {GraphQLFieldResolver} from "graphql";
+import { GraphQLFieldResolver } from "graphql";
 
-import {ComposableResolver} from "./composable.resolver";
-import {ResolverContext} from "../../interfaces/ResolverContextInterface";
-import {JWT_SECRET} from '../../utils/utils';
+import { ResolverContext } from "../../interfaces/ResolverContextInterface";
+import { JWT_SECRET } from '../../utils/utils';
 
-export const verifyTokenResolver: ComposableResolver<any, ResolverContext> =
+export const verifyTokenResolver =
     (resolver: GraphQLFieldResolver<any, ResolverContext>): GraphQLFieldResolver<any, ResolverContext> => {
 
         return (parent, args, context: ResolverContext, info) => {

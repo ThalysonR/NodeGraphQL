@@ -1,10 +1,10 @@
-import {resolvers, typeDefs} from './graphql/schema';
+import { resolvers, typeDefs } from './graphql/schema';
 import db from './models';
 import * as jwt from "jsonwebtoken";
 import {JWT_SECRET} from "./utils/utils";
 import { CatalogoAPI } from './graphql/datasource'
 
-const {ApolloServer} = require('apollo-server');
+const { ApolloServer } = require('apollo-server');
 
 class App {
 
