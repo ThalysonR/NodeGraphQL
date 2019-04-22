@@ -4,7 +4,7 @@ const produtoTypes = `
         idEmpresa: Int!
         idFornecedor: Int!
         nomeFornecedor: String!
-        codigoProduto: Int!
+        codigoProduto: String!
         codigoOriginalProduto: Int
         nomeProduto: String!
         frequencia: Int!
@@ -27,22 +27,15 @@ const produtoTypes = `
         tipoNome: String
         geracao: String
         motor: String
-        anos: [Anos]
+        anos: [String]
         nomeMotor: String
         modeloTransmissao: String
         eixoMotriz: String
     }
-
-    type Anos{
-        anos: Int
-    }
-`;
+`
 
 const produtoMutations = `
     getproduto(text: String!): [Produto!]!
-`;
+`
 
-export {
-    produtoTypes,
-    produtoMutations
-}
+export { produtoTypes, produtoMutations }
