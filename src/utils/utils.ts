@@ -1,3 +1,5 @@
+import { ComposableResolver, GraphQLB2BResolver } from "../types/GraphqlTypes";
+
 export const normalizePort = (val: number | string): number => {
     return (typeof val === 'string') ? parseInt(val) : val;
 };
@@ -16,5 +18,11 @@ export const throwError = (condition: boolean, message: string): void => {
  * @param funcs Array de funções que recebem tipo 'T' como argumento e retornam tipo 'T'
  */
 export const compose = <T>(...funcs: Array<(arg: T) => T>): ((arg: T) => T) => (value: T) => funcs.reduceRight((prev, fn) => fn(prev), value);
+
+/**
+ * Função para facilitar a tipagem do compose para resolver do graphql
+ * @param funcs Array de funções do tipo ComposableResolver
+ */
+export const gqlCompose = (...funcs: ComposableResolver[]) => compose<GraphQLB2BResolver>(...funcs);
 
 export const JWT_SECRET: string = 'pmz';
