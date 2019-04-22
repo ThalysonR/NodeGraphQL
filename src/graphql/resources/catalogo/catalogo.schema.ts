@@ -21,16 +21,16 @@ const produtoTypes = `
     type Models{
         nomeCarro: String!
         modelTipos: [ModelTipos]
-        nomeMotor: String
-        modeloTransmissao: String
-        eixoMotriz: String
     }
 
     type ModelTipos{
-        tipoNome: Int
+        tipoNome: String
         geracao: String
-        motor: Int
+        motor: String
         anos: [Anos]
+        nomeMotor: String
+        modeloTransmissao: String
+        eixoMotriz: String
     }
 
     type Anos{

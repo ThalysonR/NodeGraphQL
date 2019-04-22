@@ -5,17 +5,15 @@ class CatalogoAPI extends RESTDataSource {
 
     constructor() {
         super();
+        // @ts-ignore
+        this.initialize({ context: {} })
         this.baseURL = 'http://192.168.151.89:8000/ws-catalogo/api/';
     }
 
-    public async searchProduto(text){
+    public async searchProduto(text) {
         const nomeProduto = (text.args.text);
-        // const page = 0;
-        // const count = 10;
-        // const order = 'DESC';
-        // const sort = 'frequencia';
 
-        console.log(this.baseURL + 'produto?page=0&count=10&order=DESC&sort=frequencia&nomeProduto=' + nomeProduto );
+        console.log(this.baseURL + 'produto?page=0&count=10&order=DESC&sort=frequencia&nomeProduto=' + nomeProduto);
         console.log('Produto: ' + nomeProduto);
         const response = await this.get('produto?page=0&count=10&order=DESC&sort=frequencia&nomeProduto=' + nomeProduto);
 
@@ -42,17 +40,18 @@ class CatalogoAPI extends RESTDataSource {
             carId: produto.carId,
             articleNo: produto.articleNo,
             manuId: produto.manuId,
-            models:{
-                nomeCarro: produto.models_nomeCarro,
-                modelTipos:{
-                    tipoNome: produto.models.modelTipos_tipoNome,
-                    geracao: produto.models.modelTipos_geracao,
-                    motor: produto.models.modelTipos_motor,
-                    anos: {
-                        anos: produto.models.modelTipos.anos
-                    },
-                },
-            },
+            models: produto.models
+            // models: {
+            //     nomeCarro: produto.models_nomeCarro,
+            //     modelTipos: {
+            //         tipoNome: produto.models.modelTipos_tipoNome,
+            //         geracao: produto.models.modelTipos_geracao,
+            //         motor: produto.models.modelTipos_motor,
+            //         anos: {
+            //             anos: produto.models.modelTipos_anos
+            //         },
+            //     },
+            // },
         };
     }
 }
