@@ -31,7 +31,8 @@
     ],
     "collectCoverageFrom": [
       "**/src/**/*.ts",
-      "!**/src/{app,index}.ts"
+      "!**/src/{app,index}.ts",
+      "!**/src/models/index.ts"
     ]
   },
   "repository": {
