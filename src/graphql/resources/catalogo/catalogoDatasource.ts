@@ -2,6 +2,10 @@ import { RESTDataSource } from 'apollo-datasource-rest'
 // import { preprocessDirectives } from 'tslint/lib/verify/parse'
 
 class CatalogoAPI extends RESTDataSource {
+  constructor() {
+    super()
+    this.baseURL = 'http://192.168.151.89:8000/ws-catalogo/api/'
+  }
 
     constructor() {
         super();
@@ -17,11 +21,12 @@ class CatalogoAPI extends RESTDataSource {
         console.log('Produto: ' + nomeProduto);
         const response = await this.get('produto?page=0&count=10&order=DESC&sort=frequencia&nomeProduto=' + nomeProduto);
 
-        console.log('Response: ' + response);
+    console.log('Response: ' + response)
 
-        return Array.isArray(response.produtos.content)
-            ? response.produtos.content.map(produto => this.produtoReducer(produto)) : [];
-    }
+    return Array.isArray(response.produtos.content)
+      ? response.produtos.content.map(produto => this.produtoReducer(produto))
+      : []
+  }
 
     public produtoReducer(produto) {
         return {
@@ -54,6 +59,7 @@ class CatalogoAPI extends RESTDataSource {
             // },
         };
     }
+  }
 }
 
-export default CatalogoAPI;
+export default CatalogoAPI
