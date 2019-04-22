@@ -23,11 +23,9 @@ class App {
         this.apollo = new ApolloServer({
             typeDefs,
             resolvers,
-            dataSources: (): DataSources => {
-                return {
-                    catalogoApi: CatalogoAPI,
-                };
-            },
+            dataSources: (): DataSources => ({
+                catalogoApi: new CatalogoAPI(),
+            }),
             context: ({ req }: any) => {
                 const authorization: string = req.headers.authorization as string;
                 const token: string = authorization ? authorization.split(' ')[1] : '';
