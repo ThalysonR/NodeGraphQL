@@ -1,10 +1,10 @@
-import { CatalogoAPI } from '../../datasource'
+import { ResolverContext } from '../../../interfaces/ResolverContextInterface';
 
 export const catalogoResolvers = {
-    Mutation: {
-        getproduto: async (parent, args, {dataSources}) => {
-            const produto = Object.assign({args});
-            return new CatalogoAPI().searchProduto(produto);
+    Query: {
+        getproduto: async (parent, args, { dataSources }: ResolverContext) => {
+            const produto = Object.assign({ args });
+            return dataSources.catalogoApi.searchProduto(produto);
         }
     }
 };

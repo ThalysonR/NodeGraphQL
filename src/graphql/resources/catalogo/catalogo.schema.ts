@@ -34,8 +34,11 @@ const produtoTypes = `
     }
 `
 
-const produtoMutations = `
+const produtoQueries = `
     getproduto(text: String!): [Produto!]!
-`
+`;
 
-export { produtoTypes, produtoMutations }
+const produtoMutations = `
+`;
+
+export { produtoTypes, produtoQueries, produtoMutations }
