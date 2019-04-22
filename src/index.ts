@@ -18,9 +18,9 @@ db.sequelize.sync()
 const onError = (server: Server) => {
     return (error: NodeJS.ErrnoException): void => {
         // @ts-ignore
-        const port: number | string = server.address().port;
+        const runningPort: number | string = server.address().port;
         if (error.syscall !== 'listen') { throw error; }
-        const bind = (typeof port === 'string') ? `pipe ${port}` : `port ${port}`;
+        const bind = (typeof port === 'string') ? `pipe ${runningPort}` : `port ${runningPort}`;
         switch (error.code) {
             case 'EACCES':
                 console.error(`${bind} requires elevated privileges`);
