@@ -1,5 +1,4 @@
-import { RESTDataSource } from 'apollo-datasource-rest'
-// import { preprocessDirectives } from 'tslint/lib/verify/parse'
+import { RESTDataSource } from 'apollo-datasource-rest';
 
 class CatalogoAPI extends RESTDataSource {
   constructor() {
