@@ -2,6 +2,7 @@ import { GraphQLFieldResolver } from "graphql";
 
 import { ResolverContext } from "../../interfaces/ResolverContextInterface";
 import { verifyTokenResolver } from "./verify-token.resolver";
+import { UNAUTHORIZED } from '../../environment';
 
 export const authResolver =
     (resolver: GraphQLFieldResolver<any, ResolverContext>): GraphQLFieldResolver<any, ResolverContext> => {
@@ -10,7 +11,7 @@ export const authResolver =
             if (context.authUser || context.authorization) {
                 return resolver(parent, args, context, info);
             }
-            throw new Error('Unauthorized! Token not provided!');
+            throw new Error(UNAUTHORIZED);
         };
 
     };

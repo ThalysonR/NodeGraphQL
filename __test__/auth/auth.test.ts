@@ -1,7 +1,7 @@
 import { ApolloServerBase, gql } from 'apollo-server-core';
-import createTestClient from "./createTestClient";
-import database from './../src/models';
-import { resolvers, typeDefs as typeDefsSchema } from "../src/graphql/schema";
+import {createTestClient} from "./../";
+import database from './../../src/models';
+import { resolvers, typeDefs as typeDefsSchema } from "../../src/graphql/schema";
 
 describe("Authentication", () => {
     const typeDefs = gql(`

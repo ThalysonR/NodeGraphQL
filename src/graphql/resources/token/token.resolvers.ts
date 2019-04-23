@@ -1,13 +1,11 @@
-import * as jwt from 'jsonwebtoken';
-
-import { DbConnection } from "../../../interfaces/DbConnectionInterface";
-import { JWT_SECRET } from '../../../utils/utils';
+import {DbConnection} from "../../../interfaces/DbConnectionInterface";
+import {ERROR} from '../../../environment';
+import {createTokens} from "../../../authentication/handleTokens";
 
 export const tokenResolvers = {
 
     Mutation: {
-        createToken: (parent: any, { login, senha } : any, {db}: {db: DbConnection}) => {
-
+        createToken: (parent: any, {login, senha}: any, {db}: { db: DbConnection }) => {
             return db.Usuario.findOne({
                 where: {login},
                 attributes: ['id_usuario', 'senha'],
@@ -18,15 +16,18 @@ export const tokenResolvers = {
                     },
                     as: 'perfis'
                 }]
-            }).then((usuario) => {
+            }).then(async (usuario) => {
+                if (!usuario || !usuario.isPassword(usuario.get('senha'), senha)) {
+                    throw new Error(ERROR.USER.WRONG_CREDENTIALS);
+                }
 
-                const errorMessage: string = 'As informações de login ou senha estão incorretas!';
-                if (!usuario || !usuario.isPassword(usuario.get('senha'), senha)) { throw new Error(errorMessage); }
+                const usuarioId = usuario.get('id_usuario');
 
-                const payload = {sub: usuario.get('id_usuario')};
+                const [newToken, newRefreshToken] = await createTokens({id: usuarioId});
 
                 return {
-                    token: jwt.sign(payload, JWT_SECRET),
+                    token: newToken,
+                    refreshToken: newRefreshToken,
                     usuario: {
                         perfil: {
                             nome_perfil: usuario.perfis[0] != null ? usuario.perfis[0].nome_perfil : ''

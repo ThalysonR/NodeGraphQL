@@ -1,11 +1,11 @@
 import { usuarioResolvers } from '../../../src/graphql/resources/usuario/usuario.resolvers';
 import SequelizeMock from 'sequelize-mock';
-import { JWT_SECRET } from '../../../src/utils/utils';
+import { JWT_TOKEN_SECRET } from '../../../src/utils/utils';
 import * as jwt from 'jsonwebtoken';
 
 describe('Test usuario resolvers', () => {
     const dbMock = new SequelizeMock();
-    const secret = `Bearer: ${jwt.sign('123456', JWT_SECRET)}`;
+    const secret = `Bearer: ${jwt.sign('123456', JWT_TOKEN_SECRET)}`;
     const UserMock = dbMock.define('Usuario', {
         id_usuario: 1,
         nome_usuario: 'thalyson',
