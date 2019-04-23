@@ -4,6 +4,7 @@ import { gql } from 'apollo-server';
 
 describe('Preco resolvers test', () => {
     const { server, precoApi } = constructTestServer();
+    const { query } = createTestClient(server);
 
     it('Should return preco', async () => {
         // @ts-ignore
@@ -17,7 +18,6 @@ describe('Preco resolvers test', () => {
             }
         ]);
 
-        const { query } = createTestClient(server);
 
         const res = await query({
             query: gql`
@@ -43,5 +43,26 @@ describe('Preco resolvers test', () => {
         ` });
         // @ts-ignore
         expect(res.data.getPrecos[0]).toHaveProperty('unidade')
+    });
+
+    it('Should return condicao de pagamento', async () => {
+        // @ts-ignore
+        precoApi.get = jest.fn(() => ({
+            retorno: "XXXXXXX"
+        }));
+
+        const res = await query({
+            query: gql`
+            {
+                getCondPgmt(buscaCondicao: {
+                    operacao: 2,
+                    tipoPreco: "N",
+                    formaPagamento: "I",
+                    prazoMedio: 0
+                })
+            }
+        `})
+        // @ts-ignore
+        expect(res.data.getCondPgmt).not.toBeNull();
     });
 });

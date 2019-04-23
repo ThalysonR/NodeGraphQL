@@ -57,6 +57,7 @@ pipeline {
                 script {
                     sh 'npm run build'
                     sh 'cp package.json dist/'
+                    sh 'cp -r src/config dist/'
                     sh 'tar -czvf dist.tar.gz dist/*'
                 }
             }

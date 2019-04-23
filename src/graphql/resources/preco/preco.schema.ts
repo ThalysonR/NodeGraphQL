@@ -31,10 +31,18 @@ const precoTypes = `
     tipoPreco: String!,
     unidadeVenda: String!
     }
+
+    input BuscaCondicao {
+        operacao: Int!,
+        tipoPreco: String!,
+        formaPagamento: String!,
+        prazoMedio: Int!
+    }
 `;
 
 const precoQueries = `
-    getPrecos(buscaProdutos: [BuscaProduto]): [ProdutoPreco]!
+    getPrecos(buscaProdutos: [BuscaProduto!]!): [ProdutoPreco]!
+    getCondPgmt(buscaCondicao: BuscaCondicao!): String!
 `;
 
 const precoMutations = `
