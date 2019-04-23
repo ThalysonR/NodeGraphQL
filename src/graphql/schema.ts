@@ -1,19 +1,22 @@
-import {merge} from 'lodash';
+import { merge } from 'lodash';
 
-import {Query} from './query';
-import {Mutation} from './mutation';
+import { Query } from './query';
+import { Mutation } from './mutation';
 
-import {usuarioTypes} from './resources/usuario/usuario.schema';
-import {usuarioResolvers} from './resources/usuario/usuario.resolvers';
-import {tokenResolvers} from "./resources/token/token.resolvers";
-import {tokenTypes} from "./resources/token/token.schema";
-import { catalogoResolvers } from './resources/catalogo/catalogo.resolvers'
-import { produtoTypes } from './resources/catalogo/catalogo.schema'
+import { usuarioTypes } from './resources/usuario/usuario.schema';
+import { usuarioResolvers } from './resources/usuario/usuario.resolvers';
+import { tokenResolvers } from "./resources/token/token.resolvers";
+import { precoResolvers } from './resources/preco/preco.resolvers';
+import { tokenTypes } from "./resources/token/token.schema";
+import { catalogoResolvers } from './resources/catalogo/catalogo.resolvers';
+import { produtoTypes } from './resources/catalogo/catalogo.schema';
+import { precoTypes } from './resources/preco/preco.schema';
 
 const resolvers = merge(
     usuarioResolvers,
     tokenResolvers,
-    catalogoResolvers
+    catalogoResolvers,
+    precoResolvers
 );
 
 const typeDefs = [
@@ -21,7 +24,8 @@ const typeDefs = [
     Mutation,
     usuarioTypes,
     tokenTypes,
-    produtoTypes
+    produtoTypes,
+    precoTypes
 ];
 
-export {resolvers, typeDefs};
+export { resolvers, typeDefs };

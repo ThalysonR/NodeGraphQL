@@ -56,6 +56,7 @@ pipeline {
             steps {
                 script {
                     sh 'npm run build'
+                    sh 'cp package.json dist/'
                     sh 'tar -czvf dist.tar.gz dist/*'
                 }
             }

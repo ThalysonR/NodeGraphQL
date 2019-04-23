@@ -2,7 +2,7 @@ import { resolvers, typeDefs } from './graphql/schema';
 import db from './models';
 import * as jwt from "jsonwebtoken";
 import { JWT_SECRET } from "./utils/utils";
-import { CatalogoAPI } from './graphql/datasource'
+import * as dataSources from './graphql/datasource'
 import { DataSources } from './interfaces/DataSourcesInterface';
 
 const { ApolloServer } = require('apollo-server');
@@ -24,7 +24,8 @@ class App {
             typeDefs,
             resolvers,
             dataSources: (): DataSources => ({
-                catalogoApi: new CatalogoAPI(),
+                catalogoApi: new dataSources.CatalogoAPI(),
+                precoApi: new dataSources.PrecoAPI()
             }),
             context: ({ req }: any) => {
                 const authorization: string = req.headers.authorization as string;
