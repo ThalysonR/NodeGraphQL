@@ -7,5 +7,5 @@ export interface ResolverContext {
     db?: DbConnection;
     authorization?: string;
     authUser?: AuthUser;
-    dataSources?: DataSources;
+    dataSources: DataSources;
 }
