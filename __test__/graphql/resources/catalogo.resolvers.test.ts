@@ -126,4 +126,48 @@ describe('Test Catalog', () => {
     // @ts-ignore
     expect(res.data.getproduto[0]).toHaveProperty('nomeProduto')
   })
+
+  it('catalog test and client endpoint', async () => {
+    const { server, clienteApi } = constructTestServer()
+
+    // @ts-ignore
+    clienteApi.get = jest.fn(() => ({
+      clientes: {
+        content: [
+          {
+            id: '02570039241',
+            nome: 'KATIA',
+            municipio: 'MANAUS',
+            cnpj: null,
+            cpf: '02570039241',
+            estado: 'AMAZONAS',
+            bairro: 'ARMANDO MENDES',
+            endereco: 'RUA RIO CUNIUA 12',
+            cep: '69089180',
+          },
+        ],
+      },
+    }))
+
+    const { query } = createTestClient(server)
+
+    const res = await query({
+      query: gql`
+        {
+          getcliente(text: "Katia") {
+            id
+            nome
+            municipio
+            estado
+            bairro
+            endereco
+            cep
+          }
+        }
+      `,
+    })
+
+    // @ts-ignore
+    expect(res.data.getcliente[0]).toHaveProperty('nome')
+  })
 })
