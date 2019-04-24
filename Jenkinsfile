@@ -55,9 +55,10 @@ pipeline {
         stage('Build') {
             steps {
                 script {
+                    sh 'rm -rf dist'
                     sh 'npm run build'
                     sh 'cp package.json dist/'
-                    sh 'cp -r src/config dist/'
+                    sh 'cp -r src/config dist/src'
                     sh 'tar -czvf dist.tar.gz dist/*'
                 }
             }

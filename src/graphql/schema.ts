@@ -1,3 +1,4 @@
+import { aplicacoesResolvers } from './resources/catalogo/aplicacoes.resolvers'
 import { clienteResolvers } from './resources/catalogo/cliente.resolvers'
 import { merge } from 'lodash'
 
@@ -8,18 +9,23 @@ import { usuarioTypes } from './resources/usuario/usuario.schema'
 import { usuarioResolvers } from './resources/usuario/usuario.resolvers'
 import { tokenResolvers } from './resources/auth/token.resolvers'
 import { precoResolvers } from './resources/preco/preco.resolvers'
+import { geralResolvers } from './resources/geral/geral.resolvers';
 import { tokenTypes } from './resources/auth/token.schema'
 import { catalogoResolvers } from './resources/catalogo/catalogo.resolvers'
 import { produtoTypes } from './resources/catalogo/catalogo.schema'
 import { precoTypes } from './resources/preco/preco.schema'
 import { clienteType } from './resources/catalogo/cliente.schema'
+import { aplicacoesTypes } from './resources/catalogo/aplicacoes.schema'
+import { geralTypes } from './resources/geral/geral.schema';
 
 const resolvers = merge(
   usuarioResolvers,
   tokenResolvers,
   catalogoResolvers,
   precoResolvers,
-  clienteResolvers
+  clienteResolvers,
+  geralResolvers,
+  aplicacoesResolvers,
 )
 
 const typeDefs = [
@@ -30,6 +36,8 @@ const typeDefs = [
   produtoTypes,
   precoTypes,
   clienteType,
+  aplicacoesTypes,
+  geralTypes,
 ]
 
 export { resolvers, typeDefs }
