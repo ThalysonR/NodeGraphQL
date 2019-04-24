@@ -1,3 +1,4 @@
+import { aplicacoesResolvers } from './resources/catalogo/aplicacoes.resolvers'
 import { clienteResolvers } from './resources/catalogo/cliente.resolvers'
 import { merge } from 'lodash'
 
@@ -15,6 +16,7 @@ import { catalogoResolvers } from './resources/catalogo/catalogo.resolvers'
 import { produtoTypes } from './resources/catalogo/catalogo.schema'
 import { precoTypes } from './resources/preco/preco.schema'
 import { clienteType } from './resources/catalogo/cliente.schema'
+import { aplicacoesTypes } from './resources/catalogo/aplicacoes.schema'
 import { geralTypes } from './resources/geral/geral.schema';
 
 const resolvers = merge(
@@ -23,7 +25,8 @@ const resolvers = merge(
   catalogoResolvers,
   precoResolvers,
   clienteResolvers,
-  geralResolvers
+  geralResolvers,
+  aplicacoesResolvers,
 )
 
 const typeDefs = [
@@ -34,6 +37,7 @@ const typeDefs = [
   produtoTypes,
   precoTypes,
   clienteType,
+  aplicacoesTypes,
   geralTypes,
 ]
 

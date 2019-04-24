@@ -7,7 +7,8 @@ export const constructTestServer = () => {
     catalogoApi: new dataSources.CatalogoAPI(),
     precoApi: new dataSources.PrecoAPI(),
     clienteApi: new dataSources.ClienteAPI(),
-    geralApi: new dataSources.GeralAPI()
+    geralApi: new dataSources.GeralAPI(),
+    aplicacoesApi: new dataSources.AplicacoesAPI(),
   }
 
   const server = new ApolloServer({
