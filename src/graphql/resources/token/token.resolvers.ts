@@ -1,11 +1,11 @@
-import {DbConnection} from "../../../interfaces/DbConnectionInterface";
 import {ERROR} from '../../../environment';
 import {createTokens} from "../../../authentication/handleTokens";
+import {ResolverContext} from "../../../interfaces/ResolverContextInterface";
 
 export const tokenResolvers = {
 
     Mutation: {
-        createToken: (parent: any, {login, senha}: any, {db}: { db: DbConnection }) => {
+        createToken: (parent: any, {login, senha}: any, {db}: ResolverContext) => {
             return db.Usuario.findOne({
                 where: {login},
                 attributes: ['id_usuario', 'senha'],

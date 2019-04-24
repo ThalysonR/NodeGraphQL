@@ -4,7 +4,7 @@ import { DataSources } from './DataSourcesInterface';
 
 export interface ResolverContext {
 
-    db?: DbConnection;
+    db: DbConnection;
     authorization?: string;
     refreshToken?: string;
     newToken?: string;

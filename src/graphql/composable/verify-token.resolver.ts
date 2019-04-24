@@ -3,7 +3,7 @@ import {GraphQLFieldResolver} from "graphql";
 
 import {ResolverContext} from "../../interfaces/ResolverContextInterface";
 import {JWT_TOKEN_SECRET} from '../../utils/utils';
-import {UNAUTHORIZED, FORBIDDEN} from '../../environment';
+import {UNAUTHORIZED} from '../../environment';
 
 export const verifyTokenResolver =
     (resolver: GraphQLFieldResolver<any, ResolverContext>): GraphQLFieldResolver<any, ResolverContext> => {
@@ -17,7 +17,7 @@ export const verifyTokenResolver =
                         return resolver(parent, args, context, info);
                     }
 
-                    throw new Error(FORBIDDEN);
+                    throw new Error(UNAUTHORIZED);
                 });
             }
             throw new Error(UNAUTHORIZED);

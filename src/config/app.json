@@ -19,9 +19,9 @@
   "CONSTANTS": {
     "HTTP_ONLY": "HTTP_ONLY",
     "LOCAL_STORAGE": "LOCAL_STORAGE",
-    "FORBIDDEN": "Forbidden",
-    "UNAUTHORIZED": "Unauthorized!",
-    "NOT_ALLOWED": "Not allowed"
+    "FORBIDDEN": "Acesso proibido!",
+    "UNAUTHORIZED": "Acesso não autorizado!",
+    "NOT_ALLOWED": "Acesso não permitido!"
   },
   "STRATEGIES": {
     "HTTP_ONLY": true,
