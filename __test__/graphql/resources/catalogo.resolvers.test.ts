@@ -170,4 +170,44 @@ describe('Test Catalog', () => {
     // @ts-ignore
     expect(res.data.getcliente[0]).toHaveProperty('nome')
   })
+
+  it('catalog application endpoint test', async () => {
+    const { server, aplicacoesApi } = constructTestServer()
+
+    // @ts-ignore
+    aplicacoesApi.get = jest.fn(() => [
+      {
+        aplicacao: 'GOL',
+        inicio: '1/1900',
+        fim: '12/1999',
+        original: ' ',
+      },
+      {
+        aplicacao: 'GOL 1.8',
+        inicio: '1/1900',
+        fim: '12/1999',
+        original: ' ',
+      },
+    ])
+
+    const { query } = createTestClient(server)
+
+    const res = await query({
+      query: gql`
+        {
+          getAplicacoes(
+            buscaAplicacoes: { empresa: 1, fornecedor: 144, produto: "B47097" }
+          ) {
+            aplicacao
+            inicio
+            fim
+            original
+          }
+        }
+      `,
+    })
+
+    // @ts-ignore
+    expect(res.data.getAplicacoes[0]).toHaveProperty('aplicacao')
+  })
 })
