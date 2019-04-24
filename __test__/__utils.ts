@@ -3,17 +3,20 @@ import { ApolloServer, gql } from 'apollo-server'
 import * as dataSources from '../src/graphql/datasource'
 
 export const constructTestServer = () => {
-  const catalogoApi = new dataSources.CatalogoAPI()
-  const precoApi = new dataSources.PrecoAPI()
-  const clienteApi = new dataSources.ClienteAPI()
+  const apis = {
+    catalogoApi: new dataSources.CatalogoAPI(),
+    precoApi: new dataSources.PrecoAPI(),
+    clienteApi: new dataSources.ClienteAPI(),
+    geralApi: new dataSources.GeralAPI()
+  }
 
   const server = new ApolloServer({
     typeDefs: gql`
       ${typeDefs}
     `,
     resolvers,
-    dataSources: () => ({ catalogoApi, precoApi, clienteApi }),
+    dataSources: () => apis,
   })
 
-  return { server, catalogoApi, precoApi, clienteApi }
+  return { server, ...apis }
 }

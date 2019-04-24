@@ -26,6 +26,7 @@ class App {
         catalogoApi: new dataSources.CatalogoAPI(),
         precoApi: new dataSources.PrecoAPI(),
         clienteApi: new dataSources.ClienteAPI(),
+        geralApi: new dataSources.GeralAPI()
       }),
       context: ({ req }: any) => {
         const authorization: string = req.headers.authorization as string
