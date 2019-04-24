@@ -1,6 +1,7 @@
 import jwt from 'jsonwebtoken';
 import {JWT_TOKEN_REFRESH_SECRET, JWT_TOKEN_SECRET} from "../utils/utils";
 
+/* istanbul ignore next */
 const verifyToken = async (token, secret, addSecurityChecks = {}) => new Promise(resolve =>
     jwt.verify(token, secret, {...addSecurityChecks}, (err: any, decoded: any) => {
         if (err) {
@@ -16,6 +17,7 @@ const verifyToken = async (token, secret, addSecurityChecks = {}) => new Promise
         }
     }));
 
+/* istanbul ignore next */
 const signToken = async (user, secret, expiration = 60 * 60, additionalClaims = {}) => new Promise(resolve =>
     jwt.sign(
         {sub: user},
@@ -33,10 +35,7 @@ const signToken = async (user, secret, expiration = 60 * 60, additionalClaims = 
     ));
 
 export const createTokens = async (data, additionalClaims = {}) => {
-    const {
-        id = {},
-        refreshTokenSecret = id + JWT_TOKEN_REFRESH_SECRET,
-    } = data;
+    const {id, refreshTokenSecret = id + JWT_TOKEN_REFRESH_SECRET} = data;
 
     const createToken = await signToken(id, JWT_TOKEN_SECRET, 60, additionalClaims);
     const createRefreshToken = await signToken(id, refreshTokenSecret, 60 * 60, additionalClaims);
@@ -70,5 +69,6 @@ export const refreshTokens = async (refreshToken) => {
             id
         };
     }
+    /* istanbul ignore next */
     return {};
 };

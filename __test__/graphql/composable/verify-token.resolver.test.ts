@@ -22,13 +22,4 @@ describe('Test verify token resolver', () => {
         // @ts-ignore
         expect(() => resolver(null, [], { authorization: secret }, null)).not.toThrow();
     });
-
-    // it('Should not throw when case jwt expired but why new jwt token is valid', () => {
-    //     const secret = `Bearer: ${jwt.sign('123456789', '123456789')}`;
-    //     const newToken = `Bearer: ${jwt.sign('123456789', JWT_TOKEN_SECRET)}`;
-    //     const resolver = verifyTokenResolver((_, __, ___, ____) => { });
-    //
-    //     // @ts-ignore
-    //     expect(() => resolver(null, [], { authorization: secret, newToken }, null)).not.toThrow();
-    // });
 });

@@ -67,8 +67,7 @@ class App {
                             res.set(JWT.HEADER.REFRESH_TOKEN.NAME, newRefreshToken);
 
                             return {
-                                authorization,
-                                newToken,
+                                authorization: `Bearer ${newToken}`,
                                 refreshToken,
                                 db,
                                 authUser: {

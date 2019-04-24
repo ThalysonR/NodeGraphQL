@@ -1,6 +1,7 @@
 // @ts-ignore
 import APP from './../config/app.json';
 
+/* istanbul ignore next */
 const {
   NAMESPACE = '_',
   CONSTANTS: {

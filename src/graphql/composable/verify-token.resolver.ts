@@ -16,15 +16,7 @@ export const verifyTokenResolver =
                     if (!err) {
                         return resolver(parent, args, context, info);
                     }
-                    if (context.newToken) {
-                        try {
-                            jwt.verify(context.newToken, JWT_TOKEN_SECRET);
-                            return resolver(parent, args, context, info);
-                        } catch (e) {
-                            console.log(e);
-                            throw new Error(FORBIDDEN);
-                        }
-                    }
+
                     throw new Error(FORBIDDEN);
                 });
             }
