@@ -19,4 +19,10 @@ describe('Test usuario resolvers', () => {
         const usuarios = await usuarioResolvers.Query.getUsuarios(null, [], { db: { Usuario: UserMock }, authorization: secret }, null);
         expect(usuarios[0]['nome_usuario']).toBe('thalyson');
     });
+
+    it('Should return check auth', async () => {
+        // @ts-ignore
+        const usuario = await usuarioResolvers.Query.checkAuth(null, [], { authUser: { id: 1 }, authorization: secret }, null);
+        expect(usuario).toBe(true);
+    });
 });
