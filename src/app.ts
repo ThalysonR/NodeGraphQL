@@ -77,11 +77,6 @@ class App {
                                 }
                             };
                         }
-                        return {
-                            authorization,
-                            refreshToken,
-                            db
-                        };
                     }
                 }
                 return {
