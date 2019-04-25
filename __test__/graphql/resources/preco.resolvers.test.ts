@@ -2,10 +2,10 @@ import { createTestClient } from 'apollo-server-testing';
 import { constructTestServer } from '../../__utils';
 import { gql } from 'apollo-server';
 import * as jwt from 'jsonwebtoken';
-import { JWT_SECRET } from './../../../src/utils/utils';
+import { JWT_TOKEN_SECRET } from '../../../src/utils/utils';
 
 describe('Preco resolvers test', () => {
-  const secret = `Bearer: ${jwt.sign('123456', JWT_SECRET)}`;
+  const secret = `Bearer: ${jwt.sign('123456', JWT_TOKEN_SECRET)}`;
 
   it('Should return preco', async () => {
     const { server, precoApi } = constructTestServer({ authUser: 1, authorization: secret });

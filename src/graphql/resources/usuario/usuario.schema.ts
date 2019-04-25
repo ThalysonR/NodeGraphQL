@@ -18,6 +18,7 @@ const usuarioTypes = `
 const usuarioQueries = `
     getUsuarios: [Usuario!]
     getPerfilUsuario: Perfil
+    checkAuth: Boolean
 `;
 
 const usuarioMutations = `

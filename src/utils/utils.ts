@@ -25,4 +25,5 @@ export const compose = <T>(...funcs: Array<(arg: T) => T>): ((arg: T) => T) => (
  */
 export const gqlCompose = (...funcs: ComposableResolver[]) => compose<GraphQLB2BResolver>(...funcs);
 
-export const JWT_SECRET: string = 'pmz';
+export const JWT_TOKEN_SECRET: string = 'pmz_t';
+export const JWT_TOKEN_REFRESH_SECRET: string = 'pmz_tr';

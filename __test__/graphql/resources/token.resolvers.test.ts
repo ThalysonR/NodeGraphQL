@@ -1,4 +1,4 @@
-import { tokenResolvers } from '../../../src/graphql/resources/token/token.resolvers';
+import { tokenResolvers } from '../../../src/graphql/resources/auth/token.resolvers';
 import SequelizeMock from 'sequelize-mock';
 
 describe('Test token resolvers', () => {
