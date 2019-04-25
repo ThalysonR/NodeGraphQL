@@ -1,7 +1,8 @@
-import CatalogoAPI from './resources/catalogo/catalogoDatasource';
+import CatalogoAPI from './resources/catalogo/catalogo.datasources';
 import PrecoAPI from './resources/preco/preco.datasources';
-import ClienteAPI from './resources/catalogo/clienteDataSouce';
+import ClienteAPI from './resources/catalogo/cliente.datasources';
 import GeralAPI from './resources/geral/geral.datasources';
-import AplicacoesAPI from './resources/catalogo/aplicacoesDatasource';
+import AplicacoesAPI from './resources/catalogo/aplicacoes.datasources';
+import SimilarApi from './resources/catalogo/similar.datasources';
 
-export { CatalogoAPI, PrecoAPI, ClienteAPI, GeralAPI, AplicacoesAPI }
+export { CatalogoAPI, PrecoAPI, ClienteAPI, GeralAPI, AplicacoesAPI, SimilarApi };

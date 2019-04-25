@@ -35,6 +35,7 @@ class App {
                 clienteApi: new dataSources.ClienteAPI(),
                 geralApi: new dataSources.GeralAPI(),
                 aplicacoesApi: new dataSources.AplicacoesAPI(),
+                similarApi: new dataSources.SimilarApi()
             }),
             formatError: err => formatError(err),
             context: (async ({req, res}: any) => {
@@ -87,4 +88,4 @@ class App {
     }
 }
 
-export default new App().apollo
+export default new App().apollo;

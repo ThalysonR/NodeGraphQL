@@ -1,6 +1,6 @@
-import { typeDefs, resolvers } from '../src/graphql/schema'
-import { ApolloServer, gql } from 'apollo-server'
-import * as dataSources from '../src/graphql/datasource'
+import { typeDefs, resolvers } from '../src/graphql/schema';
+import { ApolloServer, gql } from 'apollo-server';
+import * as dataSources from '../src/graphql/datasource';
 
 export const constructTestServer = ({ authUser = {}, authorization = {}} : any = {}) => {
   const apis = {
@@ -9,7 +9,8 @@ export const constructTestServer = ({ authUser = {}, authorization = {}} : any =
     clienteApi: new dataSources.ClienteAPI(),
     geralApi: new dataSources.GeralAPI(),
     aplicacoesApi: new dataSources.AplicacoesAPI(),
-  }
+    similarApi: new dataSources.SimilarApi(),
+  };
 
   const server = new ApolloServer({
     typeDefs: gql`
@@ -20,5 +21,5 @@ export const constructTestServer = ({ authUser = {}, authorization = {}} : any =
     context: () => ({authUser, authorization}),
   })
 
-  return { server, ...apis }
-}
+  return { server, ...apis };
+};

@@ -1,12 +1,16 @@
-import { createTestClient } from 'apollo-server-testing'
-import { constructTestServer } from '../../__utils'
-import { gql } from 'apollo-server'
+import { createTestClient } from 'apollo-server-testing';
+import { constructTestServer } from '../../__utils';
+import { gql } from 'apollo-server';
+import * as jwt from 'jsonwebtoken';
+import { JWT_TOKEN_SECRET } from '../../../src/utils/utils';
 
 describe('Preco resolvers test', () => {
-  const { server, precoApi } = constructTestServer()
-  const { query } = createTestClient(server)
+  const secret = `Bearer: ${jwt.sign('123456', JWT_TOKEN_SECRET)}`;
 
   it('Should return preco', async () => {
+    const { server, precoApi } = constructTestServer({ authUser: 1, authorization: secret });
+    const { query } = createTestClient(server);
+
     // @ts-ignore
     precoApi.post = jest.fn(() => [
       {
@@ -16,7 +20,7 @@ describe('Preco resolvers test', () => {
           },
         ],
       },
-    ])
+    ]);
 
     const res = await query({
       query: gql`
@@ -42,32 +46,30 @@ describe('Preco resolvers test', () => {
           }
         }
       `,
-    })
+    });
     // @ts-ignore
-    expect(res.data.getPrecos[0]).toHaveProperty('unidade')
-  })
+    expect(res.data.getPrecos[0]).toHaveProperty('unidade');
+  });
 
   it('Should return condicao de pagamento', async () => {
+    const { server, precoApi } = constructTestServer({ authUser: 1, authorization: secret });
+    const { query } = createTestClient(server);
+
     // @ts-ignore
     precoApi.get = jest.fn(() => ({
       retorno: 'XXXXXXX',
-    }))
+    }));
 
     const res = await query({
       query: gql`
         {
           getCondPgmt(
-            buscaCondicao: {
-              operacao: 2
-              tipoPreco: "N"
-              formaPagamento: "I"
-              prazoMedio: 0
-            }
+            buscaCondicao: { operacao: 2, tipoPreco: "N", formaPagamento: "I", prazoMedio: 0 }
           )
         }
       `,
-    })
+    });
     // @ts-ignore
-    expect(res.data.getCondPgmt).not.toBeNull()
-  })
-})
+    expect(res.data.getCondPgmt).not.toBeNull();
+  });
+});
