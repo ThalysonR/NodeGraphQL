@@ -1,9 +1,13 @@
+import * as jwt from 'jsonwebtoken';
+import { JWT_SECRET } from './../../../src/utils/utils';
 import { createTestClient } from 'apollo-server-testing';
 import { constructTestServer } from '../../__utils';
 import { gql } from 'apollo-server';
 import { CatalogoAPI } from '../../../src/graphql/datasource';
 
 describe('Test Catalog', () => {
+  const secret = `Bearer: ${jwt.sign('123456', JWT_SECRET)}`;
+
   it('product object test', () => {
     const defaultProduto = {
       id: 1,
@@ -45,7 +49,7 @@ describe('Test Catalog', () => {
   });
 
   it('test on request response', async () => {
-    const { server, catalogoApi } = constructTestServer();
+    const { server, catalogoApi } = constructTestServer({ authUser: 1, authorization: secret });
 
     // @ts-ignore
     catalogoApi.get = jest.fn(() => ({
@@ -160,7 +164,7 @@ describe('Test Catalog', () => {
   });
 
   it('catalog test and client endpoint', async () => {
-    const { server, clienteApi } = constructTestServer();
+    const { server, clienteApi } = constructTestServer({ authUser: 1, authorization: secret });
 
     // @ts-ignore
     clienteApi.get = jest.fn(() => ({
@@ -204,7 +208,7 @@ describe('Test Catalog', () => {
   });
 
   it('catalog application endpoint test', async () => {
-    const { server, aplicacoesApi } = constructTestServer();
+    const { server, aplicacoesApi } = constructTestServer({ authUser: 1, authorization: secret });
 
     // @ts-ignore
     aplicacoesApi.get = jest.fn(() => [
@@ -242,7 +246,7 @@ describe('Test Catalog', () => {
   });
 
   it('similar catalog endpoint testing', async () => {
-    const { server, similarApi } = constructTestServer();
+    const { server, similarApi } = constructTestServer({ authUser: 1, authorization: secret });
 
     // @ts-ignore
     similarApi.get = jest.fn(() => [

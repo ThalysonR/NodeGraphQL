@@ -1,20 +1,19 @@
-import { RESTDataSource } from 'apollo-datasource-rest'
-// import { preprocessDirectives } from 'tslint/lib/verify/parse'
+import { RESTDataSource } from 'apollo-datasource-rest';
 
 class ClienteAPI extends RESTDataSource {
   constructor() {
-    super()
+    super();
     // @ts-ignore
-    this.initialize({ context: {} })
-    this.baseURL = 'http://192.168.151.89:8000/ws-catalogo/api/'
+    this.initialize({ context: {} });
+    this.baseURL = 'http://192.168.151.89:8000/ws-catalogo/api/';
   }
 
   public async searchCliente(text) {
-    const params = text.args.text
-    const response = await this.get('cliente' + '?text=' + params)
+    const params = text.args.text;
+    const response = await this.get('cliente' + '?text=' + params);
     return Array.isArray(response.clientes.content)
       ? response.clientes.content.map(cliente => this.clienteReducer(cliente))
-      : []
+      : [];
   }
 
   public clienteReducer(cliente) {
@@ -28,8 +27,8 @@ class ClienteAPI extends RESTDataSource {
       bairro: cliente.bairro,
       endereco: cliente.endereco,
       cep: cliente.cep,
-    }
+    };
   }
 }
 
-export default ClienteAPI
+export default ClienteAPI;

@@ -1,14 +1,13 @@
-import { ResolverContext } from '../../../interfaces/ResolverContextInterface'
+import { ResolverContext } from '../../../interfaces/ResolverContextInterface';
+import { handleError, gqlCompose } from '../../../utils/utils';
+import { authResolvers } from '../../composable/auth.resolver';
 
 export const aplicacoesResolvers = {
   Query: {
-    getAplicacoes: (
-      parent,
-      { buscaAplicacoes },
-      { dataSources }: ResolverContext,
-      info
-    ) => {
-      return dataSources.aplicacoesApi.searchAplicacoes(buscaAplicacoes)
-    },
+    getAplicacoes: gqlCompose(...authResolvers)(
+      async (parent, { buscaAplicacoes }, { dataSources }: ResolverContext, info) => {
+        return dataSources.aplicacoesApi.searchAplicacoes(buscaAplicacoes).catch(handleError);
+      },
+    ),
   },
-}
+};
