@@ -1,23 +1,25 @@
-import { aplicacoesResolvers } from './resources/catalogo/aplicacoes.resolvers'
-import { clienteResolvers } from './resources/catalogo/cliente.resolvers'
-import { merge } from 'lodash'
+import { aplicacoesResolvers } from './resources/catalogo/aplicacoes.resolvers';
+import { clienteResolvers } from './resources/catalogo/cliente.resolvers';
+import { merge } from 'lodash';
 
-import { Query } from './query'
-import { Mutation } from './mutation'
+import { Query } from './query';
+import { Mutation } from './mutation';
 
-import { usuarioTypes } from './resources/usuario/usuario.schema'
-import { usuarioResolvers } from './resources/usuario/usuario.resolvers'
-import { tokenResolvers } from './resources/token/token.resolvers'
-import { precoResolvers } from './resources/preco/preco.resolvers'
+import { usuarioTypes } from './resources/usuario/usuario.schema';
+import { usuarioResolvers } from './resources/usuario/usuario.resolvers';
+import { tokenResolvers } from './resources/token/token.resolvers';
+import { precoResolvers } from './resources/preco/preco.resolvers';
 import { geralResolvers } from './resources/geral/geral.resolvers';
 
-import { tokenTypes } from './resources/token/token.schema'
-import { catalogoResolvers } from './resources/catalogo/catalogo.resolvers'
-import { produtoTypes } from './resources/catalogo/catalogo.schema'
-import { precoTypes } from './resources/preco/preco.schema'
-import { clienteType } from './resources/catalogo/cliente.schema'
-import { aplicacoesTypes } from './resources/catalogo/aplicacoes.schema'
+import { tokenTypes } from './resources/token/token.schema';
+import { catalogoResolvers } from './resources/catalogo/catalogo.resolvers';
+import { produtoTypes } from './resources/catalogo/catalogo.schema';
+import { precoTypes } from './resources/preco/preco.schema';
+import { clienteType } from './resources/catalogo/cliente.schema';
+import { aplicacoesTypes } from './resources/catalogo/aplicacoes.schema';
 import { geralTypes } from './resources/geral/geral.schema';
+import { similarResolvers } from './resources/catalogo/similar.resolvers';
+import { similarTypes } from './resources/catalogo/similar.schema';
 
 const resolvers = merge(
   usuarioResolvers,
@@ -27,7 +29,8 @@ const resolvers = merge(
   clienteResolvers,
   geralResolvers,
   aplicacoesResolvers,
-)
+  similarResolvers,
+);
 
 const typeDefs = [
   Query,
@@ -39,6 +42,7 @@ const typeDefs = [
   clienteType,
   aplicacoesTypes,
   geralTypes,
-]
+  similarTypes,
+];
 
-export { resolvers, typeDefs }
+export { resolvers, typeDefs };

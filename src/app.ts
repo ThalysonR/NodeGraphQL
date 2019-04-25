@@ -1,21 +1,21 @@
-import { resolvers, typeDefs } from './graphql/schema'
-import db from './models'
-import * as jwt from 'jsonwebtoken'
-import { JWT_SECRET } from './utils/utils'
-import * as dataSources from './graphql/datasource'
-import { DataSources } from './interfaces/DataSourcesInterface'
+import { resolvers, typeDefs } from './graphql/schema';
+import db from './models';
+import * as jwt from 'jsonwebtoken';
+import { JWT_SECRET } from './utils/utils';
+import * as dataSources from './graphql/datasource';
+import { DataSources } from './interfaces/DataSourcesInterface';
 
-const { ApolloServer } = require('apollo-server')
+const { ApolloServer } = require('apollo-server');
 
 class App {
-  public apollo: any
+  public apollo: any;
 
   constructor() {
-    this.init()
+    this.init();
   }
 
   private init(): void {
-    this.middleware()
+    this.middleware();
   }
 
   private middleware(): void {
@@ -28,16 +28,17 @@ class App {
         clienteApi: new dataSources.ClienteAPI(),
         geralApi: new dataSources.GeralAPI(),
         aplicacoesApi: new dataSources.AplicacoesAPI(),
+        similarApi: new dataSources.SimilarApi(),
       }),
       context: ({ req }: any) => {
-        const authorization: string = req.headers.authorization as string
-        const token: string = authorization ? authorization.split(' ')[1] : ''
+        const authorization: string = req.headers.authorization as string;
+        const token: string = authorization ? authorization.split(' ')[1] : '';
 
         if (!token) {
           return {
             authorization,
             db,
-          }
+          };
         }
 
         return jwt.verify(token, JWT_SECRET, (err: any, decoded: any) => {
@@ -45,7 +46,7 @@ class App {
             return {
               authorization,
               db,
-            }
+            };
           }
 
           return {
@@ -54,11 +55,11 @@ class App {
             authUser: {
               id: decoded.sub,
             },
-          }
-        })
+          };
+        });
       },
-    })
+    });
   }
 }
 
-export default new App().apollo
+export default new App().apollo;

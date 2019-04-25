@@ -1,25 +1,24 @@
-import { RESTDataSource } from 'apollo-datasource-rest'
+import { RESTDataSource } from 'apollo-datasource-rest';
 // import { preprocessDirectives } from 'tslint/lib/verify/parse'
 
 class CatalogoAPI extends RESTDataSource {
   constructor() {
-    super()
+    super();
     // @ts-ignore
-    this.initialize({ context: {} })
-    this.baseURL = 'http://192.168.151.89:8000/ws-catalogo/api/'
+    this.initialize({ context: {} });
+    this.baseURL = 'http://192.168.151.89:8000/ws-catalogo/api/';
   }
 
   public async searchProduto(text) {
-    const nomeProduto = text.args.text
+    const nomeProduto = text.args.text;
 
     const response = await this.get(
-      'produto?page=0&count=10&order=DESC&sort=frequencia&nomeProduto=' +
-        nomeProduto
-    )
+      'produto?page=0&count=10&order=DESC&sort=frequencia&nomeProduto=' + nomeProduto,
+    );
 
     return Array.isArray(response.produtos.content)
       ? response.produtos.content.map(produto => this.produtoReducer(produto))
-      : []
+      : [];
   }
 
   public produtoReducer(produto) {
@@ -41,8 +40,22 @@ class CatalogoAPI extends RESTDataSource {
       manuId: produto.manuId,
       models: produto.models,
       anos: produto.anos,
-    }
+      modeloCarro: produto.modeloCarro,
+      fabricante: produto.fabricante,
+      eixo: produto.eixo,
+      posicao: produto.posicao,
+      lado: produto.lado,
+      motor: produto.motor,
+      combustivel: produto.combustivel,
+      aplicacao: produto.aplicacao,
+      montadoras: produto.montadoras,
+      prefixo: produto.prefixo,
+      aro: produto.aro,
+      perfil: produto.perfil,
+      viscosidade: produto.viscosidade,
+      amperagem: produto.amperagem,
+    };
   }
 }
 
-export default CatalogoAPI
+export default CatalogoAPI;

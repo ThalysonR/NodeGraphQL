@@ -1,7 +1,7 @@
-import { createTestClient } from 'apollo-server-testing'
-import { constructTestServer } from '../../__utils'
-import { gql } from 'apollo-server'
-import { CatalogoAPI } from '../../../src/graphql/datasource'
+import { createTestClient } from 'apollo-server-testing';
+import { constructTestServer } from '../../__utils';
+import { gql } from 'apollo-server';
+import { CatalogoAPI } from '../../../src/graphql/datasource';
 
 describe('Test Catalog', () => {
   it('product object test', () => {
@@ -37,15 +37,15 @@ describe('Test Catalog', () => {
           ],
         },
       ],
-    }
+    };
 
-    const resp = new CatalogoAPI().produtoReducer(defaultProduto)
+    const resp = new CatalogoAPI().produtoReducer(defaultProduto);
 
-    expect(resp).toEqual(defaultProduto)
-  })
+    expect(resp).toEqual(defaultProduto);
+  });
 
   it('test on request response', async () => {
-    const { server, catalogoApi } = constructTestServer()
+    const { server, catalogoApi } = constructTestServer();
 
     // @ts-ignore
     catalogoApi.get = jest.fn(() => ({
@@ -83,12 +83,28 @@ describe('Test Catalog', () => {
                 ],
               },
             ],
+            modeloCarro: 'PARATI',
+            fabricante: null,
+            anos: null,
+            eixo: ['TRASEIRO'],
+            posicao: [],
+            lado: [],
+            motor: null,
+            combustivel: [],
+            aplicacao: ['GOL', 'GOL GTI', 'PARATI'],
+            montadoras: ['VOLKSWAGEN'],
+            prefixo: null,
+            aro: null,
+            perfil: null,
+            viscosidade: null,
+            amperagem: '150 AMP',
           },
         ],
       },
-    }))
+      tags: ['GOL', 'GOL GTI', 'PARATI'],
+    }));
 
-    const { query } = createTestClient(server)
+    const { query } = createTestClient(server);
 
     const res = await query({
       query: gql`
@@ -118,17 +134,33 @@ describe('Test Catalog', () => {
                 eixoMotriz
               }
             }
+            modeloCarro
+            fabricante
+            anos
+            eixo
+            posicao
+            lado
+            motor
+            combustivel
+            aplicacao
+            montadoras
+            prefixo
+            aro
+            perfil
+            viscosidade
+            amperagem
+            tags
           }
         }
       `,
-    })
+    });
 
     // @ts-ignore
-    expect(res.data.getproduto[0]).toHaveProperty('nomeProduto')
-  })
+    expect(res.data.getproduto[0]).toHaveProperty('nomeProduto');
+  });
 
   it('catalog test and client endpoint', async () => {
-    const { server, clienteApi } = constructTestServer()
+    const { server, clienteApi } = constructTestServer();
 
     // @ts-ignore
     clienteApi.get = jest.fn(() => ({
@@ -147,9 +179,9 @@ describe('Test Catalog', () => {
           },
         ],
       },
-    }))
+    }));
 
-    const { query } = createTestClient(server)
+    const { query } = createTestClient(server);
 
     const res = await query({
       query: gql`
@@ -165,14 +197,14 @@ describe('Test Catalog', () => {
           }
         }
       `,
-    })
+    });
 
     // @ts-ignore
-    expect(res.data.getcliente[0]).toHaveProperty('nome')
-  })
+    expect(res.data.getcliente[0]).toHaveProperty('nome');
+  });
 
   it('catalog application endpoint test', async () => {
-    const { server, aplicacoesApi } = constructTestServer()
+    const { server, aplicacoesApi } = constructTestServer();
 
     // @ts-ignore
     aplicacoesApi.get = jest.fn(() => [
@@ -188,16 +220,14 @@ describe('Test Catalog', () => {
         fim: '12/1999',
         original: ' ',
       },
-    ])
+    ]);
 
-    const { query } = createTestClient(server)
+    const { query } = createTestClient(server);
 
     const res = await query({
       query: gql`
         {
-          getAplicacoes(
-            buscaAplicacoes: { empresa: 1, fornecedor: 144, produto: "B47097" }
-          ) {
+          getAplicacoes(buscaAplicacoes: { empresa: 1, fornecedor: 144, produto: "B47097" }) {
             aplicacao
             inicio
             fim
@@ -205,9 +235,87 @@ describe('Test Catalog', () => {
           }
         }
       `,
-    })
+    });
 
     // @ts-ignore
-    expect(res.data.getAplicacoes[0]).toHaveProperty('aplicacao')
-  })
-})
+    expect(res.data.getAplicacoes[0]).toHaveProperty('aplicacao');
+  });
+
+  it('similar catalog endpoint testing', async () => {
+    const { server, similarApi } = constructTestServer();
+
+    // @ts-ignore
+    similarApi.get = jest.fn(() => [
+      {
+        id: '452754',
+        idEmpresa: '1',
+        idFornecedor: '48',
+        nomeFornecedor: 'AXIOS MONROE',
+        codigoProduto: '334048MM',
+        codigoOriginalProduto: null,
+        nomeProduto: 'AMORTECEDOR TRASEIRO AXIOS MONROE',
+        frequencia: 0,
+        codProduto: '1___48___334048MM',
+        score: null,
+        tags: null,
+        carType: null,
+        carId: null,
+        articleNo: null,
+        manuId: null,
+        models: [
+          {
+            nomeCarro: 'GOL',
+            modelTipos: [
+              {
+                tipoNome: '1000',
+                geracao: 'I',
+                motor: '1.0',
+                anos: ['1992', '1993', '1994', '1995', '1996'],
+                nomeMotor: 'CHT',
+                modeloTransmissao: null,
+                eixoMotriz: null,
+              },
+            ],
+          },
+        ],
+        modeloCarro: 'PARATI',
+        fabricante: null,
+        anos: null,
+        eixo: ['TRASEIRO'],
+        posicao: [],
+        lado: [],
+        motor: null,
+
+        combustivel: [],
+        aplicacao: ['GOL', 'GOL GTI', 'PARATI'],
+        montadoras: ['VOLKSWAGEN'],
+        prefixo: null,
+        aro: null,
+        perfil: null,
+        viscosidade: null,
+        amperagem: null,
+      },
+    ]);
+
+    const { query } = createTestClient(server);
+
+    const res = await query({
+      query: gql`
+        {
+          getSimilar(buscaSimilar: { filial: 34, empresa: 1, fornecedor: 144, produto: "B47097" }) {
+            id
+            idEmpresa
+            idFornecedor
+            nomeFornecedor
+            codigoProduto
+            codigoOriginalProduto
+            nomeProduto
+          }
+        }
+      `,
+    });
+
+    // @ts-ignore
+    expect(res.data.getSimilar[0]).toHaveProperty('nomeProduto');
+  });
+});
