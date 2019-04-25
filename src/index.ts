@@ -1,4 +1,3 @@
-
 import app from './app';
 import db from './models';
 import { normalizePort } from './utils/utils';

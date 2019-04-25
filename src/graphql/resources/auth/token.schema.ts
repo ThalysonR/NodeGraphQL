@@ -1,6 +1,7 @@
 const tokenTypes = `
     type Credencial {
         token: String!
+        refreshToken: String!
         usuario: Usuario
     }
 `;
