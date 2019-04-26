@@ -5,6 +5,7 @@ import { clienteQueries } from './resources/catalogo/cliente.schema';
 import { aplicacoesQueries } from './resources/catalogo/aplicacoes.schema';
 import { geralQueries } from './resources/geral/geral.schema';
 import { similarQueries } from './resources/catalogo/similar.schema';
+import { imagemQueries } from './resources/imagem/imagem.schema';
 
 const Query = `
     type Query {
@@ -14,7 +15,8 @@ const Query = `
         ${aplicacoesQueries}
         ${clienteQueries},
         ${geralQueries},
-        ${similarQueries}
+        ${similarQueries},
+        ${imagemQueries}
     }
 `;
 
