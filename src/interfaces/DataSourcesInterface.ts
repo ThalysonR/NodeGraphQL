@@ -1,4 +1,12 @@
-import {AplicacoesAPI, CatalogoAPI, ClienteAPI, GeralAPI, PrecoAPI, SimilarApi} from '../graphql/datasource';
+import {
+  AplicacoesAPI,
+  CatalogoAPI,
+  ClienteAPI,
+  GeralAPI,
+  PrecoAPI,
+  SimilarApi,
+  ImagemApi,
+} from '../graphql/datasource';
 
 export interface DataSources {
   catalogoApi: CatalogoAPI;
@@ -7,4 +15,5 @@ export interface DataSources {
   aplicacoesApi: AplicacoesAPI;
   geralApi: GeralAPI;
   similarApi: SimilarApi;
+  imagemApi: ImagemApi;
 }
