@@ -1,11 +1,37 @@
 import {ERROR} from '../../../environment';
 import {createTokens} from "../../../authentication/handleTokens";
 import {ResolverContext} from "../../../interfaces/ResolverContextInterface";
+import {PessoaService} from "../../../services";
 
 export const tokenResolvers = {
 
     Mutation: {
-        createToken: (parent: any, {login, senha}: any, {db}: ResolverContext) => {
+        createToken: async (parent: any, {login, senha}: any, {db}: ResolverContext) => {
+
+            if (!login || !senha) {
+                throw new Error(ERROR.USER.EMPTY_CREDENTIALS);
+            }
+
+            const cpfCnpj = login.toString().replace(/[^0-9]+/g, '');
+
+            if (cpfCnpj.length !== 11 && cpfCnpj.length !== 14) {
+                throw new Error(ERROR.USER.WRONG_CREDENTIALS);
+            }
+
+            if (cpfCnpj.length === 11) {
+                await PessoaService.getPessoaFisicaByCPF(cpfCnpj).then(resp => {
+                    if (!resp.success) {
+                        throw new Error(ERROR.USER.DOES_NOT_EXIST);
+                    }
+                });
+            } else if (cpfCnpj.length === 14) {
+                await PessoaService.getPessoaJuridicaByCNPJ(cpfCnpj).then(resp => {
+                    if (!resp.success) {
+                        throw new Error(ERROR.USER.DOES_NOT_EXIST);
+                    }
+                });
+            }
+
             return db.Usuario.findOne({
                 where: {login},
                 attributes: ['id_usuario', 'senha'],

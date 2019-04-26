@@ -18,14 +18,17 @@ describe('Authentication', () => {
     await database.sequelize.close();
   });
 
-  it('shold return jwt token and perfil usuario when valid credentials', async () => {
-    const query = gql`
-      mutation {
-        createToken(login: "daniel", senha: "123") {
-          token
-          usuario {
-            perfil {
-              nome_perfil
+    it('shold return jwt token and perfil usuario when valid credentials', async () => {
+        const query = gql`
+            mutation{
+                createToken(login: "33517308293", senha: "123"){
+                    token,
+                    usuario{
+                        perfil{
+                            nome_perfil
+                        }
+                    }
+                }
             }
           }
         }
@@ -51,9 +54,20 @@ describe('Authentication', () => {
     const client = createTestClient(myTestServer);
     const clientRes = await client.mutate({ query });
 
-    // @ts-ignore
-    expect(clientRes.data.createToken).toBeNull();
-    // @ts-ignore
-    expect(clientRes.errors).not.toBeUndefined();
-  });
+    it('shold return null with errors token when invalid credentials', async () => {
+        const query = gql`
+            mutation{
+                createToken(login: "33517308293", senha: "1234"){
+                    token
+                }
+            }
+        `;
+        const client = createTestClient(myTestServer);
+        const clientRes = await client.mutate({query});
+
+        // @ts-ignore
+        expect(clientRes.data.createToken).toBeNull();
+        // @ts-ignore
+        expect(clientRes.errors).not.toBeUndefined();
+    });
 });
