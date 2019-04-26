@@ -12,7 +12,7 @@ class CatalogoAPI extends RESTDataSource {
     const nomeProduto = text.args.text;
 
     const response = await this.get(
-      'produto?page=0&count=10&order=DESC&sort=frequencia&nomeProduto=' + nomeProduto,
+      'produto?page=0&count=30&order=DESC&sort=frequencia&nomeProduto=' + nomeProduto,
     );
 
     return Array.isArray(response.produtos.content)
