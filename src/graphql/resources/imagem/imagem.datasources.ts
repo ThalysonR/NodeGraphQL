@@ -8,8 +8,8 @@ class ImagemApi extends RESTDataSource {
     this.baseURL = 'http://192.168.151.85:5555/';
   }
 
-  public async searchImagem(CodFornecedor, CodProduto) {
-    const imagem = await this.post('imageGroup', [{ CodFornecedor, CodProduto }]);
+  public async searchImagem(buscaImagem) {
+    const imagem = await this.post('imageGroup', buscaImagem);
     return imagem;
   }
 }

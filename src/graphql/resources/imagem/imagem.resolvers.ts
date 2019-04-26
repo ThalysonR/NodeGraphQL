@@ -5,8 +5,8 @@ import { handleError, gqlCompose } from '../../../utils/utils';
 export const imagemResolvers = {
   Query: {
     getImagem: gqlCompose(...authResolvers)(
-      async (parent, { CodFornecedor, CodProduto }, { dataSources }: ResolverContext, info) => {
-        return dataSources.imagemApi.searchImagem(CodFornecedor, CodProduto).catch(handleError);
+      async (parent, { buscaImagem }, { dataSources }: ResolverContext, info) => {
+        return dataSources.imagemApi.searchImagem(buscaImagem).catch(handleError);
       },
     ),
   },

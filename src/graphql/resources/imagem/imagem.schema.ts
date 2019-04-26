@@ -4,10 +4,15 @@ type Imagem{
     CodProduto: String!
     ImgBase64: String!
 }
+
+input BuscaImagem{
+    CodFornecedor: String!
+    CodProduto: String!
+}
 `;
 
 const imagemQueries = `
-    getImagem(CodFornecedor: String!, CodProduto: String!): [Imagem]!
+    getImagem(buscaImagem: [BuscaImagem]!): [Imagem]!
 `;
 
 const imagemMutations = `

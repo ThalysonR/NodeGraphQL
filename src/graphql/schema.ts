@@ -1,6 +1,4 @@
 import { imagemResolvers } from './resources/imagem/imagem.resolvers';
-import { aplicacoesResolvers } from './resources/catalogo/aplicacoes.resolvers';
-import { clienteResolvers } from './resources/catalogo/cliente.resolvers';
 import { merge } from 'lodash';
 
 import { Query } from './query';
@@ -11,7 +9,6 @@ import { tokenResolvers } from './resources/auth/token.resolvers';
 import { precoResolvers } from './resources/preco/preco.resolvers';
 import { geralResolvers } from './resources/geral/geral.resolvers';
 import { catalogoResolvers } from './resources/catalogo/catalogo.resolvers';
-import { similarResolvers } from './resources/catalogo/similar.resolvers';
 
 import { usuarioTypes } from './resources/usuario/usuario.schema';
 import { tokenTypes } from './resources/auth/token.schema';
@@ -28,10 +25,7 @@ const resolvers = merge(
   tokenResolvers,
   catalogoResolvers,
   precoResolvers,
-  clienteResolvers,
   geralResolvers,
-  aplicacoesResolvers,
-  similarResolvers,
   imagemResolvers,
 );
 

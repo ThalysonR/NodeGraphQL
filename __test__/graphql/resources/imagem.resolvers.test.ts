@@ -8,7 +8,6 @@ describe('Test Image', () => {
   const secret = `Bearer: ${jwt.sign('123456', JWT_TOKEN_SECRET)}`;
   it('test in the image endpoint', async () => {
     const { server, imagemApi } = constructTestServer({ authUser: 1, authorization: secret });
-
     // @ts-ignore
     imagemApi.post = jest.fn(() => [
       {
@@ -17,13 +16,11 @@ describe('Test Image', () => {
         ImgBase64: '/9j/4AAQSkZJRgABAQAAAQABAAD',
       },
     ]);
-
     const { query } = createTestClient(server);
-
     const res = await query({
       query: gql`
         {
-          getImagem(CodFornecedor: "144", CodProduto: "16001") {
+          getImagem(buscaImagem: [{ CodFornecedor: "144", CodProduto: "16001" }]) {
             CodFornecedor
             CodProduto
             ImgBase64
@@ -31,7 +28,6 @@ describe('Test Image', () => {
         }
       `,
     });
-
     // @ts-ignore
     expect(res.data.getImagem[0]).toHaveProperty('ImgBase64');
   });

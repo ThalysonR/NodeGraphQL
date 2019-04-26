@@ -29,10 +29,7 @@ class App {
       dataSources: (): DataSources => ({
         catalogoApi: new dataSources.CatalogoAPI(),
         precoApi: new dataSources.PrecoAPI(),
-        clienteApi: new dataSources.ClienteAPI(),
         geralApi: new dataSources.GeralAPI(),
-        aplicacoesApi: new dataSources.AplicacoesAPI(),
-        similarApi: new dataSources.SimilarApi(),
         imagemApi: new dataSources.ImagemApi(),
       }),
       formatError: err => formatError(err),
