@@ -164,10 +164,10 @@ describe('Test Catalog', () => {
   });
 
   it('catalog test and client endpoint', async () => {
-    const { server, clienteApi } = constructTestServer({ authUser: 1, authorization: secret });
+    const { server, catalogoApi } = constructTestServer({ authUser: 1, authorization: secret });
 
     // @ts-ignore
-    clienteApi.get = jest.fn(() => ({
+    catalogoApi.get = jest.fn(() => ({
       clientes: {
         content: [
           {
@@ -208,10 +208,10 @@ describe('Test Catalog', () => {
   });
 
   it('catalog application endpoint test', async () => {
-    const { server, aplicacoesApi } = constructTestServer({ authUser: 1, authorization: secret });
+    const { server, catalogoApi } = constructTestServer({ authUser: 1, authorization: secret });
 
     // @ts-ignore
-    aplicacoesApi.get = jest.fn(() => [
+    catalogoApi.get = jest.fn(() => [
       {
         aplicacao: 'GOL',
         inicio: '1/1900',
@@ -246,10 +246,10 @@ describe('Test Catalog', () => {
   });
 
   it('similar catalog endpoint testing', async () => {
-    const { server, similarApi } = constructTestServer({ authUser: 1, authorization: secret });
+    const { server, catalogoApi } = constructTestServer({ authUser: 1, authorization: secret });
 
     // @ts-ignore
-    similarApi.get = jest.fn(() => [
+    catalogoApi.get = jest.fn(() => [
       {
         id: '452754',
         idEmpresa: '1',
