@@ -1,5 +1,6 @@
 import jwt from 'jsonwebtoken';
 import {JWT_TOKEN_REFRESH_SECRET, JWT_TOKEN_SECRET} from "../utils/utils";
+import JWT_SETTINGS from '../environment/jwt'
 
 /* istanbul ignore next */
 const verifyToken = async (token, secret, addSecurityChecks = {}) => new Promise(resolve =>
@@ -37,8 +38,8 @@ const signToken = async (user, secret, expiration = 60 * 60, additionalClaims = 
 export const createTokens = async (data, additionalClaims = {}) => {
     const {id, refreshTokenSecret = id + JWT_TOKEN_REFRESH_SECRET} = data;
 
-    const createToken = await signToken(id, JWT_TOKEN_SECRET, 60, additionalClaims);
-    const createRefreshToken = await signToken(id, refreshTokenSecret, 60 * 60, additionalClaims);
+    const createToken = await signToken(id, JWT_TOKEN_SECRET, JWT_SETTINGS.HEADER.TOKEN.EXP, additionalClaims);
+    const createRefreshToken = await signToken(id, refreshTokenSecret, JWT_SETTINGS.HEADER.REFRESH_TOKEN.EXP, additionalClaims);
 
     return [createToken, createRefreshToken];
 };
