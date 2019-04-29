@@ -22,7 +22,7 @@ export const tokenResolvers = {
             if (cpfCnpj.length === 11) {
                 await PessoaService.getPessoaFisicaByCPF(cpfCnpj).then(resp => {
                     if (!resp.success) {
-                        throw new Error(resp.message);
+                        throw new Error(ERROR.USER.DOES_NOT_EXIST);
                     }
 
                     codPessoa = resp.data.codpessoa;
@@ -30,7 +30,7 @@ export const tokenResolvers = {
             } else if (cpfCnpj.length === 14) {
                 await PessoaService.getPessoaJuridicaByCNPJ(cpfCnpj).then(resp => {
                     if (!resp.success) {
-                        throw new Error(resp.message);
+                        throw new Error(ERROR.USER.DOES_NOT_EXIST);
                     }
                     codPessoa = resp.data.codpessoa;
                 });

@@ -28,7 +28,7 @@ class PessoaService {
                 });
 
             if (response.length === 0) {
-                throw Error('Não foí encontrando registro para o CPF informado.');
+                throw new Error('Não foi encontrando registro para o CPF informado.');
             }
 
             return {
@@ -64,7 +64,7 @@ class PessoaService {
                 });
 
             if (response.length === 0) {
-                throw Error('Não foí encontrando registro para o CNPJ informado.');
+                throw new Error('Não foi encontrando registro para o CNPJ informado.');
             }
 
             return {
