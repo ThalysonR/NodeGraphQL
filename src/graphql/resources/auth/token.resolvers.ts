@@ -13,6 +13,7 @@ export const tokenResolvers = {
             }
 
             const cpfCnpj = login.toString().replace(/[^0-9]+/g, '');
+            let codPessoa = null;
 
             if (cpfCnpj.length !== 11 && cpfCnpj.length !== 14) {
                 throw new Error(ERROR.USER.WRONG_CREDENTIALS);
@@ -21,19 +22,22 @@ export const tokenResolvers = {
             if (cpfCnpj.length === 11) {
                 await PessoaService.getPessoaFisicaByCPF(cpfCnpj).then(resp => {
                     if (!resp.success) {
-                        throw new Error(ERROR.USER.DOES_NOT_EXIST);
+                        throw new Error(resp.message);
                     }
+
+                    codPessoa = resp.data.codpessoa;
                 });
             } else if (cpfCnpj.length === 14) {
                 await PessoaService.getPessoaJuridicaByCNPJ(cpfCnpj).then(resp => {
                     if (!resp.success) {
-                        throw new Error(ERROR.USER.DOES_NOT_EXIST);
+                        throw new Error(resp.message);
                     }
+                    codPessoa = resp.data.codpessoa;
                 });
             }
 
             return db.Usuario.findOne({
-                where: {login},
+                where: {login: cpfCnpj, cod_pessoa: codPessoa},
                 attributes: ['id_usuario', 'senha'],
                 include: [{
                     model: db.Perfil,
@@ -60,7 +64,7 @@ export const tokenResolvers = {
                         }
                     }
                 }
-            })
+            });
         }
     }
 };

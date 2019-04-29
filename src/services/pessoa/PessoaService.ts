@@ -8,9 +8,7 @@ class PessoaService {
         this.db = db.sequelize;
     }
 
-    public async getPessoaFisicaByCPF(cpf: string | null = null): Promise<any> {
-
-        cpf = cpf ? cpf.toString().replace(/[^0-9]+/g, '') : null;
+    public async getPessoaFisicaByCPF(cpf: string): Promise<any> {
 
         if (!cpf || cpf.length !== 11) {
             return {
@@ -40,16 +38,13 @@ class PessoaService {
         } catch (e) {
             return {
                 success: false,
-                message: e.message || 'Não foi possível encontrar o registro.',
-                error: e
+                message: e.message
             }
         }
     }
 
 
-    public async getPessoaJuridicaByCNPJ(cnpj: string | null = null): Promise<any> {
-
-        cnpj = cnpj ? cnpj.toString().replace(/[^0-9]+/g, '') : null;
+    public async getPessoaJuridicaByCNPJ(cnpj: string): Promise<any> {
 
         if (!cnpj || cnpj.length !== 14) {
             return {
@@ -79,8 +74,7 @@ class PessoaService {
         } catch (e) {
             return {
                 success: false,
-                message: e.message || 'Não foi possível encontrar o registro.',
-                error: e
+                message: e.message
             }
         }
     }
