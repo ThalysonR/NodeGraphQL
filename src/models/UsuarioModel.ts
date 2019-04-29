@@ -2,11 +2,12 @@ import * as Sequelize from 'sequelize';
 import { BaseModelInterface } from '../interfaces/BaseModelInterface';
 import { ModelsInterface } from '../interfaces/ModelsInterface';
 import {PerfilInstance} from "./PerfilModel";
-// import { compareSync } from 'bcryptjs';
+import { compareSync } from 'bcryptjs';
 // import {encode} from "punycode";
 
 export interface UsuarioAttributes {
     id_usuario?: number;
+    cod_pessoa?: number;
     nome_usuario?: string;
     email?: string;
     login?: string;
@@ -29,6 +30,10 @@ export default (sequelize: Sequelize.Sequelize, DataTypes: Sequelize.DataTypes):
                 allowNull: false,
                 primaryKey: true,
                 autoIncrement: true
+            },
+            cod_pessoa: {
+                type: DataTypes.BIGINT,
+                allowNull: false
             },
             nome_usuario: {
                 type: DataTypes.STRING(128),
@@ -68,8 +73,8 @@ export default (sequelize: Sequelize.Sequelize, DataTypes: Sequelize.DataTypes):
     };
 
     Usuario.prototype.isPassword = (encodedPassword: string, password: string): boolean => {
-        // return compareSync(password, encodedPassword);
-        return password.toUpperCase() === encodedPassword.toUpperCase();
+        return compareSync(password, encodedPassword);
+        // return password.toUpperCase() === encodedPassword.toUpperCase();
     };
 
     return Usuario;
