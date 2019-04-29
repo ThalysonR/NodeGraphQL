@@ -2,7 +2,7 @@ import * as Sequelize from 'sequelize';
 import { BaseModelInterface } from '../interfaces/BaseModelInterface';
 import { ModelsInterface } from '../interfaces/ModelsInterface';
 import {PerfilInstance} from "./PerfilModel";
-// import { compareSync } from 'bcryptjs';
+import { compareSync } from 'bcryptjs';
 // import {encode} from "punycode";
 
 export interface UsuarioAttributes {
@@ -73,8 +73,8 @@ export default (sequelize: Sequelize.Sequelize, DataTypes: Sequelize.DataTypes):
     };
 
     Usuario.prototype.isPassword = (encodedPassword: string, password: string): boolean => {
-        // return compareSync(password, encodedPassword);
-        return password.toUpperCase() === encodedPassword.toUpperCase();
+        return compareSync(password, encodedPassword);
+        // return password.toUpperCase() === encodedPassword.toUpperCase();
     };
 
     return Usuario;
