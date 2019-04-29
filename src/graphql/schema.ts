@@ -19,6 +19,7 @@ import { aplicacoesTypes } from './resources/catalogo/aplicacoes.schema';
 import { geralTypes } from './resources/geral/geral.schema';
 import { similarTypes } from './resources/catalogo/similar.schema';
 import { imagemTypes } from './resources/imagem/imagem.schema';
+import { autocompleteTypes } from './resources/catalogo/autocomplete.schema';
 
 const resolvers = merge(
   usuarioResolvers,
@@ -41,6 +42,7 @@ const typeDefs = [
   geralTypes,
   similarTypes,
   imagemTypes,
+  autocompleteTypes,
 ];
 
 export { resolvers, typeDefs };

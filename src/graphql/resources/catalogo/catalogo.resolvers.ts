@@ -26,5 +26,11 @@ export const catalogoResolvers = {
         return dataSources.catalogoApi.searchCliente(cliente).catch(handleError);
       },
     ),
+    getAutocomplete: gqlCompose(...authResolvers)(
+      async (parent, args, { dataSources }: ResolverContext) => {
+        const autocomplete = Object.assign({ args });
+        return dataSources.catalogoApi.searchAutocomplete(autocomplete).catch(handleError);
+      },
+    ),
   },
 };

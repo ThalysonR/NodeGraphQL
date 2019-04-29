@@ -322,4 +322,36 @@ describe('Test Catalog', () => {
     // @ts-ignore
     expect(res.data.getSimilar[0]).toHaveProperty('nomeProduto');
   });
+
+  it('autocomplete endpoint test', async () => {
+    const { server, catalogoApi } = constructTestServer({ authUser: 1, authorization: secret });
+
+    // @ts-ignore
+    catalogoApi.get = jest.fn(() => [
+      {
+        id: 0,
+        descricao: 'ENVOLVENTE PARACHOQUE',
+      },
+      {
+        id: 1,
+        descricao: 'ENVOLVENTE PARACHOQUE ALMA DE ACO',
+      },
+    ]);
+
+    const { query } = createTestClient(server);
+
+    const res = await query({
+      query: gql`
+        {
+          getAutocomplete(text: "envolve") {
+            id
+            descricao
+          }
+        }
+      `,
+    });
+
+    // @ts-ignore
+    expect(res.data.getAutocomplete[0]).toHaveProperty('descricao');
+  });
 });

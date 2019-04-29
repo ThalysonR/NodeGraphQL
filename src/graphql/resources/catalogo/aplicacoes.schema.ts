@@ -11,12 +11,12 @@ input BuscaAplicacoes {
     fornecedor: Int!,
     produto: String!
 }
-`
+`;
 const aplicacoesQueries = `
     getAplicacoes(buscaAplicacoes: BuscaAplicacoes!): [Aplicacoes]!
-`
+`;
 
 const aplicacoesMutations = `
-`
+`;
 
-export { aplicacoesTypes, aplicacoesQueries, aplicacoesMutations }
+export { aplicacoesTypes, aplicacoesQueries, aplicacoesMutations };

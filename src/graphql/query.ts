@@ -6,6 +6,7 @@ import { aplicacoesQueries } from './resources/catalogo/aplicacoes.schema';
 import { geralQueries } from './resources/geral/geral.schema';
 import { similarQueries } from './resources/catalogo/similar.schema';
 import { imagemQueries } from './resources/imagem/imagem.schema';
+import { autocompleteQueries } from './resources/catalogo/autocomplete.schema';
 
 const Query = `
     type Query {
@@ -16,7 +17,8 @@ const Query = `
         ${clienteQueries},
         ${geralQueries},
         ${similarQueries},
-        ${imagemQueries}
+        ${imagemQueries},
+        ${autocompleteQueries}
     }
 `;
 

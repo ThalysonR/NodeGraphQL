@@ -87,6 +87,12 @@ class CatalogoAPI extends RESTDataSource {
       cep: cliente.cep,
     };
   }
+
+  public async searchAutocomplete(text) {
+    const request = text.args.text;
+    const autocomplete = await this.get('produto/autocomplete?text=' + request);
+    return autocomplete;
+  }
 }
 
 export default CatalogoAPI;
