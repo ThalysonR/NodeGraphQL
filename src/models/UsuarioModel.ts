@@ -7,6 +7,7 @@ import {PerfilInstance} from "./PerfilModel";
 
 export interface UsuarioAttributes {
     id_usuario?: number;
+    cod_pessoa?: number;
     nome_usuario?: string;
     email?: string;
     login?: string;
@@ -29,6 +30,10 @@ export default (sequelize: Sequelize.Sequelize, DataTypes: Sequelize.DataTypes):
                 allowNull: false,
                 primaryKey: true,
                 autoIncrement: true
+            },
+            cod_pessoa: {
+                type: DataTypes.BIGINT,
+                allowNull: false
             },
             nome_usuario: {
                 type: DataTypes.STRING(128),
