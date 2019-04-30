@@ -6,6 +6,4 @@ const Mutation = `
     }
 `;
 
-export {
-    Mutation
-}
+export { Mutation };
