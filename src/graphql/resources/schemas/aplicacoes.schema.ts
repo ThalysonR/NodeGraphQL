@@ -1,8 +1,8 @@
 const aplicacoesTypes = `
 type Aplicacoes{
-    aplicacao: String!,
-    inicio: String!,
-    fim: String!,
+    aplicacao: String!
+    inicio: String!
+    fim: String!
     original: String!
 }
 

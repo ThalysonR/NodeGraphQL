@@ -1,10 +1,10 @@
 const similarTypes = `
 type ProdutoSimilar {
-    id:  ID!
-    idEmpresa: Int!
-    idFornecedor: Int!
-    nomeFornecedor: String!
-    codigoProduto: String!
+    id:  ID!,
+    idEmpresa: Int!,
+    idFornecedor: Int!,
+    nomeFornecedor: String!,
+    codigoProduto: String!,
     codigoOriginalProduto: Int
     nomeProduto: String!
     frequencia: Int!
