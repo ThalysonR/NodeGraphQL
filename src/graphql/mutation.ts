@@ -1,12 +1,8 @@
-import { usuarioMutations } from './resources/usuario/usuario.schema';
-import { tokenMutations } from "./resources/auth/token.schema";
-import { precoMutations } from './resources/preco/preco.schema';
+import { mutations } from './resources/schemas';
 
 const Mutation = `
     type Mutation {
-        ${usuarioMutations},
-        ${tokenMutations},
-        ${precoMutations}
+        ${mutations.join(',')}
     }
 `;
 

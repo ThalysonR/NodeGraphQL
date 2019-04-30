@@ -1,4 +1,4 @@
-import { usuarioResolvers } from '../../../src/graphql/resources/usuario/usuario.resolvers';
+import { usuarioResolvers } from '../../../src/graphql/resources/resolvers/usuario.resolvers';
 import SequelizeMock from 'sequelize-mock';
 import { JWT_TOKEN_SECRET } from '../../../src/utils/utils';
 import * as jwt from 'jsonwebtoken';
