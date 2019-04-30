@@ -22,6 +22,7 @@ pipeline {
                 rocketSend message: "Build iniciada", attachments: [[title: "#${env.BUILD_NUMBER}", titleLink: "${env.BUILD_URL}", text: "${env.JOB_NAME} - ${GIT_BRANCH}"]], rawMessage: true, webhookToken: "${ROCKET_TOKEN}"
                 script {
                     sh 'npm install'
+                    sh 'rm -rf ./output'
                 }
             }
         }
