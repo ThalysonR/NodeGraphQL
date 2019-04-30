@@ -54,7 +54,7 @@ class PessoaService {
         }
 
         try {
-            const response: object[] = await this.db.query(`select pp.codpessoa
+            const response: object[] = await this.db.query(`select *
                             from cadastro.pessoas pp
                                      inner join cadastro.pessoa_juridica pj on pp.codpessoa = pj.codpessoa and pj.cnpj = $cnpj
                                      inner join cadastro.clientes cl on pj.codpessoa = cl.codpessoa`,

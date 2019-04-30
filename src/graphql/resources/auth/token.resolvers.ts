@@ -13,7 +13,7 @@ export const tokenResolvers = {
             }
 
             const cpfCnpj = login.toString().replace(/[^0-9]+/g, '');
-            let codPessoa = null;
+            let pessoa: any = {};
 
             if (cpfCnpj.length !== 11 && cpfCnpj.length !== 14) {
                 throw new Error(ERROR.USER.WRONG_CREDENTIALS);
@@ -25,20 +25,20 @@ export const tokenResolvers = {
                         throw new Error(ERROR.USER.DOES_NOT_EXIST);
                     }
 
-                    codPessoa = resp.data.codpessoa;
+                    pessoa = resp.data;
                 });
             } else if (cpfCnpj.length === 14) {
                 await PessoaService.getPessoaJuridicaByCNPJ(cpfCnpj).then(resp => {
                     if (!resp.success) {
                         throw new Error(ERROR.USER.DOES_NOT_EXIST);
                     }
-                    codPessoa = resp.data.codpessoa;
+                    pessoa = resp.data;
                 });
             }
 
             return db.Usuario.findOne({
-                where: {login: cpfCnpj, cod_pessoa: codPessoa},
-                attributes: ['id_usuario', 'senha'],
+                where: {login: cpfCnpj, cod_pessoa: pessoa.codpessoa},
+                attributes: ['id_usuario', 'senha', 'cod_pessoa', 'login', 'email'],
                 include: [{
                     model: db.Perfil,
                     through: {
@@ -59,6 +59,14 @@ export const tokenResolvers = {
                     token: newToken,
                     refreshToken: newRefreshToken,
                     usuario: {
+                        cod_pessoa: usuario.cod_pessoa,
+                        login: usuario.login,
+                        email: usuario.email,
+                        nome_completo: pessoa.nome_completo,
+                        nome_fantasia: pessoa.nome_fantasia,
+                        tipo_pessoa: pessoa.tipo_pessoa,
+                        cpf: pessoa.cpf || '',
+                        cnpj: pessoa.cnpj || '',
                         perfil: {
                             nome_perfil: usuario.perfis[0] != null ? usuario.perfis[0].nome_perfil : ''
                         }
