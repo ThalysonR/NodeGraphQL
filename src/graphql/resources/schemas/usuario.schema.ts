@@ -12,13 +12,13 @@ const usuarioTypes = `
         
         login: String!
         senha: String!
-        
+
         perfil: Perfil!
     }
-    
+
     type Perfil{
         nome_perfil: String!
-    }    
+    }
 `;
 
 const usuarioQueries = `
@@ -30,8 +30,4 @@ const usuarioQueries = `
 const usuarioMutations = `
 `;
 
-export {
-    usuarioTypes,
-    usuarioQueries,
-    usuarioMutations
-}
+export { usuarioTypes, usuarioQueries, usuarioMutations };

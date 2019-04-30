@@ -3,50 +3,9 @@ import { JWT_TOKEN_SECRET } from '../../../src/utils/utils';
 import { createTestClient } from 'apollo-server-testing';
 import { constructTestServer } from '../../__utils';
 import { gql } from 'apollo-server';
-import { CatalogoAPI } from '../../../src/graphql/datasource';
 
 describe('Test Catalog', () => {
   const secret = `Bearer: ${jwt.sign('123456', JWT_TOKEN_SECRET)}`;
-
-  it('product object test', () => {
-    const defaultProduto = {
-      id: 1,
-      idEmpresa: 1,
-      idFornecedor: 144,
-      nomeFornecedor: 'COFAP',
-      codigoProduto: 'B47097',
-      codigoOriginalProduto: null,
-      nomeProduto: 'AMORTECEDOR TRASEIRO COFAP',
-      frequencia: 2182,
-      codProduto: '1___144___B47097',
-      score: null,
-      tags: null,
-      carType: null,
-      carId: null,
-      articleNo: null,
-      manuId: null,
-      models: [
-        {
-          nomeCarro: 'GOL',
-          modelTipos: [
-            {
-              tipoNome: 1000,
-              geracao: 'I',
-              motor: '1.0',
-              anos: ['1992', '1993', '1994', '1995', '1996'],
-              nomeMotor: 'CHT',
-              modeloTransmissao: null,
-              eixoMotriz: null,
-            },
-          ],
-        },
-      ],
-    };
-
-    const resp = new CatalogoAPI().produtoReducer(defaultProduto);
-
-    expect(resp).toEqual(defaultProduto);
-  });
 
   it('test on request response', async () => {
     const { server, catalogoApi } = constructTestServer({ authUser: 1, authorization: secret });
@@ -95,17 +54,45 @@ describe('Test Catalog', () => {
             lado: [],
             motor: null,
             combustivel: [],
-            aplicacao: ['GOL', 'GOL GTI', 'PARATI'],
+            aplicacao: ['GOL', 'PARATI'],
             montadoras: ['VOLKSWAGEN'],
             prefixo: null,
             aro: null,
             perfil: null,
             viscosidade: null,
-            amperagem: '150 AMP',
+            amperagem: null,
           },
         ],
+        pageable: {
+          sort: {
+            unsorted: true,
+            sorted: false,
+          },
+          pageSize: 1,
+          pageNumber: 0,
+          offset: 0,
+          unpaged: false,
+          paged: true,
+        },
+        facets: [],
+        aggregations: {
+          fragment: true,
+          asMap: {},
+        },
+        scrollId: null,
+        totalPages: 4377,
+        totalElements: 4377,
+        sort: {
+          unsorted: true,
+          sorted: false,
+        },
+        first: true,
+        last: false,
+        numberOfElements: 1,
+        size: 1,
+        number: 0,
       },
-      tags: ['GOL', 'GOL GTI', 'PARATI'],
+      tags: ['GOL', 'PARATI'],
     }));
 
     const { query } = createTestClient(server);
@@ -113,46 +100,91 @@ describe('Test Catalog', () => {
     const res = await query({
       query: gql`
         {
-          getproduto(text: "Amortecedor") {
-            id
-            idEmpresa
-            idFornecedor
-            nomeProduto
-            frequencia
-            codProduto
-            score
-            tags
-            carType
-            carId
-            articleNo
-            manuId
-            models {
-              nomeCarro
-              modelTipos {
-                tipoNome
-                geracao
-                motor
-                anos
-                nomeMotor
-                modeloTransmissao
-                eixoMotriz
-              }
+          getproduto(
+            pesqProduto: {
+              page: 0
+              count: 1
+              order: "DESC"
+              sort: "frequencia"
+              nomeProduto: "B47097"
             }
-            modeloCarro
-            fabricante
-            anos
-            eixo
-            posicao
-            lado
-            motor
-            combustivel
-            aplicacao
-            montadoras
-            prefixo
-            aro
-            perfil
-            viscosidade
-            amperagem
+          ) {
+            produtos {
+              content {
+                id
+                idEmpresa
+                idFornecedor
+                nomeFornecedor
+                codigoProduto
+                codigoOriginalProduto
+                nomeProduto
+                frequencia
+                codProduto
+                score
+                tags
+                carType
+                carId
+                articleNo
+                manuId
+                models {
+                  nomeCarro
+                  modelTipos {
+                    tipoNome
+                    geracao
+                    motor
+                    anos
+                    nomeMotor
+                    modeloTransmissao
+                    eixoMotriz
+                  }
+                }
+                modeloCarro
+                fabricante
+                anos
+                eixo
+                posicao
+                lado
+                motor
+                combustivel
+                aplicacao
+                montadoras
+                prefixo
+                aro
+                perfil
+                viscosidade
+                amperagem
+              }
+              pageable {
+                sort {
+                  unsorted
+                  sorted
+                }
+                pageSize
+                pageNumber
+                offset
+                unpaged
+                paged
+              }
+              facets
+              aggregations {
+                fragment
+                asMap {
+                  asMap
+                }
+              }
+              scrollId
+              totalPages
+              totalElements
+              sort {
+                unsorted
+                sorted
+              }
+              first
+              last
+              numberOfElements
+              size
+              number
+            }
             tags
           }
         }
@@ -160,7 +192,7 @@ describe('Test Catalog', () => {
     });
 
     // @ts-ignore
-    expect(res.data.getproduto[0]).toHaveProperty('nomeProduto');
+    expect(res.data.getproduto.produtos.content[0]).toHaveProperty('nomeProduto');
   });
 
   it('catalog test and client endpoint', async () => {

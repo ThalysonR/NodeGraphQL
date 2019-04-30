@@ -10,13 +10,13 @@ type Cliente {
     endereco: String!
     cep: Int!
 }
-`
+`;
 
 const clienteQueries = `
     getcliente(text: String!): [Cliente!]!
-`
+`;
 
 const clienteMutations = `
-`
+`;
 
-export { clienteType, clienteQueries, clienteMutations }
+export { clienteType, clienteQueries, clienteMutations };

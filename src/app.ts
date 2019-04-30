@@ -3,7 +3,7 @@ import { resolvers, typeDefs } from './graphql/schema';
 import db from './models';
 
 import { DataSources } from './interfaces/DataSourcesInterface';
-import * as dataSources from './graphql/datasource';
+import * as dataSources from './graphql/resources/datasources';
 
 import * as jwt from 'jsonwebtoken';
 import { JWT_TOKEN_SECRET } from './utils/utils';
@@ -30,7 +30,7 @@ class App {
         catalogoApi: new dataSources.CatalogoAPI(),
         precoApi: new dataSources.PrecoAPI(),
         geralApi: new dataSources.GeralAPI(),
-        imagemApi: new dataSources.ImagemApi(),
+        imagemApi: new dataSources.ImagemAPI(),
       }),
       formatError: err => formatError(err),
       context: async ({ req, res }: any) => {

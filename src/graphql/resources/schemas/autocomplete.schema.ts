@@ -1,6 +1,6 @@
 const autocompleteTypes = `
 type Autocomplete{
-    id: Int!,
+    id: Int!
     descricao: String!
 }
 `;
