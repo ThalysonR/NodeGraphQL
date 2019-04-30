@@ -1,4 +1,3 @@
 import PessoaService from './pessoa/PessoaService';
 
-
-export {PessoaService};
+export { PessoaService };

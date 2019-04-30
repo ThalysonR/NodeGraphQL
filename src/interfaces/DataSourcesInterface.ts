@@ -1,8 +1,8 @@
-import { CatalogoAPI, GeralAPI, PrecoAPI, ImagemApi } from '../graphql/datasource';
+import * as dataSources from '../graphql/resources/datasources';
 
 export interface DataSources {
-  catalogoApi: CatalogoAPI;
-  precoApi: PrecoAPI;
-  geralApi: GeralAPI;
-  imagemApi: ImagemApi;
+  catalogoApi: dataSources.CatalogoAPI;
+  precoApi: dataSources.PrecoAPI;
+  geralApi: dataSources.GeralAPI;
+  imagemApi: dataSources.ImagemAPI;
 }

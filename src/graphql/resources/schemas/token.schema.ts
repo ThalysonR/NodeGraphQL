@@ -10,7 +10,4 @@ const tokenMutations = `
     createToken(login: String!, senha: String!): Credencial
 `;
 
-export {
-    tokenTypes,
-    tokenMutations
-}
+export { tokenTypes, tokenMutations };
