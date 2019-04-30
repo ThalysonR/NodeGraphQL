@@ -1,8 +1,8 @@
 const imagemTypes = `
 type Imagem{
-    CodFornecedor: String!,
-    CodProduto: String!,
-    ImgBase64: String!,
+    CodFornecedor: String!
+    CodProduto: String!
+    ImgBase64: String!
 }
 
 input BuscaImagem{
