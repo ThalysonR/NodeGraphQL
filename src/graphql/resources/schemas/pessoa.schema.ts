@@ -9,7 +9,7 @@ type Pessoa{
   emails: [Emails]
   enderecos: [Enderecos]
   telefones: [Telefones]
-  pessoaFisica: PessoaFisica
+  pessoaCadastro: PessoaCadastro
   clientes: Clientes
 }
 
@@ -48,13 +48,28 @@ type Telefones {
   contato: String
 }
 
-type PessoaFisica {
-  id: Int
+interface PessoaCadastro {
+  id: ID!
+  inscricaoMunicipal: String
+  cgf: String
+  calcIpi: String
+}
+
+type PessoaJuridica implements PessoaCadastro {
+  id: ID!
+  inscricaoMunicipal: String
+  cgf: String
+  calcIpi: String
+  cnpj: String
+}
+
+type PessoaFisica implements PessoaCadastro {
+  id: ID!
   cpf: String
   numeroRg: String
   emissaoRg: String
   emissorRg: String
-  cgf: Boolean
+  cgf: String
   inscricaoMunicipal: String
   operIsenta: String
   calcIpi: String

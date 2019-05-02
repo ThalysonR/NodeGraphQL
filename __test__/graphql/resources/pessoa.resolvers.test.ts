@@ -6,7 +6,7 @@ import { gql } from 'apollo-server';
 
 describe('Test Pessoa', () => {
   const secret = `Bearer: ${jwt.sign('123456', JWT_TOKEN_SECRET)}`;
-  it('catalog test and client endpoint', async () => {
+  it('endpoint cpf test', async () => {
     const { server, pessoaApi } = constructTestServer({ authUser: 1, authorization: secret });
 
     // @ts-ignore
@@ -146,16 +146,8 @@ describe('Test Pessoa', () => {
               tipo
               contato
             }
-            pessoaFisica {
+            pessoaCadastro {
               id
-              cpf
-              numeroRg
-              emissaoRg
-              emissorRg
-              cgf
-              inscricaoMunicipal
-              operIsenta
-              calcIpi
             }
             clientes {
               id
