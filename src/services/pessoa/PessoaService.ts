@@ -23,7 +23,7 @@ class PessoaService {
                                  inner join cadastro.pessoa_fisica pf on pp.codpessoa = pf.codpessoa and pf.cpf = $cpf
                                  inner join cadastro.clientes cl on pf.codpessoa = cl.codpessoa`,
         {
-          bind: { cpf },
+          bind: {cpf},
           type: sequelize.QueryTypes.SELECT,
         },
       );
@@ -45,21 +45,21 @@ class PessoaService {
   }
 
   public async getPessoaJuridicaByCNPJ(cnpj: string): Promise<any> {
+
     if (!cnpj || cnpj.length !== 14) {
       return {
         success: false,
-        message: 'É necessário informar um CNPJ válido.',
-      };
+        message: 'É necessário informar um CNPJ válido.'
+      }
     }
 
     try {
-      const response: object[] = await this.db.query(
-        `select pp.codpessoa
+      const response: object[] = await this.db.query(`select *
                             from cadastro.pessoas pp
                                      inner join cadastro.pessoa_juridica pj on pp.codpessoa = pj.codpessoa and pj.cnpj = $cnpj
                                      inner join cadastro.clientes cl on pj.codpessoa = cl.codpessoa`,
         {
-          bind: { cnpj },
+          bind: {cnpj},
           type: sequelize.QueryTypes.SELECT,
         },
       );

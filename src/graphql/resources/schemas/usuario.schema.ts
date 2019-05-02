@@ -2,9 +2,15 @@ const usuarioTypes = `
     # User definition type
     type Usuario {
         id_usuario: ID!
-        nome_usuario: String!
-        login: String!
+        cod_pessoa: Int!
+        nome_completo: String!
+        nome_fantasia: String!
+        tipo_pessoa: String!
         email: String!
+        cpf: String!
+        cnpj: String!
+        
+        login: String!
         senha: String!
 
         perfil: Perfil!
