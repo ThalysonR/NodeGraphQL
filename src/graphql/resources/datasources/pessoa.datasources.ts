@@ -9,9 +9,45 @@ class PessoaApi extends RESTDataSource {
   }
 
   public async searchPessoa(text) {
-    const params = text.args.text;
+    const params = text;
     const response = await this.get('pessoa/cpf2/' + params);
-    return response;
+    return this.pessoaReducerFisica(response);
+  }
+
+  public pessoaReducerFisica(pessoa) {
+    return {
+      nomeCompleto: pessoa.nomeCompleto,
+      nomeFantasia: pessoa.nomeFantasia,
+      tipoPessoa: pessoa.tipoPessoa,
+      dataCadastro: pessoa.dataCadastro,
+      tipoCadastro: pessoa.tipoCadastro,
+      emails: pessoa.emails,
+      enderecos: pessoa.enderecos,
+      telefones: pessoa.telefones,
+      pessoaCadastro: pessoa.pessoaFisica,
+      clientes: pessoa.clientes,
+    };
+  }
+
+  public async searchPessoaJuridica(text) {
+    const params = text;
+    const response = await this.get('pessoa/cnpj/' + params);
+    return this.pessoaReducerJuridica(response);
+  }
+
+  public pessoaReducerJuridica(pessoa) {
+    return {
+      nomeCompleto: pessoa.nomeCompleto,
+      nomeFantasia: pessoa.nomeFantasia,
+      tipoPessoa: pessoa.tipoPessoa,
+      dataCadastro: pessoa.dataCadastro,
+      tipoCadastro: pessoa.tipoCadastro,
+      emails: pessoa.emails,
+      enderecos: pessoa.enderecos,
+      telefones: pessoa.telefones,
+      pessoaCadastro: pessoa.pessoaJuridica,
+      clientes: pessoa.clientes,
+    };
   }
 }
 
