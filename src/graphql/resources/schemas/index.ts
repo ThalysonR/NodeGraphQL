@@ -12,6 +12,7 @@ import { precoMutations, precoQueries, precoTypes } from './preco.schema';
 import { similarMutations, similarQueries, similarTypes } from './similar.schema';
 import { tokenMutations, tokenTypes } from './token.schema';
 import { usuarioMutations, usuarioQueries, usuarioTypes } from './usuario.schema';
+import { pessoaMutations, pessoaTypes, pessoaQueries } from './pessoa.schema';
 
 const mutations = [
   aplicacoesMutations,
@@ -23,6 +24,7 @@ const mutations = [
   similarMutations,
   tokenMutations,
   usuarioMutations,
+  pessoaMutations,
 ];
 
 const types = [
@@ -36,6 +38,7 @@ const types = [
   similarTypes,
   tokenTypes,
   usuarioTypes,
+  pessoaTypes,
 ];
 
 const queries = [
@@ -48,6 +51,7 @@ const queries = [
   precoQueries,
   similarQueries,
   usuarioQueries,
+  pessoaQueries,
 ];
 
 export { mutations, types, queries };

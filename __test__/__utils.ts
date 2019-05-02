@@ -8,6 +8,7 @@ export const constructTestServer = ({ authUser = {}, authorization = {} }: any =
     precoApi: new dataSources.PrecoAPI(),
     geralApi: new dataSources.GeralAPI(),
     imagemApi: new dataSources.ImagemAPI(),
+    pessoaApi: new dataSources.PessoaApi(),
   };
 
   const server = new ApolloServer({

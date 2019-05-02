@@ -5,4 +5,5 @@ export interface DataSources {
   precoApi: dataSources.PrecoAPI;
   geralApi: dataSources.GeralAPI;
   imagemApi: dataSources.ImagemAPI;
+  pessoaApi: dataSources.PessoaApi;
 }

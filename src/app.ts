@@ -31,6 +31,7 @@ class App {
         precoApi: new dataSources.PrecoAPI(),
         geralApi: new dataSources.GeralAPI(),
         imagemApi: new dataSources.ImagemAPI(),
+        pessoaApi: new dataSources.PessoaApi(),
       }),
       formatError: err => formatError(err),
       context: async ({ req, res }: any) => {

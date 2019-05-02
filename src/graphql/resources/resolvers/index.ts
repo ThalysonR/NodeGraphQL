@@ -1,3 +1,4 @@
+import { pessoaResolvers } from './pessoa.resolvers';
 import { catalogoResolvers } from './catalogo.resolvers';
 import { geralResolvers } from './geral.resolvers';
 import { imagemResolvers } from './imagem.resolvers';
@@ -12,4 +13,5 @@ export default [
   precoResolvers,
   tokenResolvers,
   usuarioResolvers,
+  pessoaResolvers,
 ];
