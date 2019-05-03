@@ -1,57 +1,48 @@
 const produtoTypes = `
-type Data{
-    produtos: Produtos!
+type ProdutosPage{
+    produtos: [Produto]!
     tags: [String]!
 }
 
-type Produtos{
-    content: [Content]!
-    pageable: Pageable
-    facets: [String]
-    aggregations: Aggregations
-    scrollId: String
-    totalPages: Int
-    totalElements: Int
-    sort: Sort
-    first: Boolean
-    last: Boolean
-    numberOfElements: Int
-    size: Int
-    number: Int
+type Produto{
+  id:  ID!
+  idEmpresa: Int!
+  idFornecedor: Int!
+  nomeFornecedor: String!
+  codigoProduto: String!
+  codigoOriginalProduto: Int
+  nomeProduto: String!
+  frequencia: Int!
+  codProduto: String!
+  score: Int
+  tags: String
+  carType: String
+  carId: Int
+  articleNo: Int
+  manuId: Int
+  models: [Models!]!
+  modeloCarro: String
+  fabricante: String
+  anos: [String]
+  eixo: [String]
+  posicao: [String]
+  lado: [String]
+  motor: [String]
+  combustivel: [String]
+  aplicacao: [String]
+  montadoras: [String]
+  prefixo: String
+  aro: String
+  perfil: String
+  viscosidade: String
+  amperagem: String
+  preco: PrecoProduto
+  imagem: String
 }
 
-type Content {
-    id:  ID!
-    idEmpresa: Int!
-    idFornecedor: Int!
-    nomeFornecedor: String!
-    codigoProduto: String!
-    codigoOriginalProduto: Int
-    nomeProduto: String!
-    frequencia: Int!
-    codProduto: String!
-    score: Int
-    tags: String
-    carType: String
-    carId: Int
-    articleNo: Int
-    manuId: Int
-    models: [Models!]!
-    modeloCarro: String
-    fabricante: String
-    anos: [String]
-    eixo: [String]
-    posicao: [String]
-    lado: [String]
-    motor: [String]
-    combustivel: [String]
-    aplicacao: [String]
-    montadoras: [String]
-    prefixo: String
-    aro: String
-    perfil: String
-    viscosidade: String
-    amperagem: String
+type PrecoProduto {
+  valor: Float!
+  unidadeVenda: String!
 }
 
 type Models{
@@ -69,40 +60,18 @@ type ModelTipos{
     eixoMotriz: String
 }
 
-type Pageable{
-    sort: Sort
-    pageSize: Int
-    pageNumber: Int
-    offset: Int
-    unpaged: Boolean
-    paged: Boolean
-}
-
-type Sort{
-    unsorted: Boolean
-    sorted: Boolean
-}
-
-type Aggregations{
-    fragment: Boolean
-    asMap: AsMap
-}
-
-type AsMap{
-    asMap: String
-}
-
 input PesqProduto{
     page: Int!
     count: Int!
     order: String!
     sort: String!
     nomeProduto: String!
+    cpfCnpj: String
 }
 `;
 
 const produtoQueries = `
-    getproduto(pesqProduto: PesqProduto!): Data!
+    getProdutos(pesqProduto: PesqProduto!): ProdutosPage!
 `;
 
 const produtoMutations = `

@@ -8,7 +8,10 @@ describe('Test Catalog', () => {
   const secret = `Bearer: ${jwt.sign('123456', JWT_TOKEN_SECRET)}`;
 
   it('test on request response', async () => {
-    const { server, catalogoApi } = constructTestServer({ authUser: 1, authorization: secret });
+    const { server, catalogoApi, pessoaApi } = constructTestServer({
+      authUser: 1,
+      authorization: secret,
+    });
 
     // @ts-ignore
     catalogoApi.get = jest.fn(() => ({
@@ -94,13 +97,101 @@ describe('Test Catalog', () => {
       },
       tags: ['GOL', 'PARATI'],
     }));
+    // @ts-ignore
+    pessoaApi.get = jest.fn(() => ({
+      nomeCompleto: 'KATIA',
+      nomeFantasia: 'KATIA',
+      tipoPessoa: 'PF',
+      dataCadastro: '1542772800000',
+      tipoCadastro: 1,
+      emails: [
+        {
+          id: 926562,
+          descricao: 'antonio_igor13@hotmail.com',
+          finalidade: 1,
+          contato: 'NAO TEM',
+        },
+      ],
+      enderecos: [
+        {
+          id: 319536,
+          inscricaoEstadual: {
+            id: 150005,
+            inscricao: 'ISENTO',
+            contribuinte: 'N',
+            validContribuinte: true,
+          },
+          codPais: 1058,
+          infobusca: 0,
+          logradouro: 'RUA RIO CUNIUA',
+          codUf: 13,
+          codMunicipio: 1302603,
+          cep: '69089180',
+          bairro: 'ARMANDO MENDES',
+          numero: '12',
+          contato: '-',
+          complemento: '-',
+          tipo: 1,
+          validInfoBusca: true,
+          validTipoEndereco: true,
+          numeroNulo: false,
+          validTipoFiscal: false,
+        },
+      ],
+      telefones: [
+        {
+          id: 1432263,
+          numero: 222222222,
+          ddd: 22,
+          tipo: 3,
+          contato: 'NAO TEM',
+        },
+      ],
+      pessoaFisica: {
+        id: 10905700,
+        cpf: '02570039241',
+        numeroRg: '21112545',
+        emissaoRg: '819864000000',
+        emissorRg: 'SSP',
+        cgf: null,
+        inscricaoMunicipal: ' ',
+        operIsenta: 'N',
+        calcIpi: 'N',
+      },
+      clientes: {
+        id: 145995,
+        bloqueio: 'N',
+        agruparNotas: 'N',
+        cobrador: 'CAR',
+        tipoPreco: 'N',
+        cartaFianca: 'N',
+        valorCarta: 0,
+        prazoMedio: 0,
+        conceito: 'XX',
+        exignfdv: 'N',
+        observacao: '-',
+        limiteCredito: 0,
+        tpEmpresa: '4',
+        qtdElevador: 0,
+        qtdMecanico: 0,
+        qtdVeiculos: 0,
+        qtdVendedor: 0,
+        linhaLeve: 'S',
+        linhaPesada: 'N',
+        linhaMedia: 'N',
+        linhaOutras: 'N',
+        metragemAuto: 0,
+        metragemOfic: 0,
+        percentualAumento: 0,
+      },
+    }));
 
     const { query } = createTestClient(server);
 
     const res = await query({
       query: gql`
         {
-          getproduto(
+          getProdutos(
             pesqProduto: {
               page: 0
               count: 1
@@ -110,80 +201,52 @@ describe('Test Catalog', () => {
             }
           ) {
             produtos {
-              content {
-                id
-                idEmpresa
-                idFornecedor
-                nomeFornecedor
-                codigoProduto
-                codigoOriginalProduto
-                nomeProduto
-                frequencia
-                codProduto
-                score
-                tags
-                carType
-                carId
-                articleNo
-                manuId
-                models {
-                  nomeCarro
-                  modelTipos {
-                    tipoNome
-                    geracao
-                    motor
-                    anos
-                    nomeMotor
-                    modeloTransmissao
-                    eixoMotriz
-                  }
-                }
-                modeloCarro
-                fabricante
-                anos
-                eixo
-                posicao
-                lado
-                motor
-                combustivel
-                aplicacao
-                montadoras
-                prefixo
-                aro
-                perfil
-                viscosidade
-                amperagem
-              }
-              pageable {
-                sort {
-                  unsorted
-                  sorted
-                }
-                pageSize
-                pageNumber
-                offset
-                unpaged
-                paged
-              }
-              facets
-              aggregations {
-                fragment
-                asMap {
-                  asMap
+              id
+              idEmpresa
+              idFornecedor
+              nomeFornecedor
+              codigoProduto
+              codigoOriginalProduto
+              nomeProduto
+              frequencia
+              codProduto
+              score
+              tags
+              carType
+              carId
+              articleNo
+              manuId
+              models {
+                nomeCarro
+                modelTipos {
+                  tipoNome
+                  geracao
+                  motor
+                  anos
+                  nomeMotor
+                  modeloTransmissao
+                  eixoMotriz
                 }
               }
-              scrollId
-              totalPages
-              totalElements
-              sort {
-                unsorted
-                sorted
+              modeloCarro
+              fabricante
+              anos
+              eixo
+              posicao
+              lado
+              motor
+              combustivel
+              aplicacao
+              montadoras
+              prefixo
+              aro
+              perfil
+              viscosidade
+              amperagem
+              preco {
+                valor
+                unidadeVenda
               }
-              first
-              last
-              numberOfElements
-              size
-              number
             }
             tags
           }
@@ -192,7 +255,7 @@ describe('Test Catalog', () => {
     });
 
     // @ts-ignore
-    expect(res.data.getproduto.produtos.content[0]).toHaveProperty('nomeProduto');
+    expect(res.data.getProdutos.produtos[0]).toHaveProperty('nomeProduto');
   });
 
   it('catalog test and client endpoint', async () => {

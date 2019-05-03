@@ -14,7 +14,17 @@ class PessoaApi extends RESTDataSource {
     return this.pessoaReducerFisica(response);
   }
 
-  public pessoaReducerFisica(pessoa) {
+  public async searchPessoaJuridica(text) {
+    const params = text;
+    const response = await this.get('pessoa/cnpj/' + params);
+    return this.pessoaReducerJuridica(response);
+  }
+
+  public async buscaConsumidorFinal() {
+    return await this.get('pessoa/buscaConsumidorFinal');
+  }
+
+  private pessoaReducerFisica(pessoa) {
     return {
       nomeCompleto: pessoa.nomeCompleto,
       nomeFantasia: pessoa.nomeFantasia,
@@ -29,13 +39,7 @@ class PessoaApi extends RESTDataSource {
     };
   }
 
-  public async searchPessoaJuridica(text) {
-    const params = text;
-    const response = await this.get('pessoa/cnpj/' + params);
-    return this.pessoaReducerJuridica(response);
-  }
-
-  public pessoaReducerJuridica(pessoa) {
+  private pessoaReducerJuridica(pessoa) {
     return {
       nomeCompleto: pessoa.nomeCompleto,
       nomeFantasia: pessoa.nomeFantasia,
