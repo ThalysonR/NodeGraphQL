@@ -4,9 +4,16 @@ import { ResolverContext } from '../../../interfaces/ResolverContextInterface';
 
 const camposDinamicos = {
   'getProdutos.produtos.preco': async (args, { dataSources }: ResolverContext, produtosPage) => {
-    const chamadaConsumidor = args.pesqProduto.cpfCnpj
-      ? dataSources.pessoaApi.searchPessoa
-      : dataSources.pessoaApi.buscaConsumidorFinal;
+    let chamadaConsumidor;
+    if (args.pesqProduto.cpfCnpj) {
+      if (args.pesqProduto.cpfCnpj.length > 11) {
+        chamadaConsumidor = dataSources.pessoaApi.searchPessoaJuridica;
+      } else {
+        chamadaConsumidor = dataSources.pessoaApi.searchPessoa;
+      }
+    } else {
+      chamadaConsumidor = dataSources.pessoaApi.buscaConsumidorFinal;
+    }
 
     const consumidor = await chamadaConsumidor.call(
       dataSources.pessoaApi,
