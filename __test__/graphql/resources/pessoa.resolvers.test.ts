@@ -183,4 +183,176 @@ describe('Test Pessoa', () => {
     // @ts-ignore
     expect(res.data.getPessoa).toHaveProperty('nomeCompleto');
   });
+
+  it('endpoint cnpj test', async () => {
+    const { server, pessoaApi } = constructTestServer({ authUser: 1, authorization: secret });
+
+    // @ts-ignore
+    pessoaApi.get = jest.fn(() => ({
+      nomeCompleto: 'INTEGRACAO TRANSPORTES LTDA',
+      nomeFantasia: 'EUCATTUR',
+      pessoaJuridica: {
+        cnpj: '13484296000105',
+        id: '33006',
+        inscricaoMunicipal: ' ',
+        cgf: ' ',
+      },
+      clientes: {
+        id: 34223,
+        tipoPreco: 'N',
+        percentualAumento: 1,
+      },
+      telefones: [
+        {
+          numero: 991160268,
+          ddd: 92,
+          tipo: 1,
+          contato: 'COMPRAS',
+        },
+      ],
+      emails: [
+        {
+          descricao: 'almox3_mns@eucatur.com.br',
+        },
+      ],
+      enderecos: [
+        {
+          logradouro: 'AV. CAMAPUA, SALA 01',
+        },
+      ],
+    }));
+
+    const { query } = createTestClient(server);
+
+    const res = await query({
+      query: gql`
+        {
+          getPessoa(text: "13484296000105") {
+            nomeCompleto
+            nomeFantasia
+            pessoaCadastro {
+              ... on PessoaJuridica {
+                cnpj
+              }
+              ... on PessoaFisica {
+                cpf
+              }
+              id
+              inscricaoMunicipal
+              cgf
+            }
+            clientes {
+              id
+              tipoPreco
+            }
+            telefones {
+              numero
+              ddd
+              tipo
+              contato
+            }
+            emails {
+              descricao
+            }
+            enderecos {
+              logradouro
+            }
+            clientes {
+              tipoPreco
+              percentualAumento
+            }
+          }
+        }
+      `,
+    });
+
+    // @ts-ignore
+    expect(res.data.getPessoa).toHaveProperty('nomeCompleto');
+  });
+
+  it('endpoint test null', async () => {
+    const { server, pessoaApi } = constructTestServer({ authUser: 1, authorization: secret });
+
+    // @ts-ignore
+    pessoaApi.get = jest.fn(() => ({
+      nomeCompleto: 'INTEGRACAO TRANSPORTES LTDA',
+      nomeFantasia: 'EUCATTUR',
+      pessoaJuridica: {
+        cnpj: null,
+        id: '33006',
+        inscricaoMunicipal: ' ',
+        cgf: ' ',
+      },
+      clientes: {
+        id: 34223,
+        tipoPreco: 'N',
+        percentualAumento: 1,
+      },
+      telefones: [
+        {
+          numero: 991160268,
+          ddd: 92,
+          tipo: 1,
+          contato: 'COMPRAS',
+        },
+      ],
+      emails: [
+        {
+          descricao: 'almox3_mns@eucatur.com.br',
+        },
+      ],
+      enderecos: [
+        {
+          logradouro: 'AV. CAMAPUA, SALA 01',
+        },
+      ],
+    }));
+
+    const { query } = createTestClient(server);
+
+    const res = await query({
+      query: gql`
+        {
+          getPessoa(text: "13484296000105") {
+            nomeCompleto
+            nomeFantasia
+            pessoaCadastro {
+              ... on PessoaJuridica {
+                cnpj
+              }
+              ... on PessoaFisica {
+                cpf
+              }
+              id
+              inscricaoMunicipal
+              cgf
+            }
+            clientes {
+              id
+              tipoPreco
+            }
+            telefones {
+              numero
+              ddd
+              tipo
+              contato
+            }
+            emails {
+              descricao
+            }
+            enderecos {
+              logradouro
+            }
+            clientes {
+              tipoPreco
+              percentualAumento
+            }
+          }
+        }
+      `,
+    });
+
+    // @ts-ignore
+    expect(res.data.getPessoa).not.toBeNull();
+  });
 });

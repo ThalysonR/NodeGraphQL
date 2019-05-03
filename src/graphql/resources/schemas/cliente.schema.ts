@@ -3,8 +3,8 @@ type Cliente {
     id: ID!
     nome: String!
     municipio: String!
-    cnpj: Int!
-    cpf: Int!
+    cnpj: String
+    cpf: String
     estado: String!
     bairro: String!
     endereco: String!
