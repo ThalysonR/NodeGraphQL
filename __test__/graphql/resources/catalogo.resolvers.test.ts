@@ -8,7 +8,7 @@ describe('Test Catalog', () => {
   const secret = `Bearer: ${jwt.sign('123456', JWT_TOKEN_SECRET)}`;
 
   it('test on request response', async () => {
-    const { server, catalogoApi, pessoaApi } = constructTestServer({
+    const { server, catalogoApi, pessoaApi, precoApi } = constructTestServer({
       authUser: 1,
       authorization: secret,
     });
@@ -185,6 +185,19 @@ describe('Test Catalog', () => {
         percentualAumento: 0,
       },
     }));
+    // @ts-ignore
+    precoApi.post = jest.fn(() => [
+      {
+        fornecedorCodigo: 144,
+        empresa: 1,
+        produto: 'B47097',
+        unidade: [
+          {
+            preco: 113.5,
+          },
+        ],
+      },
+    ]);
 
     const { query } = createTestClient(server);
 
@@ -247,6 +260,7 @@ describe('Test Catalog', () => {
                 valor
                 unidadeVenda
               }
+              imagem
             }
             tags
           }
