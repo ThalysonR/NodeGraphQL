@@ -6,12 +6,7 @@ export const pessoaResolvers = {
   Query: {
     getPessoa: gqlCompose(...authResolvers)(
       async (parent, args, { dataSources }: ResolverContext) => {
-        const endpoint =
-          args.text.length > 11
-            ? dataSources.pessoaApi.searchPessoaJuridica
-            : dataSources.pessoaApi.searchPessoa;
-        const pessoa = await endpoint.call(dataSources.pessoaApi, args.text);
-        return pessoa;
+        return await dataSources.pessoaApi.searchPessoa(args.text);
       },
     ),
   },

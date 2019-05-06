@@ -5,15 +5,20 @@ const usuarioTypes = `
         cod_pessoa: Int!
         nome_completo: String!
         nome_fantasia: String!
-        tipo_pessoa: String!
+        tipo_pessoa: TipoPessoa!
         email: String!
         cpf: String!
         cnpj: String!
-        
+
         login: String!
         senha: String!
 
         perfil: Perfil!
+    }
+
+    enum TipoPessoa {
+      PJ
+      PF
     }
 
     type Perfil{

@@ -1,13 +1,11 @@
-import {ERROR} from '../../../environment';
-import {createTokens} from "../../../authentication/handleTokens";
-import {ResolverContext} from "../../../interfaces/ResolverContextInterface";
-import {PessoaService} from "../../../services";
+import { ERROR } from '../../../environment';
+import { createTokens } from '../../../authentication/handleTokens';
+import { ResolverContext } from '../../../interfaces/ResolverContextInterface';
+import { PessoaService } from '../../../services';
 
 export const tokenResolvers = {
-
   Mutation: {
-    createToken: async (parent: any, {login, senha}: any, {db}: ResolverContext) => {
-
+    createToken: async (parent: any, { login, senha }: any, { db }: ResolverContext) => {
       if (!login || !senha) {
         throw new Error(ERROR.USER.EMPTY_CREDENTIALS);
       }
@@ -37,29 +35,30 @@ export const tokenResolvers = {
       }
 
       return db.Usuario.findOne({
-        where: {login: cpfCnpj, cod_pessoa: pessoa.codpessoa},
+        where: { login: cpfCnpj, cod_pessoa: pessoa.codpessoa },
         attributes: ['id_usuario', 'senha', 'cod_pessoa', 'login', 'email'],
-        include: [{
-          model: db.Perfil,
-          through: {
-            attributes: ['nome_perfil']
+        include: [
+          {
+            model: db.Perfil,
+            through: {
+              attributes: ['nome_perfil'],
+            },
+            as: 'perfis',
           },
-          as: 'perfis'
-        }]
-      }).then(async (usuario) => {
+        ],
+      }).then(async usuario => {
         if (!usuario || !usuario.isPassword(usuario.get('senha'), senha)) {
           throw new Error(ERROR.USER.WRONG_CREDENTIALS);
         }
 
         const usuarioId = usuario.get('id_usuario');
 
-        const [newToken, newRefreshToken] = await createTokens({id: usuarioId});
+        const [newToken, newRefreshToken] = await createTokens({ id: usuarioId });
 
         return {
           token: newToken,
           refreshToken: newRefreshToken,
           usuario: {
-            cod_pessoa: usuario.cod_pessoa,
             login: usuario.login,
             email: usuario.email,
             nome_completo: pessoa.nome_completo,
@@ -68,11 +67,11 @@ export const tokenResolvers = {
             cpf: pessoa.cpf || '',
             cnpj: pessoa.cnpj || '',
             perfil: {
-              nome_perfil: usuario.perfis[0] != null ? usuario.perfis[0].nome_perfil : ''
-            }
-          }
-        }
+              nome_perfil: usuario.perfis[0] != null ? usuario.perfis[0].nome_perfil : '',
+            },
+          },
+        };
       });
-    }
-  }
+    },
+  },
 };
