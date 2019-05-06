@@ -4,21 +4,7 @@ import { ResolverContext } from '../../../interfaces/ResolverContextInterface';
 
 const camposDinamicos = {
   'getProdutos.produtos.preco': async (args, { dataSources }: ResolverContext, produtosPage) => {
-    let chamadaConsumidor;
-    if (args.pesqProduto.cpfCnpj) {
-      if (args.pesqProduto.cpfCnpj.length > 11) {
-        chamadaConsumidor = dataSources.pessoaApi.searchPessoaJuridica;
-      } else {
-        chamadaConsumidor = dataSources.pessoaApi.searchPessoa;
-      }
-    } else {
-      chamadaConsumidor = dataSources.pessoaApi.buscaConsumidorFinal;
-    }
-
-    const consumidor = await chamadaConsumidor.call(
-      dataSources.pessoaApi,
-      args.pesqProduto.cpfCnpj,
-    );
+    const consumidor = await dataSources.pessoaApi.searchPessoa(args.text);
 
     const buscaProduto = produtosPage.produtos.map(produto => ({
       condicao: 'XXXXXXX',
@@ -57,7 +43,6 @@ const camposDinamicos = {
       CodFornecedor: produto.idFornecedor,
       CodProduto: produto.codigoProduto,
     }));
-
     const imagens = await dataSources.imagemApi.searchImagem(buscaImagem);
 
     const produtosComImagem = produtosPage.produtos.map(produto => {

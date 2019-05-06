@@ -7,7 +7,8 @@ const usuarioTypes = `
         nome_fantasia: String!
         tipo_pessoa: TipoPessoa!
         email: String!
-        codigoPessoa: String!
+        cpf: String!
+        cnpj: String!
 
         login: String!
         senha: String!

@@ -64,7 +64,8 @@ export const tokenResolvers = {
             nome_completo: pessoa.nome_completo,
             nome_fantasia: pessoa.nome_fantasia,
             tipo_pessoa: pessoa.tipo_pessoa,
-            codigoPessoa: pessoa.cpf || pessoa.cnpj || '',
+            cpf: pessoa.cpf || '',
+            cnpj: pessoa.cnpj || '',
             perfil: {
               nome_perfil: usuario.perfis[0] != null ? usuario.perfis[0].nome_perfil : '',
             },
