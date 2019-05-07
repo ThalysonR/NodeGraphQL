@@ -11,6 +11,16 @@ type Pessoa{
   telefones: [Telefones]
   pessoaCadastro: PessoaCadastro
   clientes: Clientes
+  saldo: SaldoCliente
+}
+
+type SaldoCliente {
+  limite: Float!
+  emAberto: Float!
+  saldo: Float!
+  aviso: String
+  permissao: String
+  bloqueado: String!
 }
 
 type Email {
@@ -118,7 +128,7 @@ type Emails {
 `;
 
 const pessoaQueries = `
-  getPessoa(text: String!): Pessoa!
+  getPessoa(text: String): Pessoa!
 `;
 
 const pessoaMutations = `

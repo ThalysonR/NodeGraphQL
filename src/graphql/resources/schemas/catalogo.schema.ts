@@ -36,13 +36,14 @@ type Produto{
   perfil: String
   viscosidade: String
   amperagem: String
-  preco: PrecoProduto
+  unidade: PrecoProduto
+  caixa: PrecoProduto
   imagem: String
 }
 
 type PrecoProduto {
-  valor: Float!
-  unidadeVenda: String!
+  preco: Float!
+  qtd: String!
 }
 
 type Models{

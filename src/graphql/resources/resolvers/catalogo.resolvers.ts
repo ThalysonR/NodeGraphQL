@@ -3,7 +3,11 @@ import { handleError, gqlCompose, mapDynamicFields } from '../../../utils/utils'
 import { ResolverContext } from '../../../interfaces/ResolverContextInterface';
 
 const camposDinamicos = {
-  'getProdutos.produtos.preco': async (args, { dataSources }: ResolverContext, produtosPage) => {
+  'getProdutos.produtos.unidade|caixa': async (
+    args,
+    { dataSources }: ResolverContext,
+    produtosPage,
+  ) => {
     const consumidor = await dataSources.pessoaApi.searchPessoa(args.text);
 
     const buscaProduto = produtosPage.produtos.map(produto => ({
@@ -27,14 +31,13 @@ const camposDinamicos = {
           produtoPreco.empresa.toString() === produto.idEmpresa &&
           produtoPreco.produto === produto.codigoProduto,
       );
-      const preco =
-        produtoEncontrado != null
-          ? {
-              valor: produtoEncontrado.unidade[0].preco,
-              unidadeVenda: produtoEncontrado.unidade[0].tipo,
-            }
-          : null;
-      return { ...produto, preco };
+      let unidade = null;
+      let caixa = null;
+      if (produtoEncontrado != null) {
+        unidade = produtoEncontrado.unidade.find(un => un.tipo === 'UN');
+        caixa = produtoEncontrado.unidade.find(un => un.tipo === 'CX');
+      }
+      return { ...produto, unidade, caixa };
     });
     return { produtos: produtosComPreco, tags: produtosPage.tags };
   },

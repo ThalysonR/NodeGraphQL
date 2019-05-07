@@ -264,9 +264,9 @@ describe('Test Catalog', () => {
               perfil
               viscosidade
               amperagem
-              preco {
-                valor
-                unidadeVenda
+              unidade {
+                preco
+                qtd
               }
               imagem
             }
@@ -495,8 +495,9 @@ describe('Test Catalog', () => {
             }
           ) {
             produtos {
-              preco {
-                valor
+              unidade {
+                preco
+                qtd
               }
               imagem
             }

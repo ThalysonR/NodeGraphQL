@@ -12,11 +12,6 @@ class PrecoAPI extends RESTDataSource {
     const produtos = await this.post('preco/buscaListaProdutosEstoquePreco', buscaProdutos);
     return produtos;
   }
-
-  public async buscaCondicaoPagamento(buscaCondicao) {
-    const res = await this.get('preco/buscaCondicaoPagamento', buscaCondicao);
-    return res.retorno;
-  }
 }
 
 export default PrecoAPI;
