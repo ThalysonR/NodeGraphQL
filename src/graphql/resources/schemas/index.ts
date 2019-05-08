@@ -6,7 +6,6 @@ import {
 } from './autocomplete.schema';
 import { produtoMutations, produtoQueries, produtoTypes } from './catalogo.schema';
 import { clienteMutations, clienteQueries, clienteType } from './cliente.schema';
-import { similarMutations, similarQueries, similarTypes } from './similar.schema';
 import { tokenMutations, tokenTypes } from './token.schema';
 import { usuarioMutations, usuarioQueries, usuarioTypes } from './usuario.schema';
 import { pessoaMutations, pessoaTypes, pessoaQueries } from './pessoa.schema';
@@ -16,7 +15,6 @@ const mutations = [
   autocompleteMutations,
   produtoMutations,
   clienteMutations,
-  similarMutations,
   tokenMutations,
   usuarioMutations,
   pessoaMutations,
@@ -27,7 +25,6 @@ const types = [
   autocompleteTypes,
   produtoTypes,
   clienteType,
-  similarTypes,
   tokenTypes,
   usuarioTypes,
   pessoaTypes,
@@ -38,7 +35,6 @@ const queries = [
   autocompleteQueries,
   produtoQueries,
   clienteQueries,
-  similarQueries,
   usuarioQueries,
   pessoaQueries,
 ];

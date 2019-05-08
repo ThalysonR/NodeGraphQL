@@ -878,7 +878,9 @@ describe('Test Catalog', () => {
     const res = await query({
       query: gql`
         {
-          getSimilar(buscaSimilar: { filial: 34, empresa: 1, fornecedor: 144, produto: "B47097" }) {
+          getSimilares(
+            pesqSimilar: { filial: 34, empresa: 1, fornecedor: 144, produto: "B47097" }
+          ) {
             id
             idEmpresa
             idFornecedor
@@ -892,7 +894,7 @@ describe('Test Catalog', () => {
     });
 
     // @ts-ignore
-    expect(res.data.getSimilar[0]).toHaveProperty('nomeProduto');
+    expect(res.data.getSimilares[0]).toHaveProperty('nomeProduto');
   });
 
   it('autocomplete endpoint test', async () => {

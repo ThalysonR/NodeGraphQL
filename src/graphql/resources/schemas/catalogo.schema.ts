@@ -69,10 +69,19 @@ input PesqProduto{
     nomeProduto: String!
     cpfCnpj: String
 }
+
+input PesqSimilar {
+  filial: Int!
+  empresa: Int!
+  fornecedor: Int!
+  produto: String!
+  cpfCnpj: String
+}
 `;
 
 const produtoQueries = `
     getProdutos(pesqProduto: PesqProduto!): ProdutosPage!
+    getSimilares(pesqSimilar: PesqSimilar): [Produto]!
 `;
 
 const produtoMutations = `
