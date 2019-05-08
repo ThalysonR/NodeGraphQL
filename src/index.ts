@@ -4,7 +4,7 @@ import { normalizePort } from './utils/utils';
 import { Server } from 'http';
 
 const port = normalizePort(process.env.port || 3000);
-const host = process.env.host || '192.168.108.17';
+const host = process.env.host || '127.0.0.1';
 
 db.sequelize.sync().then(() => {
   app

@@ -20,7 +20,7 @@ export const tokenResolvers = {
 
       return db.Usuario.findOne({
         where: {login: cpfCnpj},
-        attributes: ['id_usuario', 'senha', 'login', 'email'],
+        attributes: ['id_usuario', 'senha', 'login', 'email', 'status_usuario'],
         include: [
           {
             model: db.Perfil,
@@ -32,6 +32,11 @@ export const tokenResolvers = {
         ],
       }).then(async usuario => {
         if (!usuario || !usuario.isPassword(usuario.get('senha'), senha)) {
+          throw new Error(ERROR.USER.WRONG_CREDENTIALS);
+        }
+
+        /* istanbul ignore if */
+        if (usuario.get('status_usuario') !== "A") {
           throw new Error(ERROR.USER.WRONG_CREDENTIALS);
         }
 
