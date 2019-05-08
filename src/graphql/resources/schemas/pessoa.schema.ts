@@ -3,7 +3,7 @@ type Pessoa{
   id: ID!
   nomeCompleto: String
   nomeFantasia: String
-  tipoPessoa: String
+  tipoPessoa: TipoPessoa!
   dataCadastro: String
   tipoCadastro: Int
   emails: [Emails]
@@ -12,6 +12,11 @@ type Pessoa{
   pessoaCadastro: PessoaCadastro
   clientes: Clientes
   saldo: SaldoCliente
+}
+
+enum TipoPessoa {
+  PJ
+  PF
 }
 
 type SaldoCliente {
@@ -111,7 +116,7 @@ type Clientes {
   metragemOfic: Int
   percentualAumento: Int
 }
-
+  
 type InscricaoEstadual{
   id: Int
   inscricao: String
