@@ -801,7 +801,7 @@ describe('Test Catalog', () => {
         },
       ],
       pagina: 1,
-      totalDados: 1,
+      totalPorPagina: 1,
     }));
 
     const { query } = createTestClient(server);
@@ -823,7 +823,7 @@ describe('Test Catalog', () => {
               }
             }
             pagina
-            totalDados
+            totalPorPagina
           }
         }
       `,

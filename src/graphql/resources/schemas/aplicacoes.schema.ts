@@ -2,7 +2,8 @@ const aplicacoesTypes = `
 type Aplicacoes{
   listaDados: [ListaDados]!
   pagina: Int!
-  totalDados: Int!
+  totalPorPagina: Int!
+  totalElements: Int!
 }
 
 type ListaDados{
