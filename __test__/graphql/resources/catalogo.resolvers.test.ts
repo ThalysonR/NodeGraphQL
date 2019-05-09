@@ -782,38 +782,54 @@ describe('Test Catalog', () => {
     const { server, catalogoApi } = constructTestServer({ authUser: 1, authorization: secret });
 
     // @ts-ignore
-    catalogoApi.get = jest.fn(() => [
-      {
-        aplicacao: 'GOL',
-        inicio: '1/1900',
-        fim: '12/1999',
-        original: ' ',
-      },
-      {
-        aplicacao: 'GOL 1.8',
-        inicio: '1/1900',
-        fim: '12/1999',
-        original: ' ',
-      },
-    ]);
+    catalogoApi.get = jest.fn(() => ({
+      listaDados: [
+        {
+          nomeCarro: 'ACCELO',
+          modelTipos: [
+            {
+              tipoNome: '1016/31',
+              geracao: '',
+              motor: '4.8',
+              anos: ['2012', '2013', '2014', '2015', '2016', '2017', '2018', '2019', '2020'],
+              nomeMotor: 'BLUETEC 5',
+              modeloTransmissao: 'FSO 4505 HDA',
+              eixoMotriz: 'HL2',
+            },
+          ],
+        },
+      ],
+      pagina: 1,
+      totalDados: 1,
+    }));
 
     const { query } = createTestClient(server);
 
     const res = await query({
       query: gql`
         {
-          getAplicacoes(buscaAplicacoes: { empresa: 1, fornecedor: 144, produto: "B47097" }) {
-            aplicacao
-            inicio
-            fim
-            original
+          getAplicacoes(buscaAplicacoes: { page: 0, count: 1, codProduto: "1___1847___DNI0102" }) {
+            listaDados {
+              nomeCarro
+              modelTipos {
+                tipoNome
+                geracao
+                motor
+                anos
+                nomeMotor
+                modeloTransmissao
+                eixoMotriz
+              }
+            }
+            pagina
+            totalDados
           }
         }
       `,
     });
 
     // @ts-ignore
-    expect(res.data.getAplicacoes[0]).toHaveProperty('aplicacao');
+    expect(res.data.getAplicacoes).toHaveProperty('listaDados');
   });
 
   it('similar catalog endpoint testing', async () => {

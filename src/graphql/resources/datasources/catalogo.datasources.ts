@@ -18,7 +18,7 @@ class CatalogoAPI extends RESTDataSource {
   }
 
   public async searchAplicacoes(buscaAplicacoes) {
-    const aplicacoes = await this.get('produto/aplicacoes', buscaAplicacoes);
+    const aplicacoes = await this.get('produto/pageAplicacoes', buscaAplicacoes);
     return aplicacoes;
   }
 
