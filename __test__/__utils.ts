@@ -2,7 +2,7 @@ import { typeDefs, resolvers } from '../src/graphql/schema';
 import { ApolloServer, gql } from 'apollo-server';
 import * as dataSources from '../src/graphql/resources/datasources';
 
-export const constructTestServer = ({ authUser = {}, authorization = {} }: any = {}) => {
+export const constructTestServer = ({ authUser = {}, authorization = {}, db = {}}: any = {}) => {
   const apis = {
     catalogoApi: new dataSources.CatalogoAPI(),
     precoApi: new dataSources.PrecoAPI(),
@@ -17,7 +17,7 @@ export const constructTestServer = ({ authUser = {}, authorization = {} }: any =
     `,
     resolvers,
     dataSources: () => apis,
-    context: () => ({ authUser, authorization }),
+    context: () => ({ authUser, authorization, db }),
   });
 
   return { server, ...apis };

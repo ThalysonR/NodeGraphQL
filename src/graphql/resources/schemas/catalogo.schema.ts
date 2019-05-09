@@ -36,13 +36,14 @@ type Produto{
   perfil: String
   viscosidade: String
   amperagem: String
-  preco: PrecoProduto
+  unidade: PrecoProduto
+  caixa: PrecoProduto
   imagem: String
 }
 
 type PrecoProduto {
-  valor: Float!
-  unidadeVenda: String!
+  preco: Float!
+  qtd: String!
 }
 
 type Models{
@@ -68,10 +69,19 @@ input PesqProduto{
     nomeProduto: String!
     cpfCnpj: String
 }
+
+input PesqSimilar {
+  filial: Int!
+  empresa: Int!
+  fornecedor: Int!
+  produto: String!
+  cpfCnpj: String
+}
 `;
 
 const produtoQueries = `
     getProdutos(pesqProduto: PesqProduto!): ProdutosPage!
+    getSimilares(pesqSimilar: PesqSimilar): [Produto]!
 `;
 
 const produtoMutations = `

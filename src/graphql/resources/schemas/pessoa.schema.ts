@@ -3,7 +3,7 @@ type Pessoa{
   id: ID!
   nomeCompleto: String
   nomeFantasia: String
-  tipoPessoa: String
+  tipoPessoa: TipoPessoa!
   dataCadastro: String
   tipoCadastro: Int
   emails: [Emails]
@@ -11,6 +11,21 @@ type Pessoa{
   telefones: [Telefones]
   pessoaCadastro: PessoaCadastro
   clientes: Clientes
+  saldo: SaldoCliente
+}
+
+enum TipoPessoa {
+  PJ
+  PF
+}
+
+type SaldoCliente {
+  limite: Float!
+  emAberto: Float!
+  saldo: Float!
+  aviso: String
+  permissao: String
+  bloqueado: String!
 }
 
 type Email {
@@ -101,7 +116,7 @@ type Clientes {
   metragemOfic: Int
   percentualAumento: Int
 }
-
+  
 type InscricaoEstadual{
   id: Int
   inscricao: String
@@ -118,7 +133,7 @@ type Emails {
 `;
 
 const pessoaQueries = `
-  getPessoa(text: String!): Pessoa!
+  getPessoa(text: String): Pessoa!
 `;
 
 const pessoaMutations = `

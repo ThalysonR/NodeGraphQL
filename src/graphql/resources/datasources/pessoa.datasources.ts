@@ -38,6 +38,7 @@ class PessoaApi extends RESTDataSource {
 
   private pessoaReducerFisica(pessoa) {
     return {
+      id: pessoa.id,
       nomeCompleto: pessoa.nomeCompleto,
       nomeFantasia: pessoa.nomeFantasia,
       tipoPessoa: pessoa.tipoPessoa,
@@ -53,6 +54,7 @@ class PessoaApi extends RESTDataSource {
 
   private pessoaReducerJuridica(pessoa) {
     return {
+      id: pessoa.id,
       nomeCompleto: pessoa.nomeCompleto,
       nomeFantasia: pessoa.nomeFantasia,
       tipoPessoa: pessoa.tipoPessoa,

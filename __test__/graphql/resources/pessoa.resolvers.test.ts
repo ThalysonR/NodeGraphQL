@@ -175,6 +175,10 @@ describe('Test Pessoa', () => {
               metragemOfic
               percentualAumento
             }
+            saldo {
+              limite
+              emAberto
+            }
           }
         }
       `,
@@ -260,6 +264,10 @@ describe('Test Pessoa', () => {
             clientes {
               tipoPreco
               percentualAumento
+            }
+            saldo {
+              saldo
+              emAberto
             }
           }
         }
@@ -354,5 +362,34 @@ describe('Test Pessoa', () => {
 
     // @ts-ignore
     expect(res.data.getPessoa).not.toBeNull();
+  });
+
+  it('Should return default saldo for consumidor final', async () => {
+    const { server, pessoaApi } = constructTestServer({ authUser: 1, authorization: secret });
+
+    // @ts-ignore
+    pessoaApi.get = jest.fn(() => ({
+      nomeCompleto: 'CONSUMIDOR FINAL',
+      nomeFantasia: 'CONSUMIDOR FINAL',
+    }));
+
+    const { query } = createTestClient(server);
+    const res = await query({
+      query: gql`
+        {
+          getPessoa {
+            nomeCompleto
+            nomeFantasia
+            saldo {
+              saldo
+              emAberto
+            }
+          }
+        }
+      `,
+    });
+
+    // @ts-ignore
+    expect(res.data.getPessoa.saldo.saldo).toBe(0);
   });
 });

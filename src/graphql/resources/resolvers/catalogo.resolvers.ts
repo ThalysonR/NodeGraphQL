@@ -2,9 +2,13 @@ import { authResolvers } from '../../composable/auth.resolver';
 import { handleError, gqlCompose, mapDynamicFields } from '../../../utils/utils';
 import { ResolverContext } from '../../../interfaces/ResolverContextInterface';
 
-const camposDinamicos = {
-  'getProdutos.produtos.preco': async (args, { dataSources }: ResolverContext, produtosPage) => {
-    const consumidor = await dataSources.pessoaApi.searchPessoa(args.text);
+const getProdutosDynamic = {
+  'getProdutos.produtos.unidade|caixa': async (
+    cpfCnpj,
+    { dataSources }: ResolverContext,
+    produtosPage,
+  ) => {
+    const consumidor = await dataSources.pessoaApi.searchPessoa(cpfCnpj);
 
     const buscaProduto = produtosPage.produtos.map(produto => ({
       condicao: 'XXXXXXX',
@@ -27,14 +31,13 @@ const camposDinamicos = {
           produtoPreco.empresa.toString() === produto.idEmpresa &&
           produtoPreco.produto === produto.codigoProduto,
       );
-      const preco =
-        produtoEncontrado != null
-          ? {
-              valor: produtoEncontrado.unidade[0].preco,
-              unidadeVenda: produtoEncontrado.unidade[0].tipo,
-            }
-          : null;
-      return { ...produto, preco };
+      let unidade = null;
+      let caixa = null;
+      if (produtoEncontrado != null) {
+        unidade = produtoEncontrado.unidade.find(un => un.tipo === 'UN');
+        caixa = produtoEncontrado.unidade.find(un => un.tipo === 'CX');
+      }
+      return { ...produto, unidade, caixa };
     });
     return { produtos: produtosComPreco, tags: produtosPage.tags };
   },
@@ -59,6 +62,11 @@ const camposDinamicos = {
   },
 };
 
+const getSimilaresDynamic = {
+  'getSimilares.unidade|caixa': getProdutosDynamic['getProdutos.produtos.unidade|caixa'],
+  'getSimilares.imagem': getProdutosDynamic['getProdutos.produtos.imagem'],
+};
+
 export const catalogoResolvers = {
   Query: {
     getProdutos: gqlCompose(...authResolvers)(
@@ -68,8 +76,8 @@ export const catalogoResolvers = {
           .catch(handleError);
 
         const newProdutosPage = await mapDynamicFields(
-          camposDinamicos,
-          { pesqProduto },
+          getProdutosDynamic,
+          pesqProduto.cpfCnpj,
           context,
           info,
           produtosPage,
@@ -83,9 +91,19 @@ export const catalogoResolvers = {
         return dataSources.catalogoApi.searchAplicacoes(buscaAplicacoes).catch(handleError);
       },
     ),
-    getSimilar: gqlCompose(...authResolvers)(
-      async (parent, { buscaSimilar }, { dataSources }: ResolverContext, info) => {
-        return dataSources.catalogoApi.searchSimilar(buscaSimilar).catch(handleError);
+    getSimilares: gqlCompose(...authResolvers)(
+      async (parent, { pesqSimilar }, context: ResolverContext, info) => {
+        const similares = await context.dataSources.catalogoApi
+          .searchSimilar(pesqSimilar)
+          .catch(handleError);
+        const { produtos } = await mapDynamicFields(
+          getSimilaresDynamic,
+          pesqSimilar.cpfCnpj,
+          context,
+          info,
+          { produtos: similares },
+        );
+        return produtos;
       },
     ),
     getcliente: gqlCompose(...authResolvers)(

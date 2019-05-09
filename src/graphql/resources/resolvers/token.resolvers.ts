@@ -1,42 +1,26 @@
-import { ERROR } from '../../../environment';
-import { createTokens } from '../../../authentication/handleTokens';
-import { ResolverContext } from '../../../interfaces/ResolverContextInterface';
-import { PessoaService } from '../../../services';
+import {ERROR} from '../../../environment';
+import {createTokens} from '../../../authentication/handleTokens';
+import {ResolverContext} from '../../../interfaces/ResolverContextInterface';
+import {graphql} from 'graphql';
+import {makeExecutableSchema} from 'graphql-tools'
+import {resolvers, typeDefs} from '../../schema';
 
 export const tokenResolvers = {
   Mutation: {
-    createToken: async (parent: any, { login, senha }: any, { db }: ResolverContext) => {
+    createToken: async (parent: any, {login, senha}: any, {db, dataSources}: ResolverContext) => {
       if (!login || !senha) {
         throw new Error(ERROR.USER.EMPTY_CREDENTIALS);
       }
 
       const cpfCnpj = login.toString().replace(/[^0-9]+/g, '');
-      let pessoa: any = {};
 
       if (cpfCnpj.length !== 11 && cpfCnpj.length !== 14) {
         throw new Error(ERROR.USER.WRONG_CREDENTIALS);
       }
 
-      if (cpfCnpj.length === 11) {
-        await PessoaService.getPessoaFisicaByCPF(cpfCnpj).then(resp => {
-          if (!resp.success) {
-            throw new Error(ERROR.USER.DOES_NOT_EXIST);
-          }
-
-          pessoa = resp.data;
-        });
-      } else if (cpfCnpj.length === 14) {
-        await PessoaService.getPessoaJuridicaByCNPJ(cpfCnpj).then(resp => {
-          if (!resp.success) {
-            throw new Error(ERROR.USER.DOES_NOT_EXIST);
-          }
-          pessoa = resp.data;
-        });
-      }
-
       return db.Usuario.findOne({
-        where: { login: cpfCnpj, cod_pessoa: pessoa.codpessoa },
-        attributes: ['id_usuario', 'senha', 'cod_pessoa', 'login', 'email'],
+        where: {login: cpfCnpj},
+        attributes: ['id_usuario', 'senha', 'login', 'email', 'status_usuario'],
         include: [
           {
             model: db.Perfil,
@@ -51,9 +35,37 @@ export const tokenResolvers = {
           throw new Error(ERROR.USER.WRONG_CREDENTIALS);
         }
 
+        /* istanbul ignore if */
+        if (usuario.get('status_usuario') !== "A") {
+          throw new Error(ERROR.USER.WRONG_CREDENTIALS);
+        }
+
         const usuarioId = usuario.get('id_usuario');
 
-        const [newToken, newRefreshToken] = await createTokens({ id: usuarioId });
+        /* istanbul ignore if */
+        if(!usuario.perfis[0]){
+          throw new Error(ERROR.USER.EMPTY_PERFIL);
+        }
+
+        const [newToken, newRefreshToken] = await createTokens({id: usuarioId});
+
+        let pessoa: any = {};
+
+        const schema = makeExecutableSchema({typeDefs, resolvers});
+
+        const queryGetPessoa = `{getPessoa(text: "${cpfCnpj}"){id nomeCompleto nomeFantasia tipoPessoa saldo{saldo} pessoaCadastro{...on PessoaFisica{cpf} ...on PessoaJuridica{cnpj}}}}`;
+
+        await graphql(schema, queryGetPessoa, null, {
+          authUser: usuarioId,
+          authorization: `Bearer ${newToken}`,
+          dataSources
+        })
+          .then((resp: any) => {
+            if (!resp.data) {
+              throw new Error(ERROR.USER.DOES_NOT_EXIST);
+            }
+            pessoa = resp.data.getPessoa;
+          });
 
         return {
           token: newToken,
@@ -61,17 +73,21 @@ export const tokenResolvers = {
           usuario: {
             login: usuario.login,
             email: usuario.email,
-            nome_completo: pessoa.nome_completo,
-            nome_fantasia: pessoa.nome_fantasia,
-            tipo_pessoa: pessoa.tipo_pessoa,
-            cpf: pessoa.cpf || '',
-            cnpj: pessoa.cnpj || '',
-            perfil: {
-              nome_perfil: usuario.perfis[0] != null ? usuario.perfis[0].nome_perfil : '',
+            pessoa: {
+              nomeCompleto: pessoa.nomeCompleto,
+              nomeFantasia: pessoa.nomeFantasia,
+              tipoPessoa: pessoa.tipoPessoa,
+              saldo: {
+                saldo: pessoa.saldo.saldo
+              },
+              pessoaCadastro: pessoa.tipoPessoa === "PF" ? {cpf: pessoa.pessoaCadastro.cpf} : {cnpj: pessoa.pessoaCadastro.cnpj}
             },
-          },
+            perfil: {
+              nome_perfil: usuario.perfis[0].nome_perfil
+            }
+          }
         };
       });
-    },
-  },
+    }
+  }
 };

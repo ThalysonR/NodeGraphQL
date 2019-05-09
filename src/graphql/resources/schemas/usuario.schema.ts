@@ -1,35 +1,22 @@
 const usuarioTypes = `
-    # User definition type
-    type Usuario {
-        id_usuario: ID!
-        cod_pessoa: Int!
-        nome_completo: String!
-        nome_fantasia: String!
-        tipo_pessoa: TipoPessoa!
-        email: String!
-        cpf: String!
-        cnpj: String!
+# User definition type
+type Usuario {
+  email: String
+  login: String
+  
+  pessoa: Pessoa!
+  perfil: Perfil!
+}
 
-        login: String!
-        senha: String!
-
-        perfil: Perfil!
-    }
-
-    enum TipoPessoa {
-      PJ
-      PF
-    }
-
-    type Perfil{
-        nome_perfil: String!
-    }
+type Perfil{
+  nome_perfil: String
+}
 `;
 
 const usuarioQueries = `
-    getUsuarios: [Usuario!]
-    getPerfilUsuario: Perfil
-    checkAuth: Boolean
+  getUsuarios: [Usuario!]
+  getPerfilUsuario: Perfil
+  checkAuth: Boolean
 `;
 
 const usuarioMutations = `
