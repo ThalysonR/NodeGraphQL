@@ -944,4 +944,44 @@ describe('Test Catalog', () => {
     // @ts-ignore
     expect(res.data.getAutocomplete[0]).toHaveProperty('descricao');
   });
+
+  it('estoque endpoin test', async () => {
+    const { server, geralApi } = constructTestServer({ authUser: 1, authorization: secret });
+
+    // @ts-ignore
+    geralApi.get = jest.fn(() => [
+      {
+        filial: 33,
+        produto: '16001',
+        qtd: 0,
+        qtdInventario: 0,
+        minimo: 0,
+        maximo: 0,
+        ativo: 'S',
+        endereco: 'AV.KAKO CAMINHA',
+      },
+    ]);
+
+    const { query } = createTestClient(server);
+
+    const res = await query({
+      query: gql`
+        {
+          getEstoque(buscaEstoque: { uf: "AM", produto: "16001", empresa: 1, fornecedor: 144 }) {
+            filial
+            produto
+            qtd
+            qtdInventario
+            minimo
+            maximo
+            ativo
+            endereco
+          }
+        }
+      `,
+    });
+
+    // @ts-ignore
+    expect(res.data.getEstoque[0]).toHaveProperty('produto');
+  });
 });

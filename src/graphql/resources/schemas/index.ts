@@ -9,6 +9,7 @@ import { clienteMutations, clienteQueries, clienteType } from './cliente.schema'
 import { tokenMutations, tokenTypes } from './token.schema';
 import { usuarioMutations, usuarioQueries, usuarioTypes } from './usuario.schema';
 import { pessoaMutations, pessoaTypes, pessoaQueries } from './pessoa.schema';
+import { estoqueQueries, estoqueMutations, estoqueType } from './estoque.schema';
 
 const mutations = [
   aplicacoesMutations,
@@ -18,6 +19,7 @@ const mutations = [
   tokenMutations,
   usuarioMutations,
   pessoaMutations,
+  estoqueMutations,
 ];
 
 const types = [
@@ -28,6 +30,7 @@ const types = [
   tokenTypes,
   usuarioTypes,
   pessoaTypes,
+  estoqueType,
 ];
 
 const queries = [
@@ -37,6 +40,7 @@ const queries = [
   clienteQueries,
   usuarioQueries,
   pessoaQueries,
+  estoqueQueries,
 ];
 
 export { mutations, types, queries };

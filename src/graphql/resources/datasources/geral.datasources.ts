@@ -12,6 +12,11 @@ class GeralAPI extends RESTDataSource {
     const saldoCliente = await this.get('/clientePemaza/saldoCliente/cpfCnpj', { cpfCnpj });
     return saldoCliente[0];
   }
+
+  public async searchEstoque(buscaEstoque) {
+    const estoque = await this.get('/estoquePemaza/produtoEstoquePorFiliais', buscaEstoque);
+    return estoque;
+  }
 }
 
 export default GeralAPI;

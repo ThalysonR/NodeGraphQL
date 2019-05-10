@@ -118,5 +118,10 @@ export const catalogoResolvers = {
         return dataSources.catalogoApi.searchAutocomplete(autocomplete).catch(handleError);
       },
     ),
+    getEstoque: gqlCompose(...authResolvers)(
+      async (parent, { buscaEstoque }, { dataSources }: ResolverContext, info) => {
+        return dataSources.geralApi.searchEstoque(buscaEstoque).catch(handleError);
+      },
+    ),
   },
 };
