@@ -7,7 +7,10 @@ import { gql } from 'apollo-server';
 describe('Test Pessoa', () => {
   const secret = `Bearer: ${jwt.sign('123456', JWT_TOKEN_SECRET)}`;
   it('endpoint cpf test', async () => {
-    const { server, pessoaApi } = constructTestServer({ authUser: 1, authorization: secret });
+    const { server, pessoaApi, geralApi } = constructTestServer({
+      authUser: 1,
+      authorization: secret,
+    });
 
     // @ts-ignore
     pessoaApi.get = jest.fn(() => ({
@@ -97,6 +100,17 @@ describe('Test Pessoa', () => {
         percentualAumento: 0,
       },
     }));
+    // @ts-ignore
+    geralApi.get = jest.fn(() => [
+      {
+        limite: 0,
+        em_aberto: 0,
+        saldo: 0,
+        aviso: null,
+        permissao: null,
+        bloqueado: '',
+      },
+    ]);
 
     const { query } = createTestClient(server);
 
@@ -189,7 +203,10 @@ describe('Test Pessoa', () => {
   });
 
   it('endpoint cnpj test', async () => {
-    const { server, pessoaApi } = constructTestServer({ authUser: 1, authorization: secret });
+    const { server, pessoaApi, geralApi } = constructTestServer({
+      authUser: 1,
+      authorization: secret,
+    });
 
     // @ts-ignore
     pessoaApi.get = jest.fn(() => ({
@@ -225,6 +242,17 @@ describe('Test Pessoa', () => {
         },
       ],
     }));
+    // @ts-ignore
+    geralApi.get = jest.fn(() => [
+      {
+        limite: 0,
+        em_aberto: 0,
+        saldo: 0,
+        aviso: null,
+        permissao: null,
+        bloqueado: '',
+      },
+    ]);
 
     const { query } = createTestClient(server);
 

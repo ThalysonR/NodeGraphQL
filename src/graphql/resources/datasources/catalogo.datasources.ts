@@ -1,11 +1,11 @@
 import { RESTDataSource } from 'apollo-datasource-rest';
 
 class CatalogoAPI extends RESTDataSource {
-  constructor() {
+  constructor(config) {
     super();
     // @ts-ignore
     this.initialize({ context: {} });
-    this.baseURL = 'http://192.168.151.89:8000/ws-catalogo/api/';
+    this.baseURL = `${config.catalogoUrl}/ws-catalogo/api/`;
   }
 
   public async searchProduto(pesqProduto) {
