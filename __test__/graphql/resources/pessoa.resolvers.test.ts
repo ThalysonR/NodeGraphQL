@@ -421,7 +421,7 @@ describe('Test Pessoa', () => {
     expect(res.data.getPessoa.saldo.saldo).toBe(0);
   });
 
-  it('', async () => {
+  it('test in payment condition endpoint', async () => {
     const { server, geralApi } = constructTestServer({ authUser: 1, authorization: secret });
 
     // @ts-ignore
