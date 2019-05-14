@@ -17,6 +17,14 @@ class GeralAPI extends RESTDataSource {
     const estoque = await this.get('/estoquePemaza/produtoEstoquePorFiliais', buscaEstoque);
     return estoque;
   }
+
+  public async searchCondicao(buscaCondicao) {
+    const condicao = await this.get(
+      '/condicaoPagamentoPemaza/buscaCondicaoPagamento',
+      buscaCondicao,
+    );
+    return condicao;
+  }
 }
 
 export default GeralAPI;

@@ -420,4 +420,48 @@ describe('Test Pessoa', () => {
     // @ts-ignore
     expect(res.data.getPessoa.saldo.saldo).toBe(0);
   });
+
+  it('', async () => {
+    const { server, geralApi } = constructTestServer({ authUser: 1, authorization: secret });
+
+    // @ts-ignore
+    geralApi.get = jest.fn(() => [
+      {
+        recnum: null,
+        codigo: 'A8',
+        nomeCondicaoPagamento: null,
+        descricao: 'ATAC P/ 1 DIA',
+        parcelas: 1,
+        periodo: 0,
+        periodoEntrada: 1,
+        descontoMedio: 29.4,
+        documento: null,
+      },
+    ]);
+
+    const { query } = createTestClient(server);
+
+    const res = await query({
+      query: gql`
+        {
+          getCondicao(
+            buscaCondicao: { operacao: 1, tipoPreco: "A", formaPagamento: "F", prazoMedio: 45 }
+          ) {
+            recnum
+            codigo
+            nomeCondicaoPagamento
+            descricao
+            parcelas
+            periodo
+            periodoEntrada
+            descontoMedio
+            documento
+          }
+        }
+      `,
+    });
+
+    // @ts-ignore
+    expect(res.data.getCondicao[0]).toHaveProperty('descricao');
+  });
 });
