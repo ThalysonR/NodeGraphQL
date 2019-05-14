@@ -39,11 +39,17 @@ type Produto{
   unidade: PrecoProduto
   caixa: PrecoProduto
   imagem: String
+  estoque: EstoqueProduto
 }
 
 type PrecoProduto {
   preco: Float!
   qtd: String!
+}
+
+type EstoqueProduto {
+  qtd: Int!
+  qtdInventario: Int!
 }
 
 type Models{
