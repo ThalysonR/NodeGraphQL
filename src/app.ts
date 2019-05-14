@@ -10,6 +10,7 @@ import { JWT_TOKEN_SECRET } from './utils/utils';
 import { JWT } from './environment';
 import { formatError } from './graphql/response';
 import { refreshTokens } from './authentication/handleTokens';
+import getConfig from './environment/datasources.config';
 
 class App {
   public apollo: any;
@@ -23,15 +24,17 @@ class App {
   }
 
   private middleware(): void {
+    const dtSourceConfig = getConfig();
+
     this.apollo = new ApolloServer({
       typeDefs,
       resolvers,
       dataSources: (): DataSources => ({
-        catalogoApi: new dataSources.CatalogoAPI(),
-        precoApi: new dataSources.PrecoAPI(),
-        geralApi: new dataSources.GeralAPI(),
-        imagemApi: new dataSources.ImagemAPI(),
-        pessoaApi: new dataSources.PessoaApi(),
+        catalogoApi: new dataSources.CatalogoAPI(dtSourceConfig),
+        precoApi: new dataSources.PrecoAPI(dtSourceConfig),
+        geralApi: new dataSources.GeralAPI(dtSourceConfig),
+        imagemApi: new dataSources.ImagemAPI(dtSourceConfig),
+        pessoaApi: new dataSources.PessoaApi(dtSourceConfig),
       }),
       formatError: err => formatError(err),
       context: async ({ req, res }: any) => {

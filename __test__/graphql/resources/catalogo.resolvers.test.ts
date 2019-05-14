@@ -8,7 +8,7 @@ describe('Test Catalog', () => {
   const secret = `Bearer: ${jwt.sign('123456', JWT_TOKEN_SECRET)}`;
 
   it('test on request response', async () => {
-    const { server, catalogoApi, pessoaApi, precoApi, imagemApi } = constructTestServer({
+    const { server, catalogoApi, pessoaApi, precoApi, imagemApi, geralApi } = constructTestServer({
       authUser: 1,
       authorization: secret,
     });
@@ -206,6 +206,15 @@ describe('Test Catalog', () => {
         ImgBase64: 'Imagem',
       },
     ]);
+    // @ts-ignore
+    geralApi.get = jest.fn(() => [
+      {
+        filial: 34,
+        produto: 'B47097',
+        qtd: 31,
+        qtdInventario: 31,
+      },
+    ]);
 
     const { query } = createTestClient(server);
 
@@ -269,6 +278,9 @@ describe('Test Catalog', () => {
                 qtd
               }
               imagem
+              estoque {
+                qtd
+              }
             }
             tags
           }

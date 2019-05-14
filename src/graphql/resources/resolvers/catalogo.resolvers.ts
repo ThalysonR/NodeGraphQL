@@ -60,6 +60,32 @@ const getProdutosDynamic = {
 
     return { ...produtosPage, produtos: produtosComImagem };
   },
+  'getProdutos.produtos.estoque': async (
+    cpfCnpj,
+    { dataSources }: ResolverContext,
+    produtosPage,
+  ) => {
+    const consumidor = await dataSources.pessoaApi.searchPessoa(cpfCnpj);
+    const produtosComEstoque = await produtosPage.produtos.map(async produto => {
+      const buscaEstoque = {
+        uf: consumidor['enderecos']['codUf'] || 'AM',
+        produto: produto.codigoProduto,
+        empresa: produto.idEmpresa,
+        fornecedor: produto.idFornecedor,
+      };
+
+      const estoque = await dataSources.geralApi.searchEstoque(buscaEstoque);
+      const reducedEstoque = estoque.reduce(
+        (soma, atual) => ({
+          qtd: soma.qtd + atual.qtd,
+          qtdInventario: soma.qtdInventario + atual.qtdInventario,
+        }),
+        { qtd: 0, qtdInventario: 0 },
+      );
+      return { ...produto, estoque: reducedEstoque };
+    });
+    return { ...produtosPage, produtos: produtosComEstoque };
+  },
 };
 
 const getSimilaresDynamic = {

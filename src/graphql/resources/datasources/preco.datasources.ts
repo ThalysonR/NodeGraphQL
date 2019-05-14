@@ -1,11 +1,11 @@
 import { RESTDataSource } from 'apollo-datasource-rest';
 
 class PrecoAPI extends RESTDataSource {
-  constructor() {
+  constructor(config) {
     super();
     // @ts-ignore
     this.initialize({ context: {} });
-    this.baseURL = 'http://192.168.151.89:8000/ws-preco/api/';
+    this.baseURL = `${config.microServicesUrl}/ws-preco/api/`;
   }
 
   public async buscaListaProdutosEstoquePreco(buscaProdutos) {
