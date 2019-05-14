@@ -1,4 +1,4 @@
-import { gqlCompose, mapDynamicFields } from '../../../utils/utils';
+import { gqlCompose, mapDynamicFields, handleError } from '../../../utils/utils';
 import { authResolvers } from '../../composable/auth.resolver';
 import { ResolverContext } from '../../../interfaces/ResolverContextInterface';
 
@@ -31,6 +31,11 @@ export const pessoaResolvers = {
           pessoa,
         );
         return mappedPessoa;
+      },
+    ),
+    getCondicao: gqlCompose(...authResolvers)(
+      async (parent, { buscaCondicao }, { dataSources }: ResolverContext, info) => {
+        return dataSources.geralApi.searchCondicao(buscaCondicao).catch(handleError);
       },
     ),
   },
