@@ -83,7 +83,13 @@ const getProdutosDynamic = {
           }),
           { qtd: 0, qtdInventario: 0 },
         );
-        return { ...produto, estoque: reducedEstoque };
+        return {
+          ...produto,
+          estoque: {
+            ...reducedEstoque,
+            qtdDisponivel: Math.min(reducedEstoque.qtd, reducedEstoque.qtdInventario),
+          },
+        };
       } catch (error) {
         return produto;
       }
