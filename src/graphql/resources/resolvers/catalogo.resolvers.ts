@@ -74,15 +74,25 @@ const getProdutosDynamic = {
         fornecedor: produto.idFornecedor,
       };
 
-      const estoque = await dataSources.geralApi.searchEstoque(buscaEstoque);
-      const reducedEstoque = estoque.reduce(
-        (soma, atual) => ({
-          qtd: soma.qtd + atual.qtd,
-          qtdInventario: soma.qtdInventario + atual.qtdInventario,
-        }),
-        { qtd: 0, qtdInventario: 0 },
-      );
-      return { ...produto, estoque: reducedEstoque };
+      try {
+        const estoque = await dataSources.geralApi.searchEstoque(buscaEstoque);
+        const reducedEstoque = estoque.reduce(
+          (soma, atual) => ({
+            qtd: soma.qtd + atual.qtd,
+            qtdInventario: soma.qtdInventario + atual.qtdInventario,
+          }),
+          { qtd: 0, qtdInventario: 0 },
+        );
+        return {
+          ...produto,
+          estoque: {
+            ...reducedEstoque,
+            qtdDisponivel: Math.min(reducedEstoque.qtd, reducedEstoque.qtdInventario),
+          },
+        };
+      } catch (error) {
+        return produto;
+      }
     });
     return { ...produtosPage, produtos: produtosComEstoque };
   },

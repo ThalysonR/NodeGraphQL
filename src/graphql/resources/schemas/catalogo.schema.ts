@@ -50,6 +50,7 @@ type PrecoProduto {
 type EstoqueProduto {
   qtd: Int!
   qtdInventario: Int!
+  qtdDisponivel: Int!
 }
 
 type Models{
