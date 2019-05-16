@@ -13,6 +13,10 @@ class CatalogoAPI extends RESTDataSource {
     const produtosPage = {
       produtos: response.produtos.content,
       tags: response.tags,
+      numeroElementos: response.produtos.numberOfElements,
+      numeroPagina: response.produtos.number,
+      totalElementos: response.produtos.totalElements,
+      totalPaginas: response.produtos.totalPages,
     };
     return produtosPage;
   }

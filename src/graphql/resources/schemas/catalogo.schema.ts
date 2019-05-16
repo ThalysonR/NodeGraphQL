@@ -2,6 +2,10 @@ const produtoTypes = `
 type ProdutosPage{
     produtos: [Produto]!
     tags: [String]!
+    numeroElementos: Int!
+    numeroPagina: Int!
+    totalElementos: Int!
+    totalPaginas: Int!
 }
 
 type Produto{
