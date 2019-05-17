@@ -35,6 +35,7 @@ class App {
         geralApi: new dataSources.GeralAPI(dtSourceConfig),
         imagemApi: new dataSources.ImagemAPI(dtSourceConfig),
         pessoaApi: new dataSources.PessoaApi(dtSourceConfig),
+        pedidoService: new dataSources.PedidoService(),
       }),
       formatError: err => formatError(err),
       context: async ({ req, res }: any) => {
