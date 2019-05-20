@@ -10,4 +10,9 @@ export default class PedidoService extends SQLDataSource {
       },
     });
   }
+
+  public createOrder(pedido) {
+    PedidoService.db.Pedido.create({ ...pedido });
+    return pedido;
+  }
 }

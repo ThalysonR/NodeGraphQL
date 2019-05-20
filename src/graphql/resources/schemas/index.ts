@@ -1,16 +1,17 @@
-import { aplicacoesMutations, aplicacoesQueries, aplicacoesTypes } from './aplicacoes.schema';
+import { aplicacoesQueries, aplicacoesTypes, aplicacoesMutations } from './aplicacoes.schema';
 import {
-  autocompleteMutations,
   autocompleteQueries,
   autocompleteTypes,
+  autocompleteMutations,
 } from './autocomplete.schema';
-import { produtoMutations, produtoQueries, produtoTypes } from './catalogo.schema';
-import { clienteMutations, clienteQueries, clienteType } from './cliente.schema';
+import { produtoQueries, produtoTypes, produtoMutations } from './catalogo.schema';
+import { clienteQueries, clienteType, clienteMutations } from './cliente.schema';
+import { condicaoQueries, condicaoType, condicaoMutations } from './codicaoPagamento.schema';
+import { estoqueQueries, estoqueType, estoqueMutations } from './estoque.schema';
+import { pedidoMutations, pedidoQueries, pedidoType } from './pedido.schema';
+import { pessoaQueries, pessoaTypes, pessoaMutations } from './pessoa.schema';
 import { tokenMutations, tokenTypes } from './token.schema';
-import { usuarioMutations, usuarioQueries, usuarioTypes } from './usuario.schema';
-import { pessoaMutations, pessoaTypes, pessoaQueries } from './pessoa.schema';
-import { estoqueQueries, estoqueMutations, estoqueType } from './estoque.schema';
-import { condicaoMutations, condicaoType, condicaoQueries } from './codicaoPagamento.schema';
+import { usuarioQueries, usuarioTypes, usuarioMutations } from './usuario.schema';
 
 const mutations = [
   aplicacoesMutations,
@@ -22,6 +23,7 @@ const mutations = [
   pessoaMutations,
   estoqueMutations,
   condicaoMutations,
+  pedidoMutations,
 ];
 
 const types = [
@@ -34,6 +36,7 @@ const types = [
   pessoaTypes,
   estoqueType,
   condicaoType,
+  pedidoType,
 ];
 
 const queries = [
@@ -45,6 +48,7 @@ const queries = [
   pessoaQueries,
   estoqueQueries,
   condicaoQueries,
+  pedidoQueries,
 ];
 
 export { mutations, types, queries };
