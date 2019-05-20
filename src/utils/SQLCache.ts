@@ -1,4 +1,5 @@
 import { InMemoryLRUCache } from 'apollo-server-caching';
+import sequelize = require('sequelize');
 
 export default class SQLCache {
   private cache: InMemoryLRUCache<string>;
@@ -6,7 +7,10 @@ export default class SQLCache {
     this.cache = cache;
   }
 
-  public getCached(func, query): Promise<any> {
+  public getCached<TFindOptions>(
+    func: (opts: sequelize.FindOptions<TFindOptions>) => any,
+    query: sequelize.FindOptions<TFindOptions>,
+  ): Promise<any> {
     const key = `${func.name}:${JSON.stringify(query)}`;
     return this.cache.get(key).then(entry => {
       if (entry) {

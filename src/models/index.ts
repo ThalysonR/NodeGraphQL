@@ -5,6 +5,7 @@ import Sequelize from 'sequelize';
 import { DbConnection } from '../interfaces/DbConnectionInterface';
 import { DataSource } from 'apollo-datasource';
 import SQLCache from '../utils/SQLCache';
+import sequelize = require('sequelize');
 let db: any = null;
 
 if (!db) {
@@ -15,7 +16,10 @@ export default db as DbConnection;
 
 export class SQLDataSource extends DataSource {
   protected static db: DbConnection;
-  public getCached;
+  public getCached: <TFindOptions>(
+    dbFn: (opts: sequelize.FindOptions<TFindOptions>) => any,
+    opts: sequelize.FindOptions<TFindOptions>,
+  ) => any;
   protected context: any;
   protected cache: SQLCache;
   constructor() {
