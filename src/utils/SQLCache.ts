@@ -8,7 +8,7 @@ export default class SQLCache {
   }
 
   public getCached<TFindOptions>(
-    func: (opts: sequelize.FindOptions<TFindOptions>) => any,
+    func: (opts: sequelize.FindOptions<TFindOptions>) => Promise<any>,
     query: sequelize.FindOptions<TFindOptions>,
   ): Promise<any> {
     const key = `${func.name}:${JSON.stringify(query)}`;
