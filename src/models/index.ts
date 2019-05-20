@@ -14,7 +14,7 @@ export default db as DbConnection;
 export class SQLDataSource {
   protected static db: DbConnection;
   constructor() {
-    if (!!SQLDataSource.db) {
+    if (SQLDataSource.db === undefined) {
       SQLDataSource.db = getDbConnection();
     }
   }
