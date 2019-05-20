@@ -88,6 +88,7 @@ input SetPagamento{
 `;
 
 const pedidoQueries = `
+  findOrdersByCliente(codCliente: Int!): [Pedido]!
   searchOrder(codPedido: Int!): Pedido!
 `;
 

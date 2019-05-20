@@ -16,19 +16,21 @@ export default db as DbConnection;
 
 export class SQLDataSource extends DataSource {
   protected static db: DbConnection;
-  public getCached: <TFindOptions>(
+  protected static cache: SQLCache;
+  protected getCached: <TFindOptions>(
     dbFn: (opts: sequelize.FindOptions<TFindOptions>) => any,
     opts: sequelize.FindOptions<TFindOptions>,
   ) => any;
   protected context: any;
-  protected cache: SQLCache;
   constructor() {
     super();
     if (SQLDataSource.db === undefined) {
       SQLDataSource.db = getDbConnection();
     }
-    this.cache = new SQLCache();
-    this.getCached = this.cache.getCached.bind(this.cache);
+    if (SQLDataSource.cache === undefined) {
+      SQLDataSource.cache = new SQLCache();
+    }
+    this.getCached = SQLDataSource.cache.getCached.bind(SQLDataSource.cache);
   }
 
   public initialize(config) {

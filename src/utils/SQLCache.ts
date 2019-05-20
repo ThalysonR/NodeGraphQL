@@ -1,9 +1,9 @@
-import { InMemoryLRUCache } from 'apollo-server-caching';
+import { InMemoryLRUCache, KeyValueCache } from 'apollo-server-caching';
 import sequelize = require('sequelize');
 
 export default class SQLCache {
-  private cache: InMemoryLRUCache<string>;
-  constructor(cache = new InMemoryLRUCache()) {
+  private cache: KeyValueCache<string>;
+  constructor(cache: KeyValueCache<string> = new InMemoryLRUCache()) {
     this.cache = cache;
   }
 
