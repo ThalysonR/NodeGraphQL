@@ -4,7 +4,22 @@ import { gql } from 'apollo-server';
 
 describe('Pedido Test', () => {
   it('Should return pedido', async () => {
-    const { server, pedidoService } = constructTestServer(true);
+    const dbMocks = {
+      Pedido: {
+        codpedido: 123,
+        codfilial: 34,
+        codcliente: 123,
+        codfuncionario: 123,
+        condicao: 'A',
+        emissao: Date.now(),
+        situacao: 'A',
+        total: 54.35,
+        observacao: ' ',
+        ordemcompra: '1234984',
+      },
+    };
+
+    const { server, pedidoService } = constructTestServer(true, dbMocks);
 
     // @ts-ignore
     pedidoService.getCached = jest.fn(() => []);

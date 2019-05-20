@@ -6,14 +6,17 @@ import getConfig from '../src/environment/datasources.config';
 import { DataSources as B2BDataSources } from '../src/interfaces/DataSourcesInterface';
 import { DataSources } from 'apollo-server-core/dist/graphqlOptions';
 import { JWT_TOKEN_SECRET } from '../src/utils/utils';
+import SequelizeMock from 'sequelize-mock';
 
 /**
  * Função auxiliar para criar um servidor de teste para o graphql
  * @param authorization Boolean - indica se deve ser inserido autorização no contexto
  * @param param1
  */
-export const constructTestServer = (authorization: boolean = false, { db = {} }: any = {}) => {
+export const constructTestServer = (authorization: boolean = false, mocks = {}) => {
   const dtSourceConfig = getConfig();
+
+  const dbMocks = buildSqlizeMocks(mocks);
 
   const apis = {
     catalogoApi: new dataSources.CatalogoAPI(dtSourceConfig),
@@ -21,7 +24,8 @@ export const constructTestServer = (authorization: boolean = false, { db = {} }:
     geralApi: new dataSources.GeralAPI(dtSourceConfig),
     imagemApi: new dataSources.ImagemAPI(dtSourceConfig),
     pessoaApi: new dataSources.PessoaApi(dtSourceConfig),
-    pedidoService: new dataSources.PedidoService(),
+    pedidoService: new dataSources.PedidoService(dbMocks),
+    usuarioService: new dataSources.UsuarioService(dbMocks),
   };
 
   let authOpts = {};
@@ -38,8 +42,19 @@ export const constructTestServer = (authorization: boolean = false, { db = {} }:
     `,
     resolvers,
     dataSources: (): DataSources<B2BDataSources> => apis,
-    context: () => ({ ...authOpts, db }),
+    context: () => ({ ...authOpts }),
   });
 
-  return { server, ...apis };
+  return { server, ...apis, dbMocks };
 };
+
+function buildSqlizeMocks(mocks) {
+  const dbMock = new SequelizeMock();
+  const builtMocks = {};
+  for (const mockName in mocks) {
+    if (mocks.hasOwnProperty(mockName)) {
+      builtMocks[mockName] = dbMock.define(mockName, mocks[mockName]);
+    }
+  }
+  return builtMocks;
+}

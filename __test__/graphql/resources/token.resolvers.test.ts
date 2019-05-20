@@ -1,11 +1,10 @@
 import { constructTestServer } from '../../__utils';
 import { createTestClient } from 'apollo-server-testing';
 import { gql } from 'apollo-server';
-import db from './../../../src/models';
 
 describe('Test token resolvers', () => {
   it('Should throw when credentials empty', async () => {
-    const { server } = constructTestServer(true, { db });
+    const { server } = constructTestServer(true);
 
     const { mutate } = createTestClient(server);
     const res = await mutate({
@@ -107,9 +106,17 @@ describe('Test token resolvers', () => {
   });
 
   it('Should return token when credentials user PF is correct', async () => {
-    const { server, pessoaApi, geralApi } = constructTestServer(true, {
-      db,
-    });
+    const dbMocks = {
+      Usuario: {
+        id_usuario: 1,
+        nome_usuario: 'thalyson',
+        login: '33517308293',
+        email: 'teste@teste.com',
+        senha: 123,
+      },
+    };
+
+    const { server, pessoaApi, geralApi } = constructTestServer(true, dbMocks);
 
     // @ts-ignore
     pessoaApi.get = jest.fn(() => ({
@@ -182,7 +189,7 @@ describe('Test token resolvers', () => {
   });
 
   it('Should return null when password user is incorrect', async () => {
-    const { server, pessoaApi } = constructTestServer(true, { db });
+    const { server, pessoaApi } = constructTestServer(true);
 
     // @ts-ignore
     pessoaApi.get = jest.fn(() => ({
@@ -244,7 +251,7 @@ describe('Test token resolvers', () => {
   });
 
   it('Should throw when no pessoa found', async () => {
-    const { server, pessoaApi } = constructTestServer(true, { db });
+    const { server, pessoaApi } = constructTestServer(true);
 
     // @ts-ignore
     pessoaApi.get = jest.fn(() => ({
@@ -305,9 +312,7 @@ describe('Test token resolvers', () => {
   });
 
   it('Should return token when credentials user PJ is correct', async () => {
-    const { server, pessoaApi, geralApi } = constructTestServer(true, {
-      db,
-    });
+    const { server, pessoaApi, geralApi } = constructTestServer(true);
 
     // @ts-ignore
     pessoaApi.get = jest.fn(() => ({

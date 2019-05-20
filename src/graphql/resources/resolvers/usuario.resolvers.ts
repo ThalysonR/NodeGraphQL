@@ -4,11 +4,11 @@ import { ResolverContext } from '../../../interfaces/ResolverContextInterface';
 
 export const usuarioResolvers = {
   Query: {
-    getUsuarios: gqlCompose(...authResolvers)((parent: any, args: any, { db }: ResolverContext) => {
-      return db.Usuario.findAll({
-        attributes: ['id_usuario', 'nome_usuario', 'login'],
-      }).catch(handleError);
-    }),
+    getUsuarios: gqlCompose(...authResolvers)(
+      (parent: any, args: any, { dataSources }: ResolverContext) => {
+        return dataSources.usuarioService.findAll().catch(handleError);
+      },
+    ),
 
     checkAuth: (parent: any, args: any, { authUser }: ResolverContext) => {
       return !!authUser;

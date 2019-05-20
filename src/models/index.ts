@@ -6,13 +6,6 @@ import { DbConnection } from '../interfaces/DbConnectionInterface';
 import { DataSource } from 'apollo-datasource';
 import SQLCache from '../utils/SQLCache';
 import sequelize = require('sequelize');
-let db: any = null;
-
-if (!db) {
-  db = getDbConnection();
-}
-
-export default db as DbConnection;
 
 export class SQLDataSource extends DataSource {
   protected static db: DbConnection;
@@ -22,10 +15,11 @@ export class SQLDataSource extends DataSource {
     opts: sequelize.FindOptions<TFindOptions>,
   ) => any;
   protected context: any;
-  constructor() {
+  constructor(db?) {
     super();
     if (SQLDataSource.db === undefined) {
-      SQLDataSource.db = getDbConnection();
+      console.log(db);
+      SQLDataSource.db = db ? db : getDbConnection();
     }
     if (SQLDataSource.cache === undefined) {
       SQLDataSource.cache = new SQLCache();

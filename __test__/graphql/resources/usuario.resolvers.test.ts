@@ -1,38 +1,44 @@
-import { usuarioResolvers } from '../../../src/graphql/resources/resolvers/usuario.resolvers';
-import SequelizeMock from 'sequelize-mock';
-import { JWT_TOKEN_SECRET } from '../../../src/utils/utils';
-import * as jwt from 'jsonwebtoken';
+import { constructTestServer } from '../../__utils';
+import { createTestClient } from 'apollo-server-testing';
+import { gql } from 'apollo-server';
 
 describe('Test usuario resolvers', () => {
-  const dbMock = new SequelizeMock();
-  const secret = `Bearer: ${jwt.sign('123456', JWT_TOKEN_SECRET)}`;
-  const UserMock = dbMock.define('Usuario', {
-    id_usuario: 1,
-    nome_usuario: 'thalyson',
-    login: 'thalyson',
-    email: 'teste@teste.com',
-    senha: 123456,
-  });
+  const dbMocks = {
+    Usuario: {
+      id_usuario: 1,
+      nome_usuario: 'thalyson',
+      login: 'thalyson',
+      email: 'teste@teste.com',
+      senha: 123456,
+    },
+  };
+  const { server } = constructTestServer(true, dbMocks);
 
   it('Should return all users', async () => {
-    const usuarios = await usuarioResolvers.Query.getUsuarios(
-      null,
-      [],
-      // @ts-ignore
-      { db: { Usuario: UserMock }, authorization: secret },
-      null,
-    );
-    expect(usuarios[0]['nome_usuario']).toBe('thalyson');
+    const client = createTestClient(server);
+    const res = await client.query({
+      query: gql`
+        {
+          getUsuarios {
+            email
+          }
+        }
+      `,
+    });
+    // @ts-ignore
+    expect(res.data.getUsuarios[0].email).toBe('teste@teste.com');
   });
 
   it('Should return check auth', async () => {
-    const usuario = await usuarioResolvers.Query.checkAuth(
-      null,
-      [],
-      { authUser: { id: 1 }, authorization: secret },
-      // @ts-ignore
-      null,
-    );
-    expect(usuario).toBe(true);
+    const client = createTestClient(server);
+    const res = await client.query({
+      query: gql`
+        {
+          checkAuth
+        }
+      `,
+    });
+    // @ts-ignore
+    expect(res.data.checkAuth).toBe(true);
   });
 });
