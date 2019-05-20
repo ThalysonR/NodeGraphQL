@@ -3,8 +3,6 @@ import { RESTDataSource } from 'apollo-datasource-rest';
 class CatalogoAPI extends RESTDataSource {
   constructor(config) {
     super();
-    // @ts-ignore
-    this.initialize({ context: {} });
     this.baseURL = `${config.catalogoUrl}/ws-catalogo/api/`;
   }
 

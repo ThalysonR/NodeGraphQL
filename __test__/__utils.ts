@@ -8,13 +8,12 @@ import { DataSources } from 'apollo-server-core/dist/graphqlOptions';
 export const constructTestServer = ({ authUser = {}, authorization = {}, db = {} }: any = {}) => {
   const dtSourceConfig = getConfig();
 
-  const apis: DataSources<B2BDataSources> = {
+  const apis = {
     catalogoApi: new dataSources.CatalogoAPI(dtSourceConfig),
     precoApi: new dataSources.PrecoAPI(dtSourceConfig),
     geralApi: new dataSources.GeralAPI(dtSourceConfig),
     imagemApi: new dataSources.ImagemAPI(dtSourceConfig),
     pessoaApi: new dataSources.PessoaApi(dtSourceConfig),
-    // @ts-ignore
     pedidoService: new dataSources.PedidoService(),
   };
 
