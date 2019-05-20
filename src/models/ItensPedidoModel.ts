@@ -58,11 +58,11 @@ export default (
         allowNull: false,
       },
       vl_item: {
-        type: DataTypes.INTEGER,
+        type: DataTypes.DOUBLE,
         allowNull: false,
       },
       vl_total: {
-        type: DataTypes.INTEGER,
+        type: DataTypes.DOUBLE,
         allowNull: false,
       },
       unidade: {

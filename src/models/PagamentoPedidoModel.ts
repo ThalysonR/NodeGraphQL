@@ -8,7 +8,7 @@ export interface PagamentoAttributes {
   codtipopagto?: number;
   valor_pago?: number;
   parcela?: number;
-  situacao?: number;
+  situacao?: string;
   cod_adm?: number;
 }
 
@@ -45,11 +45,15 @@ export default (
         type: DataTypes.FLOAT,
         allowNull: false,
       },
-      situacao: {
+      parcela: {
         type: DataTypes.INTEGER,
         allowNull: false,
       },
-      parcela: {
+      situacao: {
+        type: DataTypes.STRING(1),
+        allowNull: false,
+      },
+      cod_adm: {
         type: DataTypes.INTEGER,
         allowNull: false,
       },
