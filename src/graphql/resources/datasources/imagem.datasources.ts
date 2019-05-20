@@ -3,8 +3,6 @@ import { RESTDataSource } from 'apollo-datasource-rest';
 class ImagemApi extends RESTDataSource {
   constructor(config) {
     super();
-    // @ts-ignore
-    this.initialize({ context: {} });
     this.baseURL = `${config.imagemUrl}/`;
   }
 

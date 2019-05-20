@@ -39,7 +39,7 @@ const getProdutosDynamic = {
       }
       return { ...produto, unidade, caixa };
     });
-    return { produtos: produtosComPreco, tags: produtosPage.tags };
+    return { ...produtosPage, produtos: produtosComPreco };
   },
   'getProdutos.produtos.imagem': async (args, { dataSources }: ResolverContext, produtosPage) => {
     const buscaImagem = produtosPage.produtos.map(produto => ({

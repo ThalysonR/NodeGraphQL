@@ -3,6 +3,8 @@ import * as path from 'path';
 import Sequelize from 'sequelize';
 
 import { DbConnection } from '../interfaces/DbConnectionInterface';
+import { DataSource } from 'apollo-datasource';
+import SQLCache from '../utils/SQLCache';
 let db: any = null;
 
 if (!db) {
@@ -11,12 +13,22 @@ if (!db) {
 
 export default db as DbConnection;
 
-export class SQLDataSource {
+export class SQLDataSource extends DataSource {
   protected static db: DbConnection;
+  public getCached;
+  protected context: any;
+  protected cache: SQLCache;
   constructor() {
+    super();
     if (SQLDataSource.db === undefined) {
       SQLDataSource.db = getDbConnection();
     }
+    this.cache = new SQLCache();
+    this.getCached = this.cache.getCached.bind(this.cache);
+  }
+
+  public initialize(config) {
+    this.context = config.context;
   }
 }
 
