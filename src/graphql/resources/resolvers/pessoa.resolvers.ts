@@ -34,7 +34,14 @@ export const pessoaResolvers = {
       },
     ),
     getCondicao: gqlCompose(...authResolvers)(
-      async (parent, { buscaCondicao }, { dataSources }: ResolverContext, info) => {
+      async (parent, { cpfCnpj }, { dataSources }: ResolverContext, info) => {
+        const pessoa = await dataSources.pessoaApi.searchPessoa(cpfCnpj);
+        const buscaCondicao = {
+          operacao: 1,
+          tipoPreco: pessoa.clientes.tipoPreco,
+          formaPagamento: 'F',
+          prazoMedio: pessoa.clientes.prazoMedio,
+        };
         return dataSources.geralApi.searchCondicao(buscaCondicao).catch(handleError);
       },
     ),
