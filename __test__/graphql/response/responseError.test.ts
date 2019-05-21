@@ -22,6 +22,6 @@ describe('Response Errors', () => {
   it('Should return response error messages and status general', () => {
     const error = new Error('error code');
 
-    expect(formatError(error)).not.toHaveProperty('status');
+    expect(formatError(error).status).toBe(500);
   });
 });
