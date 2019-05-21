@@ -6,7 +6,7 @@ import { hashSync } from 'bcryptjs';
 
 describe('Test token resolvers', () => {
   it('Should throw when credentials empty', async () => {
-    const { server } = constructTestServer(true);
+    const { server } = constructTestServer({ authorization: true });
 
     const { mutate } = createTestClient(server);
     const res = await mutate({
@@ -47,7 +47,7 @@ describe('Test token resolvers', () => {
   });
 
   it('Should throw when no user found', async () => {
-    const { server, pessoaApi } = constructTestServer(true);
+    const { server, pessoaApi } = constructTestServer({ authorization: true });
 
     // @ts-ignore
     pessoaApi.get = jest.fn(() => ({
@@ -125,7 +125,7 @@ describe('Test token resolvers', () => {
       },
     };
 
-    const { server, pessoaApi, geralApi } = constructTestServer(true, dbMocks);
+    const { server, pessoaApi, geralApi } = constructTestServer({ authorization: true, dbMocks });
 
     // @ts-ignore
     pessoaApi.get = jest.fn(() => ({
@@ -198,7 +198,7 @@ describe('Test token resolvers', () => {
   });
 
   it('Should return null when password user is incorrect', async () => {
-    const { server, pessoaApi } = constructTestServer(true);
+    const { server, pessoaApi } = constructTestServer({ authorization: true });
 
     // @ts-ignore
     pessoaApi.get = jest.fn(() => ({
@@ -260,7 +260,7 @@ describe('Test token resolvers', () => {
   });
 
   it('Should throw when no pessoa found', async () => {
-    const { server, pessoaApi } = constructTestServer(true);
+    const { server, pessoaApi } = constructTestServer({ authorization: true });
 
     // @ts-ignore
     pessoaApi.get = jest.fn(() => ({
@@ -337,7 +337,7 @@ describe('Test token resolvers', () => {
         },
       },
     };
-    const { server, pessoaApi, geralApi } = constructTestServer(true, dbMocks);
+    const { server, pessoaApi, geralApi } = constructTestServer({ authorization: true, dbMocks });
 
     // @ts-ignore
     pessoaApi.get = jest.fn(() => ({

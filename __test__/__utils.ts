@@ -9,18 +9,20 @@ import { JWT_TOKEN_SECRET } from '../src/utils/utils';
 import SequelizeMock from 'sequelize-mock';
 import { DbMockInterface } from '../src/interfaces/DbMockInterface';
 
+interface Options {
+  authorization?: boolean;
+  dbMocks?: DbMockInterface;
+}
+
 /**
  * Função auxiliar para criar um servidor de teste para o graphql
  * @param authorization Boolean - indica se deve ser inserido autorização no contexto
  * @param param1
  */
-export const constructTestServer = (
-  authorization: boolean = false,
-  mocks: DbMockInterface = {},
-) => {
+export const constructTestServer = ({ authorization = false, dbMocks = {} }: Options) => {
   const dtSourceConfig = getConfig();
 
-  const dbMocks = buildSqlizeMocks(mocks);
+  const mocks = buildSqlizeMocks(dbMocks);
 
   const apis = {
     catalogoApi: new dataSources.CatalogoAPI(dtSourceConfig),
@@ -28,8 +30,8 @@ export const constructTestServer = (
     geralApi: new dataSources.GeralAPI(dtSourceConfig),
     imagemApi: new dataSources.ImagemAPI(dtSourceConfig),
     pessoaApi: new dataSources.PessoaApi(dtSourceConfig),
-    pedidoService: new dataSources.PedidoService(dbMocks),
-    usuarioService: new dataSources.UsuarioService(dbMocks),
+    pedidoService: new dataSources.PedidoService(mocks),
+    usuarioService: new dataSources.UsuarioService(mocks),
   };
 
   let authOpts = {};
@@ -49,7 +51,7 @@ export const constructTestServer = (
     context: () => ({ ...authOpts }),
   });
 
-  return { server, ...apis, dbMocks };
+  return { server, ...apis, mocks };
 };
 
 function buildSqlizeMocks(mocks: DbMockInterface) {

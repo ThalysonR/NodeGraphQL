@@ -14,7 +14,7 @@ describe('Test usuario resolvers', () => {
       },
     },
   };
-  const { server } = constructTestServer(true, dbMocks);
+  const { server } = constructTestServer({ authorization: true, dbMocks });
 
   it('Should return all users', async () => {
     const client = createTestClient(server);

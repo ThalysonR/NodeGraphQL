@@ -21,7 +21,7 @@ describe('Pedido Test', () => {
       },
     };
 
-    const { server, pedidoService } = constructTestServer(true, dbMocks);
+    const { server, pedidoService } = constructTestServer({ authorization: true, dbMocks });
 
     // @ts-ignore
     pedidoService.getCached = jest.fn(() => []);

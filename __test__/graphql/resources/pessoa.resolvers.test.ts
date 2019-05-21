@@ -4,7 +4,7 @@ import { gql } from 'apollo-server';
 
 describe('Test Pessoa', () => {
   it('endpoint cpf test', async () => {
-    const { server, pessoaApi, geralApi } = constructTestServer(true);
+    const { server, pessoaApi, geralApi } = constructTestServer({ authorization: true });
 
     // @ts-ignore
     pessoaApi.get = jest.fn(() => ({
@@ -197,7 +197,7 @@ describe('Test Pessoa', () => {
   });
 
   it('endpoint cnpj test', async () => {
-    const { server, pessoaApi, geralApi } = constructTestServer(true);
+    const { server, pessoaApi, geralApi } = constructTestServer({ authorization: true });
 
     // @ts-ignore
     pessoaApi.get = jest.fn(() => ({
@@ -298,7 +298,7 @@ describe('Test Pessoa', () => {
   });
 
   it('endpoint test null', async () => {
-    const { server, pessoaApi } = constructTestServer(true);
+    const { server, pessoaApi } = constructTestServer({ authorization: true });
 
     // @ts-ignore
     pessoaApi.get = jest.fn(() => ({
@@ -384,7 +384,7 @@ describe('Test Pessoa', () => {
   });
 
   it('Should return default saldo for consumidor final', async () => {
-    const { server, pessoaApi } = constructTestServer(true);
+    const { server, pessoaApi } = constructTestServer({ authorization: true });
 
     // @ts-ignore
     pessoaApi.get = jest.fn(() => ({
@@ -413,7 +413,7 @@ describe('Test Pessoa', () => {
   });
 
   it('test in payment condition endpoint', async () => {
-    const { server, geralApi } = constructTestServer(true);
+    const { server, geralApi } = constructTestServer({ authorization: true });
 
     // @ts-ignore
     geralApi.get = jest.fn(() => [
