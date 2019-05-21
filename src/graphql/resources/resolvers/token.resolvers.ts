@@ -13,7 +13,7 @@ export const tokenResolvers = {
         throw new Error(ERROR.USER.WRONG_CREDENTIALS);
       }
 
-      const usuario = await dataSources.usuarioService.findUserByLogin(login);
+      const usuario = await dataSources.usuarioService.findUserByLogin(cpfCnpj);
       /* istanbul ignore if */
       if (!usuario || !usuario.isPassword(usuario.get('senha'), senha)) {
         throw new Error(ERROR.USER.WRONG_CREDENTIALS);
