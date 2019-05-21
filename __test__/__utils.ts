@@ -66,5 +66,6 @@ function buildSqlizeMocks(mocks: DbMockInterface) {
       );
     }
   }
+  builtMocks['sequelize'] = dbMock;
   return builtMocks;
 }
