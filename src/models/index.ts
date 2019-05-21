@@ -8,8 +8,8 @@ import SQLCache from '../utils/SQLCache';
 import sequelize = require('sequelize');
 
 export class SQLDataSource extends DataSource {
-  protected static db: DbConnection;
   protected static cache: SQLCache;
+  protected db: DbConnection;
   protected getCached: <TFindOptions>(
     dbFn: (opts: sequelize.FindOptions<TFindOptions>) => any,
     opts: sequelize.FindOptions<TFindOptions>,
@@ -17,10 +17,7 @@ export class SQLDataSource extends DataSource {
   protected context: any;
   constructor(db?) {
     super();
-    if (SQLDataSource.db === undefined) {
-      console.log(db);
-      SQLDataSource.db = db ? db : getDbConnection();
-    }
+    this.db = db ? db : getDbConnection();
     if (SQLDataSource.cache === undefined) {
       SQLDataSource.cache = new SQLCache();
     }
@@ -32,7 +29,7 @@ export class SQLDataSource extends DataSource {
   }
 }
 
-function getDbConnection(): DbConnection {
+export function getDbConnection(): DbConnection {
   const basename: string = path.basename(module.filename);
   const env: string = process.env.NODE_ENV || 'development';
   let config = require(path.resolve(`${__dirname}./../config/db_config.json`))[env];

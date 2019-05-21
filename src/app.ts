@@ -1,6 +1,6 @@
 const { ApolloServer } = require('apollo-server');
 import { resolvers, typeDefs } from './graphql/schema';
-import db from './models';
+import { getDbConnection } from './models';
 
 import { DataSources } from './interfaces/DataSourcesInterface';
 import * as dataSources from './graphql/resources/datasources';
@@ -25,6 +25,7 @@ class App {
 
   private middleware(): void {
     const dtSourceConfig = getConfig();
+    const db = getDbConnection();
 
     this.apollo = new ApolloServer({
       typeDefs,
@@ -35,8 +36,8 @@ class App {
         geralApi: new dataSources.GeralAPI(dtSourceConfig),
         imagemApi: new dataSources.ImagemAPI(dtSourceConfig),
         pessoaApi: new dataSources.PessoaApi(dtSourceConfig),
-        pedidoService: new dataSources.PedidoService(),
-        usuarioService: new dataSources.UsuarioService(),
+        pedidoService: new dataSources.PedidoService(db),
+        usuarioService: new dataSources.UsuarioService(db),
       }),
       formatError: err => formatError(err),
       context: async ({ req, res }: any) => {
@@ -53,7 +54,6 @@ class App {
             return {
               authorization,
               refreshToken,
-              db,
               authUser: {
                 id: sub,
               },
@@ -73,7 +73,6 @@ class App {
               return {
                 authorization: `Bearer ${newToken}`,
                 refreshToken,
-                db,
                 authUser: {
                   id,
                 },
@@ -81,9 +80,7 @@ class App {
             }
           }
         }
-        return {
-          db,
-        };
+        return {};
       },
     });
   }

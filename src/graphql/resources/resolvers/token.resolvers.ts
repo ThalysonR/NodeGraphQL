@@ -8,41 +8,34 @@ export const tokenResolvers = {
       if (!login || !senha) {
         throw new Error(ERROR.USER.EMPTY_CREDENTIALS);
       }
-
       const cpfCnpj = login.toString().replace(/[^0-9]+/g, '');
-
       if (cpfCnpj.length !== 11 && cpfCnpj.length !== 14) {
         throw new Error(ERROR.USER.WRONG_CREDENTIALS);
       }
 
       const usuario = await dataSources.usuarioService.findUserByLogin(login);
-      console.log(usuario);
-
+      /* istanbul ignore if */
       if (!usuario || !usuario.isPassword(usuario.get('senha'), senha)) {
         throw new Error(ERROR.USER.WRONG_CREDENTIALS);
       }
-
       /* istanbul ignore if */
       if (usuario.get('status_usuario') !== 'A') {
         throw new Error(ERROR.USER.WRONG_CREDENTIALS);
       }
-
       const usuarioId = usuario.get('id_usuario');
 
       /* istanbul ignore if */
       if (!usuario.perfis[0]) {
         throw new Error(ERROR.USER.EMPTY_PERFIL);
       }
-
       const [newToken, newRefreshToken] = await createTokens({ id: usuarioId });
-
       const pessoa = await dataSources.pessoaApi.searchPessoa(cpfCnpj);
+      /* istanbul ignore if */
       if (!pessoa) {
         throw new Error(ERROR.USER.DOES_NOT_EXIST);
       }
       const saldo = await dataSources.geralApi.findSaldoClienteByCpfCnpj(cpfCnpj);
-
-      return {
+      const objFinal = {
         token: newToken,
         refreshToken: newRefreshToken,
         usuario: {
@@ -65,6 +58,7 @@ export const tokenResolvers = {
           },
         },
       };
+      return objFinal;
     },
   },
 };

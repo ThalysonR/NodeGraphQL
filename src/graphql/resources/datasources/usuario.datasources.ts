@@ -7,15 +7,13 @@ export default class UsuarioService extends SQLDataSource {
   }
 
   public async findUserByLogin(login) {
-    console.log('FindUser: ', UsuarioService.db);
-    const dbFn = UsuarioService.db.Usuario.findOne.bind(UsuarioService.db.Usuario);
-    console.log('FindUser: ', dbFn({ where: { login } }));
+    const dbFn = this.db.Usuario.findOne.bind(this.db.Usuario);
     return await this.getCached<UsuarioAttributes>(dbFn, {
       where: { login },
       attributes: ['id_usuario', 'senha', 'login', 'email', 'status_usuario'],
       include: [
         {
-          model: UsuarioService.db.Perfil,
+          model: this.db.Perfil,
           through: {
             attributes: ['nome_perfil'],
           },
@@ -26,7 +24,7 @@ export default class UsuarioService extends SQLDataSource {
   }
 
   public async findAll() {
-    const dbFn = UsuarioService.db.Usuario.findAll.bind(UsuarioService.db.Usuario);
+    const dbFn = this.db.Usuario.findAll.bind(this.db.Usuario);
     return await this.getCached<UsuarioAttributes>(dbFn, {});
   }
 }

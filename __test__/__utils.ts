@@ -7,13 +7,17 @@ import { DataSources as B2BDataSources } from '../src/interfaces/DataSourcesInte
 import { DataSources } from 'apollo-server-core/dist/graphqlOptions';
 import { JWT_TOKEN_SECRET } from '../src/utils/utils';
 import SequelizeMock from 'sequelize-mock';
+import { DbMockInterface } from '../src/interfaces/DbMockInterface';
 
 /**
  * Função auxiliar para criar um servidor de teste para o graphql
  * @param authorization Boolean - indica se deve ser inserido autorização no contexto
  * @param param1
  */
-export const constructTestServer = (authorization: boolean = false, mocks = {}) => {
+export const constructTestServer = (
+  authorization: boolean = false,
+  mocks: DbMockInterface = {},
+) => {
   const dtSourceConfig = getConfig();
 
   const dbMocks = buildSqlizeMocks(mocks);
@@ -48,12 +52,16 @@ export const constructTestServer = (authorization: boolean = false, mocks = {}) 
   return { server, ...apis, dbMocks };
 };
 
-function buildSqlizeMocks(mocks) {
+function buildSqlizeMocks(mocks: DbMockInterface) {
   const dbMock = new SequelizeMock();
   const builtMocks = {};
   for (const mockName in mocks) {
     if (mocks.hasOwnProperty(mockName)) {
-      builtMocks[mockName] = dbMock.define(mockName, mocks[mockName]);
+      builtMocks[mockName] = dbMock.define(
+        mockName,
+        mocks[mockName].model,
+        mocks[mockName].options,
+      );
     }
   }
   return builtMocks;

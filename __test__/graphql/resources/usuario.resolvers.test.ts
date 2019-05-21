@@ -5,11 +5,13 @@ import { gql } from 'apollo-server';
 describe('Test usuario resolvers', () => {
   const dbMocks = {
     Usuario: {
-      id_usuario: 1,
-      nome_usuario: 'thalyson',
-      login: 'thalyson',
-      email: 'teste@teste.com',
-      senha: 123456,
+      model: {
+        id_usuario: 1,
+        nome_usuario: 'thalyson',
+        login: 'thalyson',
+        email: 'teste@teste.com',
+        senha: 123456,
+      },
     },
   };
   const { server } = constructTestServer(true, dbMocks);

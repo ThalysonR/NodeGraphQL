@@ -1,6 +1,8 @@
 import { constructTestServer } from '../../__utils';
 import { createTestClient } from 'apollo-server-testing';
 import { gql } from 'apollo-server';
+import { UsuarioMethods } from '../../../src/models/UsuarioModel';
+import { hashSync } from 'bcryptjs';
 
 describe('Test token resolvers', () => {
   it('Should throw when credentials empty', async () => {
@@ -108,11 +110,18 @@ describe('Test token resolvers', () => {
   it('Should return token when credentials user PF is correct', async () => {
     const dbMocks = {
       Usuario: {
-        id_usuario: 1,
-        nome_usuario: 'thalyson',
-        login: '33517308293',
-        email: 'teste@teste.com',
-        senha: 123,
+        model: {
+          id_usuario: 1,
+          nome_usuario: 'thalyson',
+          login: '33517308293',
+          email: 'teste@teste.com',
+          senha: hashSync('123'),
+          status_usuario: 'A',
+          perfis: [{ nome_perfil: 'Teste' }],
+        },
+        options: {
+          instanceMethods: UsuarioMethods,
+        },
       },
     };
 
@@ -312,7 +321,23 @@ describe('Test token resolvers', () => {
   });
 
   it('Should return token when credentials user PJ is correct', async () => {
-    const { server, pessoaApi, geralApi } = constructTestServer(true);
+    const dbMocks = {
+      Usuario: {
+        model: {
+          id_usuario: 1,
+          nome_usuario: 'EUCATTUR',
+          login: '13484296000105',
+          email: 'teste@teste.com',
+          senha: hashSync('123'),
+          status_usuario: 'A',
+          perfis: [{ nome_perfil: 'Teste' }],
+        },
+        options: {
+          instanceMethods: UsuarioMethods,
+        },
+      },
+    };
+    const { server, pessoaApi, geralApi } = constructTestServer(true, dbMocks);
 
     // @ts-ignore
     pessoaApi.get = jest.fn(() => ({
