@@ -1,16 +1,10 @@
-import * as jwt from 'jsonwebtoken';
-import { JWT_TOKEN_SECRET } from '../../../src/utils/utils';
 import { createTestClient } from 'apollo-server-testing';
 import { constructTestServer } from '../../__utils';
 import { gql } from 'apollo-server';
 
 describe('Test Pessoa', () => {
-  const secret = `Bearer: ${jwt.sign('123456', JWT_TOKEN_SECRET)}`;
   it('endpoint cpf test', async () => {
-    const { server, pessoaApi, geralApi } = constructTestServer({
-      authUser: 1,
-      authorization: secret,
-    });
+    const { server, pessoaApi, geralApi } = constructTestServer({ authorization: true });
 
     // @ts-ignore
     pessoaApi.get = jest.fn(() => ({
@@ -203,10 +197,7 @@ describe('Test Pessoa', () => {
   });
 
   it('endpoint cnpj test', async () => {
-    const { server, pessoaApi, geralApi } = constructTestServer({
-      authUser: 1,
-      authorization: secret,
-    });
+    const { server, pessoaApi, geralApi } = constructTestServer({ authorization: true });
 
     // @ts-ignore
     pessoaApi.get = jest.fn(() => ({
@@ -307,7 +298,7 @@ describe('Test Pessoa', () => {
   });
 
   it('endpoint test null', async () => {
-    const { server, pessoaApi } = constructTestServer({ authUser: 1, authorization: secret });
+    const { server, pessoaApi } = constructTestServer({ authorization: true });
 
     // @ts-ignore
     pessoaApi.get = jest.fn(() => ({
@@ -393,7 +384,7 @@ describe('Test Pessoa', () => {
   });
 
   it('Should return default saldo for consumidor final', async () => {
-    const { server, pessoaApi } = constructTestServer({ authUser: 1, authorization: secret });
+    const { server, pessoaApi } = constructTestServer({ authorization: true });
 
     // @ts-ignore
     pessoaApi.get = jest.fn(() => ({
@@ -422,7 +413,7 @@ describe('Test Pessoa', () => {
   });
 
   it('test in payment condition endpoint', async () => {
-    const { server, geralApi } = constructTestServer({ authUser: 1, authorization: secret });
+    const { server, geralApi } = constructTestServer({ authorization: true });
 
     // @ts-ignore
     geralApi.get = jest.fn(() => [

@@ -17,6 +17,7 @@ const config = {
 };
 
 export default function getConfig() {
+  /* istanbul ignore next */
   const env = process.env.NODE_ENV || '';
   return config[env];
 }

@@ -1,16 +1,11 @@
-import * as jwt from 'jsonwebtoken';
-import { JWT_TOKEN_SECRET } from '../../../src/utils/utils';
 import { createTestClient } from 'apollo-server-testing';
 import { constructTestServer } from '../../__utils';
 import { gql } from 'apollo-server';
 
 describe('Test Catalog', () => {
-  const secret = `Bearer: ${jwt.sign('123456', JWT_TOKEN_SECRET)}`;
-
   it('test on request response', async () => {
     const { server, catalogoApi, pessoaApi, precoApi, imagemApi, geralApi } = constructTestServer({
-      authUser: 1,
-      authorization: secret,
+      authorization: true,
     });
 
     // @ts-ignore
@@ -294,8 +289,7 @@ describe('Test Catalog', () => {
 
   it('Should return empty image and preco when not found', async () => {
     const { server, catalogoApi, pessoaApi, precoApi, imagemApi } = constructTestServer({
-      authUser: 1,
-      authorization: secret,
+      authorization: true,
     });
 
     // @ts-ignore
@@ -524,8 +518,7 @@ describe('Test Catalog', () => {
 
   it('Should not make http calls for unused dynamic fields', async () => {
     const { server, catalogoApi, pessoaApi, precoApi, imagemApi } = constructTestServer({
-      authUser: 1,
-      authorization: secret,
+      authorization: true,
     });
     const mockFn = jest.fn(() => [
       {
@@ -748,7 +741,7 @@ describe('Test Catalog', () => {
   });
 
   it('catalog test and client endpoint', async () => {
-    const { server, catalogoApi } = constructTestServer({ authUser: 1, authorization: secret });
+    const { server, catalogoApi } = constructTestServer({ authorization: true });
 
     // @ts-ignore
     catalogoApi.get = jest.fn(() => ({
@@ -792,7 +785,7 @@ describe('Test Catalog', () => {
   });
 
   it('catalog application endpoint test', async () => {
-    const { server, catalogoApi } = constructTestServer({ authUser: 1, authorization: secret });
+    const { server, catalogoApi } = constructTestServer({ authorization: true });
 
     // @ts-ignore
     catalogoApi.get = jest.fn(() => ({
@@ -846,7 +839,7 @@ describe('Test Catalog', () => {
   });
 
   it('similar catalog endpoint testing', async () => {
-    const { server, catalogoApi } = constructTestServer({ authUser: 1, authorization: secret });
+    const { server, catalogoApi } = constructTestServer({ authorization: true });
 
     // @ts-ignore
     catalogoApi.get = jest.fn(() => [
@@ -926,7 +919,7 @@ describe('Test Catalog', () => {
   });
 
   it('autocomplete endpoint test', async () => {
-    const { server, catalogoApi } = constructTestServer({ authUser: 1, authorization: secret });
+    const { server, catalogoApi } = constructTestServer({ authorization: true });
 
     // @ts-ignore
     catalogoApi.get = jest.fn(() => [
@@ -958,7 +951,7 @@ describe('Test Catalog', () => {
   });
 
   it('estoque endpoin test', async () => {
-    const { server, geralApi } = constructTestServer({ authUser: 1, authorization: secret });
+    const { server, geralApi } = constructTestServer({ authorization: true });
 
     // @ts-ignore
     geralApi.get = jest.fn(() => [

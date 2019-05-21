@@ -5,26 +5,23 @@ import Sequelize from 'sequelize';
 import { DbConnection } from '../interfaces/DbConnectionInterface';
 import { DataSource } from 'apollo-datasource';
 import SQLCache from '../utils/SQLCache';
-let db: any = null;
-
-if (!db) {
-  db = getDbConnection();
-}
-
-export default db as DbConnection;
+import sequelize = require('sequelize');
 
 export class SQLDataSource extends DataSource {
-  protected static db: DbConnection;
-  public getCached;
+  protected static cache: SQLCache;
+  protected db: DbConnection;
+  protected getCached: <TFindOptions>(
+    dbFn: (opts: sequelize.FindOptions<TFindOptions>) => any,
+    opts: sequelize.FindOptions<TFindOptions>,
+  ) => any;
   protected context: any;
-  protected cache: SQLCache;
-  constructor() {
+  constructor(db?) {
     super();
-    if (SQLDataSource.db === undefined) {
-      SQLDataSource.db = getDbConnection();
+    this.db = db ? db : getDbConnection();
+    if (SQLDataSource.cache === undefined) {
+      SQLDataSource.cache = new SQLCache();
     }
-    this.cache = new SQLCache();
-    this.getCached = this.cache.getCached.bind(this.cache);
+    this.getCached = SQLDataSource.cache.getCached.bind(SQLDataSource.cache);
   }
 
   public initialize(config) {
@@ -32,7 +29,7 @@ export class SQLDataSource extends DataSource {
   }
 }
 
-function getDbConnection(): DbConnection {
+export function getDbConnection(): DbConnection {
   const basename: string = path.basename(module.filename);
   const env: string = process.env.NODE_ENV || 'development';
   let config = require(path.resolve(`${__dirname}./../config/db_config.json`))[env];

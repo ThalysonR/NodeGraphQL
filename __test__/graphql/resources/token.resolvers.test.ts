@@ -1,15 +1,12 @@
 import { constructTestServer } from '../../__utils';
-import * as jwt from 'jsonwebtoken';
-import { JWT_TOKEN_SECRET } from '../../../src/utils/utils';
 import { createTestClient } from 'apollo-server-testing';
 import { gql } from 'apollo-server';
-import db from './../../../src/models';
+import { UsuarioMethods } from '../../../src/models/UsuarioModel';
+import { hashSync } from 'bcryptjs';
 
 describe('Test token resolvers', () => {
-  const secret = `Bearer: ${jwt.sign('123456', JWT_TOKEN_SECRET)}`;
-
   it('Should throw when credentials empty', async () => {
-    const { server } = constructTestServer({ authUser: 1, authorization: secret, db });
+    const { server } = constructTestServer({ authorization: true });
 
     const { mutate } = createTestClient(server);
     const res = await mutate({
@@ -50,7 +47,7 @@ describe('Test token resolvers', () => {
   });
 
   it('Should throw when no user found', async () => {
-    const { server, pessoaApi } = constructTestServer({ authUser: 1, authorization: secret, db });
+    const { server, pessoaApi } = constructTestServer({ authorization: true });
 
     // @ts-ignore
     pessoaApi.get = jest.fn(() => ({
@@ -111,11 +108,24 @@ describe('Test token resolvers', () => {
   });
 
   it('Should return token when credentials user PF is correct', async () => {
-    const { server, pessoaApi, geralApi } = constructTestServer({
-      authUser: 1,
-      authorization: secret,
-      db,
-    });
+    const dbMocks = {
+      Usuario: {
+        model: {
+          id_usuario: 1,
+          nome_usuario: 'thalyson',
+          login: '33517308293',
+          email: 'teste@teste.com',
+          senha: hashSync('123'),
+          status_usuario: 'A',
+          perfis: [{ nome_perfil: 'Teste' }],
+        },
+        options: {
+          instanceMethods: UsuarioMethods,
+        },
+      },
+    };
+
+    const { server, pessoaApi, geralApi } = constructTestServer({ authorization: true, dbMocks });
 
     // @ts-ignore
     pessoaApi.get = jest.fn(() => ({
@@ -188,7 +198,7 @@ describe('Test token resolvers', () => {
   });
 
   it('Should return null when password user is incorrect', async () => {
-    const { server, pessoaApi } = constructTestServer({ authUser: 1, authorization: secret, db });
+    const { server, pessoaApi } = constructTestServer({ authorization: true });
 
     // @ts-ignore
     pessoaApi.get = jest.fn(() => ({
@@ -250,7 +260,7 @@ describe('Test token resolvers', () => {
   });
 
   it('Should throw when no pessoa found', async () => {
-    const { server, pessoaApi } = constructTestServer({ authUser: 1, authorization: secret, db });
+    const { server, pessoaApi } = constructTestServer({ authorization: true });
 
     // @ts-ignore
     pessoaApi.get = jest.fn(() => ({
@@ -311,11 +321,23 @@ describe('Test token resolvers', () => {
   });
 
   it('Should return token when credentials user PJ is correct', async () => {
-    const { server, pessoaApi, geralApi } = constructTestServer({
-      authUser: 1,
-      authorization: secret,
-      db,
-    });
+    const dbMocks = {
+      Usuario: {
+        model: {
+          id_usuario: 1,
+          nome_usuario: 'EUCATTUR',
+          login: '13484296000105',
+          email: 'teste@teste.com',
+          senha: hashSync('123'),
+          status_usuario: 'A',
+          perfis: [{ nome_perfil: 'Teste' }],
+        },
+        options: {
+          instanceMethods: UsuarioMethods,
+        },
+      },
+    };
+    const { server, pessoaApi, geralApi } = constructTestServer({ authorization: true, dbMocks });
 
     // @ts-ignore
     pessoaApi.get = jest.fn(() => ({

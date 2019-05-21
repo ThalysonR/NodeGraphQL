@@ -1,8 +1,8 @@
-const { ApolloServer } = require('apollo-server');
+import { ApolloServer, gql } from 'apollo-server';
 import { resolvers, typeDefs } from './graphql/schema';
-import db from './models';
+import { getDbConnection } from './models';
 
-import { DataSources } from './interfaces/DataSourcesInterface';
+import { DataSources as B2BDataSources } from './interfaces/DataSourcesInterface';
 import * as dataSources from './graphql/resources/datasources';
 
 import * as jwt from 'jsonwebtoken';
@@ -11,6 +11,7 @@ import { JWT } from './environment';
 import { formatError } from './graphql/response';
 import { refreshTokens } from './authentication/handleTokens';
 import getConfig from './environment/datasources.config';
+import { DataSources } from 'apollo-server-core/dist/requestPipeline';
 
 class App {
   public apollo: any;
@@ -25,17 +26,21 @@ class App {
 
   private middleware(): void {
     const dtSourceConfig = getConfig();
+    const db = getDbConnection();
 
     this.apollo = new ApolloServer({
-      typeDefs,
+      typeDefs: gql`
+        ${typeDefs}
+      `,
       resolvers,
-      dataSources: (): DataSources => ({
+      dataSources: (): DataSources<B2BDataSources> => ({
         catalogoApi: new dataSources.CatalogoAPI(dtSourceConfig),
         precoApi: new dataSources.PrecoAPI(dtSourceConfig),
         geralApi: new dataSources.GeralAPI(dtSourceConfig),
         imagemApi: new dataSources.ImagemAPI(dtSourceConfig),
         pessoaApi: new dataSources.PessoaApi(dtSourceConfig),
-        pedidoService: new dataSources.PedidoService(),
+        pedidoService: new dataSources.PedidoService(db),
+        usuarioService: new dataSources.UsuarioService(db),
       }),
       formatError: err => formatError(err),
       context: async ({ req, res }: any) => {
@@ -52,7 +57,6 @@ class App {
             return {
               authorization,
               refreshToken,
-              db,
               authUser: {
                 id: sub,
               },
@@ -72,7 +76,6 @@ class App {
               return {
                 authorization: `Bearer ${newToken}`,
                 refreshToken,
-                db,
                 authUser: {
                   id,
                 },
@@ -80,9 +83,7 @@ class App {
             }
           }
         }
-        return {
-          db,
-        };
+        return {};
       },
     });
   }

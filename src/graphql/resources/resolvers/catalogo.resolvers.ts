@@ -78,8 +78,8 @@ const getProdutosDynamic = {
         const estoque = await dataSources.geralApi.searchEstoque(buscaEstoque);
         const reducedEstoque = estoque.reduce(
           (soma, atual) => ({
-            qtd: soma.qtd + atual.qtd,
-            qtdInventario: soma.qtdInventario + atual.qtdInventario,
+            qtd: soma.qtd + Math.floor(atual.qtd),
+            qtdInventario: soma.qtdInventario + Math.floor(atual.qtdInventario),
           }),
           { qtd: 0, qtdInventario: 0 },
         );
