@@ -1,17 +1,15 @@
 import { ApolloServer, gql } from 'apollo-server';
-import { resolvers, typeDefs } from './graphql/schema';
-import { getDbConnection } from './models';
-
-import { DataSources as B2BDataSources } from './interfaces/DataSourcesInterface';
-import * as dataSources from './graphql/resources/datasources';
-
-import * as jwt from 'jsonwebtoken';
-import { JWT_TOKEN_SECRET } from './utils/utils';
-import { JWT } from './environment';
-import { formatError } from './graphql/response';
-import { refreshTokens } from './authentication/handleTokens';
-import getConfig from './environment/datasources.config';
 import { DataSources } from 'apollo-server-core/dist/requestPipeline';
+import * as jwt from 'jsonwebtoken';
+import { refreshTokens } from './authentication/handleTokens';
+import { JWT } from './environment';
+import getConfig from './environment/datasources.config';
+import * as dataSources from './graphql/resources/datasources';
+import { formatError } from './graphql/response';
+import { resolvers, typeDefs } from './graphql/schema';
+import { DataSources as B2BDataSources } from './interfaces/DataSourcesInterface';
+import { getDbConnection } from './models';
+import { JWT_TOKEN_SECRET } from './utils/utils';
 
 class App {
   public apollo: any;

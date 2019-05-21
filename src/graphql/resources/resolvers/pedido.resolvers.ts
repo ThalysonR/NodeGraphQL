@@ -1,6 +1,6 @@
-import { authResolvers } from '../../composable/auth.resolver';
-import { gqlCompose } from '../../../utils/utils';
 import { ResolverContext } from '../../../interfaces/ResolverContextInterface';
+import { gqlCompose } from '../../../utils/utils';
+import { authResolvers } from '../../composable/auth.resolver';
 
 export const pedidoResolvers = {
   Mutation: {

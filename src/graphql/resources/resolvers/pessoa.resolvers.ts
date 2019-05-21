@@ -1,6 +1,6 @@
-import { gqlCompose, mapDynamicFields, handleError } from '../../../utils/utils';
-import { authResolvers } from '../../composable/auth.resolver';
 import { ResolverContext } from '../../../interfaces/ResolverContextInterface';
+import { gqlCompose, handleError, mapDynamicFields } from '../../../utils/utils';
+import { authResolvers } from '../../composable/auth.resolver';
 
 const getPessoaDinamicos = {
   'getPessoa.saldo': async (args, { dataSources }: ResolverContext, pessoa) => {

@@ -1,10 +1,10 @@
+import { DataSource } from 'apollo-datasource';
 import * as fs from 'fs';
 import * as path from 'path';
 import Sequelize from 'sequelize';
-
 import { DbConnection } from '../interfaces/DbConnectionInterface';
-import { DataSource } from 'apollo-datasource';
 import SQLCache from '../utils/SQLCache';
+
 import sequelize = require('sequelize');
 
 export class SQLDataSource extends DataSource {

@@ -1,6 +1,6 @@
-import { formatError } from '../../../src/graphql/response';
 import { ApolloError } from 'apollo-server';
-import { UNAUTHORIZED, FORBIDDEN } from '../../../src/environment';
+import { FORBIDDEN, UNAUTHORIZED } from '../../../src/environment';
+import { formatError } from '../../../src/graphql/response';
 
 describe('Response Errors', () => {
   it('Should return response error messages and status code when authenticate unauthorized', () => {

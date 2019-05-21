@@ -116,7 +116,7 @@ type Clientes {
   metragemOfic: Int
   percentualAumento: Int
 }
-  
+
 type InscricaoEstadual{
   id: Int
   inscricao: String
