@@ -45,9 +45,7 @@ export const tokenResolvers = {
             nomeCompleto: pessoa.nomeCompleto,
             nomeFantasia: pessoa.nomeFantasia,
             tipoPessoa: pessoa.tipoPessoa,
-            saldo: {
-              saldo,
-            },
+            saldo,
             pessoaCadastro:
               pessoa.tipoPessoa === 'PF'
                 ? { cpf: pessoa.pessoaCadastro.cpf }
