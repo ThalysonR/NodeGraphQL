@@ -10,6 +10,7 @@ const getProdutosDynamic = {
   ) => {
     const consumidor = await dataSources.pessoaApi.searchPessoa(cpfCnpj);
 
+    // TODO Tirar dados mockados
     const buscaProduto = produtosPage.produtos.map(produto => ({
       condicao: 'XXXXXXX',
       descontoItem: 0,

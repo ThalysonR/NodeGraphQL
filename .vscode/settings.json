@@ -8,5 +8,12 @@
   },
   "editor.codeActionsOnSave": {
     "source.organizeImports": true
+  },
+  "todo-tree.defaultHighlight": {
+    "type": "text",
+    "background": "green",
+    "foreground": "red",
+    "opacity": 50,
+    "iconColour": "green"
   }
 }
