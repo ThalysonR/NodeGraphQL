@@ -7,7 +7,7 @@ type Pessoa{
   dataCadastro: String
   tipoCadastro: Int
   emails: [Emails]
-  enderecos: [Enderecos]
+  enderecos: [Endereco]
   telefones: [Telefones]
   pessoaCadastro: PessoaCadastro
   clientes: Clientes
@@ -35,7 +35,7 @@ type Email {
   contato: String
 }
 
-type Enderecos {
+type Endereco {
   id: Int
   inscricaoEstadual: InscricaoEstadual
   codPais: Int

@@ -3,7 +3,7 @@ import { BaseModelInterface } from '../interfaces/BaseModelInterface';
 import { ModelsInterface } from './../interfaces/ModelsInterface';
 
 export interface PedidoAttributes {
-  codpedido?: number;
+  codpedido: number;
   codfilial?: number;
   codfuncionario?: number;
   codcliente?: number;
@@ -27,7 +27,7 @@ export default (sequelize: Sequelize.Sequelize, DataTypes: Sequelize.DataTypes):
     {
       codpedido: {
         type: DataTypes.BIGINT,
-        allowNull: false,
+        allowNull: true,
         primaryKey: true,
         autoIncrement: false,
       },

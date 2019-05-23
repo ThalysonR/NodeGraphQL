@@ -4,7 +4,7 @@ import { ModelsInterface } from './../interfaces/ModelsInterface';
 
 export interface EnderecoAttributes {
   codpedend?: number;
-  codpedido?: number;
+  codpedido: number;
   codendereco?: number;
 }
 
@@ -31,7 +31,7 @@ export default (
       },
       codpedido: {
         type: DataTypes.BIGINT,
-        allowNull: false,
+        allowNull: true,
       },
       codendereco: {
         type: DataTypes.BIGINT,
@@ -40,7 +40,7 @@ export default (
     },
     {
       schema: 'b2b',
-      tableName: 'pedidoS_enderecos',
+      tableName: 'pedidos_enderecos',
       timestamps: false,
     },
   );

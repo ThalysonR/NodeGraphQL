@@ -3,7 +3,7 @@ import { BaseModelInterface } from '../interfaces/BaseModelInterface';
 import { ModelsInterface } from './../interfaces/ModelsInterface';
 
 export interface ItensPedidoAttributes {
-  codpedido?: number;
+  codpedido: number;
   codpedidoitem?: number;
   fornecedor_emp?: number;
   fornecedor_cod?: number;
@@ -32,8 +32,8 @@ export default (
     'ItensPedido',
     {
       codpedido: {
-        type: DataTypes.INTEGER,
-        allowNull: false,
+        type: DataTypes.BIGINT,
+        allowNull: true,
       },
       codpedidoitem: {
         type: DataTypes.INTEGER,

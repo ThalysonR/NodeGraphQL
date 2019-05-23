@@ -3,7 +3,7 @@ import { BaseModelInterface } from '../interfaces/BaseModelInterface';
 import { ModelsInterface } from './../interfaces/ModelsInterface';
 
 export interface PagamentoAttributes {
-  codpedido?: number;
+  codpedido: number;
   codpedpagto?: number;
   codtipopagto?: number;
   valor_pago?: number;
@@ -29,7 +29,7 @@ export default (
     {
       codpedido: {
         type: DataTypes.BIGINT,
-        allowNull: false,
+        allowNull: true,
       },
       codpedpagto: {
         type: DataTypes.BIGINT,
@@ -39,7 +39,7 @@ export default (
       },
       codtipopagto: {
         type: DataTypes.BIGINT,
-        allowNull: false,
+        allowNull: true,
       },
       valor_pago: {
         type: DataTypes.FLOAT,
