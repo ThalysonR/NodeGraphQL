@@ -1,7 +1,7 @@
+import { Server } from 'http';
 import app from './app';
 import { getDbConnection } from './models';
 import { normalizePort } from './utils/utils';
-import { Server } from 'http';
 
 const port = normalizePort(process.env.port || 3000);
 const host = process.env.host || '127.0.0.1';

@@ -3,9 +3,15 @@ const usuarioTypes = `
 type Usuario {
   email: String
   login: String
-  
+
   pessoa: Pessoa!
   perfil: Perfil!
+}
+
+type Credencial {
+  token: String!
+  refreshToken: String!
+  usuario: Usuario
 }
 
 type Perfil{
@@ -20,6 +26,7 @@ const usuarioQueries = `
 `;
 
 const usuarioMutations = `
+  createToken(login: String!, senha: String!): Credencial
 `;
 
 export { usuarioTypes, usuarioQueries, usuarioMutations };

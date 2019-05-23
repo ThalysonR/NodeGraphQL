@@ -1,6 +1,6 @@
+import { gql } from 'apollo-server';
 import { createTestClient } from 'apollo-server-testing';
 import { constructTestServer } from '../../__utils';
-import { gql } from 'apollo-server';
 
 describe('Test Catalog', () => {
   it('test on request response', async () => {

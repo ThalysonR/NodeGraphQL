@@ -1,5 +1,5 @@
-import { ComposableResolver, GraphQLB2BResolver } from '../types/GraphqlTypes';
 import { ResolverContext } from '../interfaces/ResolverContextInterface';
+import { ComposableResolver, GraphQLB2BResolver } from '../types/GraphqlTypes';
 
 export const normalizePort = (val: number | string): number => {
   return typeof val === 'string' ? parseInt(val) : val;

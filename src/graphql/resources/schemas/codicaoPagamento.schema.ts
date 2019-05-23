@@ -10,17 +10,10 @@ type CondicaoPagamento {
     descontoMedio: Float
     documento: String
 }
-
-input BuscaCondicao {
-  operacao: Int
-  tipoPreco: String!
-  formaPagamento: String!
-  prazoMedio: Int!
-}
 `;
 
 const condicaoQueries = `
-  getCondicao(buscaCondicao: BuscaCondicao!): [CondicaoPagamento]!
+  getCondicao(cpfCnpj: String): [CondicaoPagamento]!
 `;
 
 const condicaoMutations = `

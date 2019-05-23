@@ -1,5 +1,5 @@
-import {ApolloError} from 'apollo-server';
-import {FORBIDDEN, UNAUTHORIZED, ERROR} from '../../environment';
+import { ApolloError } from 'apollo-server';
+import { ERROR, FORBIDDEN, UNAUTHORIZED } from '../../environment';
 
 const e401s = [
   ERROR.USER.WRONG_CREDENTIALS,
@@ -15,7 +15,10 @@ const e403s = [FORBIDDEN];
 
 export const formatError = err => {
   let error = err;
-  const maskError = !(error.originalError instanceof ApolloError) && !e401s.includes(err.message) && !e403s.includes(err.message);
+  const maskError =
+    !(error.originalError instanceof ApolloError) &&
+    !e401s.includes(err.message) &&
+    !e403s.includes(err.message);
   if (maskError) {
     error = {
       message: error.message,
@@ -23,7 +26,7 @@ export const formatError = err => {
       location: error.location,
       path: error.path,
       extensions: {
-        code: 500
+        code: 500,
       },
     };
   }

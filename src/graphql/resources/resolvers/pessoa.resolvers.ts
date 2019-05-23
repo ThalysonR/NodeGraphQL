@@ -1,6 +1,6 @@
-import { gqlCompose, mapDynamicFields, handleError } from '../../../utils/utils';
-import { authResolvers } from '../../composable/auth.resolver';
 import { ResolverContext } from '../../../interfaces/ResolverContextInterface';
+import { gqlCompose, handleError, mapDynamicFields } from '../../../utils/utils';
+import { authResolvers } from '../../composable/auth.resolver';
 
 const getPessoaDinamicos = {
   'getPessoa.saldo': async (args, { dataSources }: ResolverContext, pessoa) => {
@@ -34,7 +34,14 @@ export const pessoaResolvers = {
       },
     ),
     getCondicao: gqlCompose(...authResolvers)(
-      async (parent, { buscaCondicao }, { dataSources }: ResolverContext, info) => {
+      async (parent, { cpfCnpj }, { dataSources }: ResolverContext, info) => {
+        const pessoa = await dataSources.pessoaApi.searchPessoa(cpfCnpj);
+        const buscaCondicao = {
+          operacao: 1,
+          tipoPreco: pessoa.clientes.tipoPreco,
+          formaPagamento: 'F',
+          prazoMedio: pessoa.clientes.prazoMedio,
+        };
         return dataSources.geralApi.searchCondicao(buscaCondicao).catch(handleError);
       },
     ),

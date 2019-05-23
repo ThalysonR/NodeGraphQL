@@ -1,6 +1,6 @@
+import { gql } from 'apollo-server';
 import { createTestClient } from 'apollo-server-testing';
 import { constructTestServer } from '../../__utils';
-import { gql } from 'apollo-server';
 
 describe('Test Pessoa', () => {
   it('endpoint cpf test', async () => {
@@ -413,8 +413,15 @@ describe('Test Pessoa', () => {
   });
 
   it('test in payment condition endpoint', async () => {
-    const { server, geralApi } = constructTestServer({ authorization: true });
+    const { server, geralApi, pessoaApi } = constructTestServer({ authorization: true });
 
+    // @ts-ignore
+    pessoaApi.get = jest.fn(() => ({
+      clientes: {
+        tipoPreco: 'N',
+        prazoMedio: 0,
+      },
+    }));
     // @ts-ignore
     geralApi.get = jest.fn(() => [
       {
@@ -435,9 +442,7 @@ describe('Test Pessoa', () => {
     const res = await query({
       query: gql`
         {
-          getCondicao(
-            buscaCondicao: { operacao: 1, tipoPreco: "A", formaPagamento: "F", prazoMedio: 45 }
-          ) {
+          getCondicao {
             recnum
             codigo
             nomeCondicaoPagamento

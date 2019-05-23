@@ -1,13 +1,13 @@
-import { typeDefs, resolvers } from '../src/graphql/schema';
 import { ApolloServer, gql } from 'apollo-server';
-import * as jwt from 'jsonwebtoken';
-import * as dataSources from '../src/graphql/resources/datasources';
-import getConfig from '../src/environment/datasources.config';
-import { DataSources as B2BDataSources } from '../src/interfaces/DataSourcesInterface';
 import { DataSources } from 'apollo-server-core/dist/graphqlOptions';
-import { JWT_TOKEN_SECRET } from '../src/utils/utils';
+import * as jwt from 'jsonwebtoken';
 import SequelizeMock from 'sequelize-mock';
+import getConfig from '../src/environment/datasources.config';
+import * as dataSources from '../src/graphql/resources/datasources';
+import { resolvers, typeDefs } from '../src/graphql/schema';
+import { DataSources as B2BDataSources } from '../src/interfaces/DataSourcesInterface';
 import { DbMockInterface } from '../src/interfaces/DbMockInterface';
+import { JWT_TOKEN_SECRET } from '../src/utils/utils';
 
 interface Options {
   authorization?: boolean;

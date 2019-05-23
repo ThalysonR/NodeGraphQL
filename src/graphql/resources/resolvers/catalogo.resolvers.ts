@@ -1,6 +1,6 @@
-import { authResolvers } from '../../composable/auth.resolver';
-import { handleError, gqlCompose, mapDynamicFields } from '../../../utils/utils';
 import { ResolverContext } from '../../../interfaces/ResolverContextInterface';
+import { gqlCompose, handleError, mapDynamicFields } from '../../../utils/utils';
+import { authResolvers } from '../../composable/auth.resolver';
 
 const getProdutosDynamic = {
   'getProdutos.produtos.unidade|caixa': async (
@@ -10,6 +10,7 @@ const getProdutosDynamic = {
   ) => {
     const consumidor = await dataSources.pessoaApi.searchPessoa(cpfCnpj);
 
+    // TODO Tirar dados mockados
     const buscaProduto = produtosPage.produtos.map(produto => ({
       condicao: 'XXXXXXX',
       descontoItem: 0,

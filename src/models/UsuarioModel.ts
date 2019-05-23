@@ -1,8 +1,8 @@
+import { compareSync } from 'bcryptjs';
 import * as Sequelize from 'sequelize';
 import { BaseModelInterface } from '../interfaces/BaseModelInterface';
 import { ModelsInterface } from '../interfaces/ModelsInterface';
 import { PerfilInstance } from './PerfilModel';
-import { compareSync } from 'bcryptjs';
 // import {encode} from "punycode";
 
 export interface UsuarioAttributes {
