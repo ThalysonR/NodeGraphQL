@@ -12,7 +12,7 @@ export const pedidoResolvers = {
         const buscaProduto = setPedido.itens.map(produto => ({
           condicao: 'XXXXXXX',
           descontoItem: 0,
-          fatorAumento: 0,
+          fatorAumento: pessoa.clientes.percentualAumento,
           filial: 34,
           fornecedorCodigo: produto.fornecedor_cod,
           fornecedorEmpresa: produto.fornecedor_emp,
