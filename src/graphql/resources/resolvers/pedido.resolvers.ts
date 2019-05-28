@@ -91,7 +91,11 @@ export const pedidoResolvers = {
   Query: {
     findOrdersByCliente: gqlCompose(...authResolvers)(
       async (parent, { codCliente }, { dataSources }: ResolverContext, info) => {
-        return await dataSources.pedidoService.findPedidoByCliente(codCliente);
+        const pessoa = await dataSources.pessoaApi.searchPessoa(codCliente);
+
+        const resp = await dataSources.pedidoService.findPedidoByCliente(pessoa.clientes.id);
+
+        return resp;
       },
     ),
   },

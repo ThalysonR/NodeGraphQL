@@ -87,7 +87,7 @@ input SetEndereco{
 `;
 
 const pedidoQueries = `
-  findOrdersByCliente(codCliente: Int!): [Pedido]!
+  findOrdersByCliente(codCliente: String!): [Pedido]!
   searchOrder(codPedido: Int!): Pedido!
 `;
 

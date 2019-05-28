@@ -7,9 +7,9 @@ describe('Pedido Test', () => {
     const dbMocks = {
       Pedido: {
         model: {
-          codpedido: 123,
+          codpedido: 210,
           codfilial: 34,
-          codcliente: 123,
+          codcliente: 145995,
           codfuncionario: 123,
           condicao: 'A',
           emissao: Date.now(),
@@ -17,25 +17,85 @@ describe('Pedido Test', () => {
           total: 54.35,
           observacao: ' ',
           ordemcompra: '1234984',
+          pedidos_itens: [
+            {
+              codpedido: '210',
+              codpedidoitem: 308,
+              fornecedor_emp: 1,
+              fornecedor_cod: 1416,
+              vl_item: 697.6,
+              produto: '15W40 SELENIA K',
+              quantidade: 4,
+              vl_total: 2790.4,
+              unidade: 'CX',
+              embalagem: 24,
+              qtd_estoque: 3310,
+            },
+          ],
         },
       },
     };
 
-    const { server, pedidoService } = constructTestServer({ authorization: true, dbMocks });
+    const { server, pedidoService, pessoaApi } = constructTestServer({
+      authorization: true,
+      dbMocks,
+    });
 
     // @ts-ignore
     pedidoService.getCached = jest.fn(() => []);
 
+    // @ts-ignore
+    pessoaApi.get = jest.fn(() => ({
+      nomeCompleto: 'KATIA',
+      nomeFantasia: 'KATIA',
+      tipoPessoa: 'PF',
+      dataCadastro: '1542772800000',
+      tipoCadastro: 1,
+      emails: [],
+      enderecos: [],
+      telefones: [],
+      pessoaFisica: {
+        id: 10905700,
+        cpf: '02570039241',
+        numeroRg: '21112545',
+        emissaoRg: '819864000000',
+        emissorRg: 'SSP',
+        cgf: null,
+        inscricaoMunicipal: ' ',
+        operIsenta: 'N',
+        calcIpi: 'N',
+      },
+      clientes: {
+        id: 145995,
+      },
+    }));
+
     const client = createTestClient(server);
+
     const res = await client.query({
       query: gql`
         {
-          findOrdersByCliente(codCliente: 123) {
+          findOrdersByCliente(codCliente: "02570039241") {
             codpedido
+            itens {
+              codpedido
+              codpedidoitem
+              fornecedor_emp
+              fornecedor_cod
+              vl_item
+              produto
+              quantidade
+              vl_item
+              vl_total
+              unidade
+              embalagem
+              qtd_estoque
+            }
           }
         }
       `,
     });
+
     // @ts-ignore
     expect(res.data.findOrdersByCliente).toEqual([]);
   });

@@ -9,10 +9,26 @@ export default class PedidoService extends SQLDataSource {
 
   public async findPedidoByCliente(codcliente: number) {
     const dbFN = this.db.Pedido.findAll.bind(this.db.Pedido);
+
     return await this.getCached<PedidoAttributes>(dbFN, {
       where: {
         codcliente,
       },
+      attributes: ['codpedido'],
+      include: [
+        {
+          model: this.db.ItensPedido,
+          as: 'pedidos_itens',
+        },
+      ],
+    }).then(res => {
+      const pedido = res.map(pedido => ({
+        ...pedido,
+        codpedido: pedido.codpedido,
+        itens: pedido.pedidos_itens,
+      }));
+
+      return pedido;
     });
   }
 
