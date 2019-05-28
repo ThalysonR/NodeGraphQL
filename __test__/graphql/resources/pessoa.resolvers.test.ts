@@ -460,4 +460,56 @@ describe('Test Pessoa', () => {
     // @ts-ignore
     expect(res.data.getCondicao[0]).toHaveProperty('descricao');
   });
+
+  it('pemaza payment test', async () => {
+    const { server, geralApi } = constructTestServer({ authorization: true });
+
+    // @ts-ignore
+    geralApi.get = jest.fn(() => [
+      {
+        recnum: 633,
+        codigo: 'A8',
+        nomeCondicaoPagamento: 'ATAC P/ 1 DIA',
+        descricao: 'ATAC P/ 1 DIA',
+        parcelas: 1,
+        periodo: 0,
+        periodoEntrada: 1,
+        valor: 9999999.99,
+        documento: 'F',
+        descontoMedio: 29.4,
+        tipoPreco: 'A',
+        parcelaCartao: 0,
+        ativo: 'S',
+        caf: '',
+      },
+    ]);
+
+    const { query } = createTestClient(server);
+
+    const res = await query({
+      query: gql`
+        {
+          getPagamentoPemaza {
+            recnum
+            codigo
+            nomeCondicaoPagamento
+            descricao
+            parcelas
+            periodo
+            periodoEntrada
+            valor
+            documento
+            descontoMedio
+            tipoPreco
+            parcelaCartao
+            ativo
+            caf
+          }
+        }
+      `,
+    });
+
+    // @ts-ignore
+    expect(res.data.getPagamentoPemaza).toHaveProperty('codigo');
+  });
 });

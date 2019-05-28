@@ -74,6 +74,7 @@ input SetPagamento{
   codtipopagto: Int
   valor_pago: Float
   parcela: Int
+  codigo: String
   situacao: String
   cod_adm: Int
 }

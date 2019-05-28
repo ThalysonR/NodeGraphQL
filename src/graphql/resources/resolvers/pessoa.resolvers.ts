@@ -36,6 +36,8 @@ export const pessoaResolvers = {
     getCondicao: gqlCompose(...authResolvers)(
       async (parent, { cpfCnpj }, { dataSources }: ResolverContext, info) => {
         const pessoa = await dataSources.pessoaApi.searchPessoa(cpfCnpj);
+
+        // TODO Tirar dados Mockados
         const buscaCondicao = {
           operacao: 1,
           tipoPreco: pessoa.clientes.tipoPreco,
@@ -43,6 +45,12 @@ export const pessoaResolvers = {
           prazoMedio: pessoa.clientes.prazoMedio,
         };
         return dataSources.geralApi.searchCondicao(buscaCondicao).catch(handleError);
+      },
+    ),
+
+    getPagamentoPemaza: gqlCompose(...authResolvers)(
+      async (parent, codigo, { dataSources }: ResolverContext, info) => {
+        return dataSources.geralApi.searchPagamento(codigo).catch(handleError);
       },
     ),
   },
