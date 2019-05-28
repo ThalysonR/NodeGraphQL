@@ -512,4 +512,49 @@ describe('Test Pessoa', () => {
     // @ts-ignore
     expect(res.data.getPagamentoPemaza).toHaveProperty('codigo');
   });
+
+  it('type payment test', async () => {
+    const { server, geralApi } = constructTestServer({ authorization: true });
+
+    // @ts-ignore
+    geralApi.get = jest.fn(() => [
+      {
+        recnum: 4,
+        codigo: 'F',
+        codigo1: 4,
+        descricao: 'Faturamento',
+        descricao1: 'FATURAMENTO',
+        obs: ' ',
+        de_est_contrib: 'C',
+        de_est_ncontrib: 'C',
+        fo_est_contrib: 'C',
+        fo_est_ncontrib: 'C',
+        caf: ' ',
+      },
+    ]);
+
+    const { query } = createTestClient(server);
+
+    const res = await query({
+      query: gql`
+        {
+          getTipoPagamento {
+            recnum
+            codigo
+            codigo1
+            descricao
+            descricao1
+            obs
+            de_est_contrib
+            de_est_ncontrib
+            fo_est_contrib
+            caf
+          }
+        }
+      `,
+    });
+
+    // @ts-ignore
+    expect(res.data.getTipoPagamento).toHaveProperty('descricao');
+  });
 });
