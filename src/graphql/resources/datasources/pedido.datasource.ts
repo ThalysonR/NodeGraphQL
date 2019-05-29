@@ -14,6 +14,7 @@ export default class PedidoService extends SQLDataSource {
       where: {
         codcliente,
       },
+      order: [['codpedido', 'DESC']],
       attributes: ['codpedido'],
       include: [
         {
