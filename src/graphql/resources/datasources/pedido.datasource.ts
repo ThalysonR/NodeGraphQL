@@ -1,5 +1,4 @@
 import { SQLDataSource } from '../../../models';
-import { PedidoAttributes } from '../../../models/PedidoModel';
 
 export default class PedidoService extends SQLDataSource {
   constructor(db?) {
@@ -7,12 +6,17 @@ export default class PedidoService extends SQLDataSource {
   }
 
   public async findPedidoByCliente(codcliente: number) {
-    const dbFN = this.db.Pedido.findAll.bind(this.db.Pedido);
-    return await this.getCached<PedidoAttributes>(dbFN, {
+    return await this.db.Pedido.findAll({
       where: {
         codcliente,
       },
     });
+    // const dbFN = this.db.Pedido.findAll.bind(this.db.Pedido);
+    // return await this.getCached<PedidoAttributes>(dbFN, {
+    //   where: {
+    //     codcliente,
+    //   },
+    // });
   }
 
   public createOrder(pedido) {
