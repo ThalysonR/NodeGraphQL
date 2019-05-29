@@ -37,7 +37,7 @@ describe('Pedido Test', () => {
       `,
     });
     // @ts-ignore
-    expect(res.data.findOrdersByCliente).toEqual([]);
+    expect(res.data.findOrdersByCliente).toEqual([{ codpedido: '123' }]);
   });
 
   it('test mutation createOrder ', async () => {
