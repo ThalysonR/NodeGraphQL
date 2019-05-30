@@ -28,7 +28,7 @@ export default class PedidoService extends SQLDataSource {
           pedido.situacao = 'SOLICITADO';
         } else if (pedido.situacao === 'A') {
           pedido.situacao = 'EM ANDAMENTO';
-        } else {
+        } else if (pedido.situacao === 'E') {
           pedido.situacao = 'ENTREGUE';
         }
         return {
