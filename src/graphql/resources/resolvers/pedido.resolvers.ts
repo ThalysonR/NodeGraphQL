@@ -70,11 +70,11 @@ export const pedidoResolvers = {
           situacao: 'S',
           codfilial: 34,
           itens: item,
-          total,
+          total: Number(total).toFixed(2),
           pagamento: {
             codtipopagto: 4,
             situacao: 'S',
-            valor_pago: total,
+            valor_pago: Number(total).toFixed(2),
             cod_adm: '1',
             parcela: setPedido.pagamento.parcela,
           },
