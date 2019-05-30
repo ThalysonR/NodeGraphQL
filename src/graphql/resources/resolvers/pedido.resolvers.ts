@@ -84,7 +84,7 @@ export const pedidoResolvers = {
           return value.validTipoFiscal === true;
         });
 
-        return { ...order.get({ plain: true }), endereco: end };
+        return { ...order.get({ plain: true }), endereco: end, itens: item };
       },
     ),
   },
