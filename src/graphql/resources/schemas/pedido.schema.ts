@@ -11,6 +11,7 @@ type Pedido{
   observacao: String
   ordem_compra: String
   itens: [ItensPedido]
+  qtdItens: Int
   endereco: Endereco
   pagamento: PagamentoPedido
 }

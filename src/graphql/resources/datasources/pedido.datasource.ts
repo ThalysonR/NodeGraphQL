@@ -15,7 +15,7 @@ export default class PedidoService extends SQLDataSource {
         codcliente,
       },
       order: [['codpedido', 'DESC']],
-      attributes: ['codpedido'],
+      attributes: ['codpedido', 'situacao', 'total'],
       include: [
         {
           model: this.db.ItensPedido,
@@ -23,11 +23,23 @@ export default class PedidoService extends SQLDataSource {
         },
       ],
     }).then(res => {
-      const pedido = res.map(pedido => ({
-        ...pedido,
-        codpedido: pedido.codpedido,
-        itens: pedido.pedidos_itens,
-      }));
+      const pedido = res.map(pedido => {
+        if (pedido.situacao === 'S') {
+          pedido.situacao = 'SOLICITADO';
+        } else if (pedido.situacao === 'A') {
+          pedido.situacao = 'EM ANDAMENTO';
+        } else {
+          pedido.situacao = 'ENTREGUE';
+        }
+        return {
+          ...pedido,
+          codpedido: pedido.codpedido,
+          total: pedido.total,
+          situacao: pedido.situacao,
+          qtdItens: pedido.pedidos_itens.length,
+          itens: pedido.pedidos_itens,
+        };
+      });
 
       return pedido;
     });
