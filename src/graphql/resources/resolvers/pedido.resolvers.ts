@@ -95,6 +95,28 @@ export const pedidoResolvers = {
 
         const resp = await dataSources.pedidoService.findPedidoByCliente(pessoa.clientes.id);
 
+        const param: any = [];
+
+        resp.map(value => {
+          value.pedidos_itens.map(res => {
+            param.push(res.fornecedor_emp + '___' + res.fornecedor_cod + '___' + res.produto);
+          });
+        });
+
+        const produto = await dataSources.catalogoApi.searchProductName(param);
+
+        produto.map(value => {
+          resp.map(res => {
+            res.itens.map(vai => {
+              const condicao =
+                vai.fornecedor_emp + '___' + vai.fornecedor_cod + '___' + vai.produto;
+              if (condicao === value.codigo) {
+                vai.produto = value.nome;
+              }
+            });
+          });
+        });
+
         return resp;
       },
     ),
