@@ -41,8 +41,8 @@ export const pedidoResolvers = {
                         fornecedor_cod: itens.fornecedorCodigo,
                         produto: itens.produto,
                         quantidade: pedido.quantidade,
-                        vl_item: tes.preco,
-                        vl_total: pedido.quantidade * tes.preco,
+                        vl_item: Number(tes.preco).toFixed(2),
+                        vl_total: Number(pedido.quantidade * tes.preco).toFixed(2),
                         unidade: tes.tipo,
                         embalagem: tes.qtd,
                         qtd_estoque: itens.qtdEstoque,
@@ -70,11 +70,11 @@ export const pedidoResolvers = {
           situacao: 'S',
           codfilial: 34,
           itens: item,
-          total,
+          total: Number(total).toFixed(2),
           pagamento: {
             codtipopagto: 4,
             situacao: 'S',
-            valor_pago: total,
+            valor_pago: Number(total).toFixed(2),
             cod_adm: '1',
             parcela: setPedido.pagamento.parcela,
           },
@@ -84,14 +84,40 @@ export const pedidoResolvers = {
           return value.validTipoFiscal === true;
         });
 
-        return { ...order.get({ plain: true }), endereco: end };
+        return { ...order.get({ plain: true }), endereco: end, itens: item };
       },
     ),
   },
   Query: {
     findOrdersByCliente: gqlCompose(...authResolvers)(
       async (parent, { codCliente }, { dataSources }: ResolverContext, info) => {
-        return await dataSources.pedidoService.findPedidoByCliente(codCliente);
+        const pessoa = await dataSources.pessoaApi.searchPessoa(codCliente);
+
+        const resp = await dataSources.pedidoService.findPedidoByCliente(pessoa.clientes.id);
+
+        const param: any = [];
+
+        resp.map(value => {
+          value.itens.map(res => {
+            param.push(res.fornecedor_emp + '___' + res.fornecedor_cod + '___' + res.produto);
+          });
+        });
+
+        const produto = await dataSources.catalogoApi.searchProductName(param);
+
+        produto.map(value => {
+          resp.map(res => {
+            res.itens.map(vai => {
+              const condicao =
+                vai.fornecedor_emp + '___' + vai.fornecedor_cod + '___' + vai.produto;
+              if (condicao === value.codigo) {
+                vai.produto = value.nome;
+              }
+            });
+          });
+        });
+
+        return resp;
       },
     ),
   },

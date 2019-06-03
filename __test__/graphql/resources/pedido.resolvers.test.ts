@@ -4,40 +4,306 @@ import { constructTestServer } from '../../__utils';
 
 describe('Pedido Test', () => {
   it('Should return pedido', async () => {
-    const dbMocks = {
+    const dbMocks = await {
       Pedido: {
         model: {
-          codpedido: 123,
+          codpedido: 287,
           codfilial: 34,
-          codcliente: 123,
+          codcliente: 145995,
           codfuncionario: 123,
-          condicao: 'A',
+          condicao: 'XXXXXXX',
+          emissao: Date.now(),
+          situacao: 'S',
+          total: 54.35,
+          observacao: ' ',
+          ordemcompra: '1234984',
+          pedidos_itens: [
+            {
+              codpedido: 287,
+              codpedidoitem: 308,
+              fornecedor_emp: 1,
+              fornecedor_cod: 1416,
+              vl_item: 697.6,
+              produto: '15W40 SELENIA K',
+              quantidade: 4,
+              vl_total: 2790.4,
+              unidade: 'CX',
+              embalagem: 24,
+              qtd_estoque: 3310,
+            },
+          ],
+        },
+      },
+    };
+
+    const { server, pedidoService, pessoaApi, catalogoApi } = constructTestServer({
+      authorization: true,
+      dbMocks,
+    });
+
+    // @ts-ignore
+    catalogoApi.post = jest.fn(() => [
+      {
+        codigo: '1___1416___15W40 SELENIA K',
+        nome: 'LITRO OLEO SELENIA K 15W40 SN PETRONAS',
+      },
+    ]);
+
+    // @ts-ignore
+    pedidoService.getCached = jest.fn(() => []);
+
+    // @ts-ignore
+    pessoaApi.get = jest.fn(() => ({
+      nomeCompleto: 'KATIA',
+      nomeFantasia: 'KATIA',
+      tipoPessoa: 'PJ',
+      dataCadastro: '1542772800000',
+      tipoCadastro: 1,
+      emails: [],
+      enderecos: [],
+      telefones: [],
+      pessoaJuridica: {
+        id: 10905700,
+        cnpj: '13484296000105',
+      },
+      clientes: {
+        id: 145995,
+      },
+    }));
+
+    const cliente = createTestClient(server);
+
+    const res = await cliente.query({
+      query: gql`
+        query {
+          findOrdersByCliente(codCliente: "13484296000105") {
+            codpedido
+            situacao
+            total
+            qtdItens
+            itens {
+              codpedido
+              codpedidoitem
+              fornecedor_emp
+              fornecedor_cod
+              vl_item
+              produto
+              quantidade
+              vl_item
+              vl_total
+              unidade
+              embalagem
+              qtd_estoque
+            }
+          }
+        }
+      `,
+    });
+
+    // @ts-ignore
+    expect(res.data.findOrdersByCliente[0]).toHaveProperty('codpedido');
+  });
+
+  it('Should return pedido in progress', async () => {
+    const dbMocks = await {
+      Pedido: {
+        model: {
+          codpedido: 287,
+          codfilial: 34,
+          codcliente: 145995,
+          codfuncionario: 123,
+          condicao: 'XXXXXXX',
           emissao: Date.now(),
           situacao: 'A',
           total: 54.35,
           observacao: ' ',
           ordemcompra: '1234984',
+          pedidos_itens: [
+            {
+              codpedido: 287,
+              codpedidoitem: 308,
+              fornecedor_emp: 1,
+              fornecedor_cod: 1416,
+              vl_item: 697.6,
+              produto: '15W40 SELENIA K',
+              quantidade: 4,
+              vl_total: 2790.4,
+              unidade: 'CX',
+              embalagem: 24,
+              qtd_estoque: 3310,
+            },
+          ],
         },
       },
     };
 
-    const { server, pedidoService } = constructTestServer({ authorization: true, dbMocks });
+    const { server, pedidoService, pessoaApi, catalogoApi } = constructTestServer({
+      authorization: true,
+      dbMocks,
+    });
+
+    // @ts-ignore
+    catalogoApi.post = jest.fn(() => [
+      {
+        codigo: '1___1416___15W40 SELENIA K',
+        nome: 'LITRO OLEO SELENIA K 15W40 SN PETRONAS',
+      },
+    ]);
 
     // @ts-ignore
     pedidoService.getCached = jest.fn(() => []);
 
-    const client = createTestClient(server);
-    const res = await client.query({
+    // @ts-ignore
+    pessoaApi.get = jest.fn(() => ({
+      nomeCompleto: 'KATIA',
+      nomeFantasia: 'KATIA',
+      tipoPessoa: 'PJ',
+      dataCadastro: '1542772800000',
+      tipoCadastro: 1,
+      emails: [],
+      enderecos: [],
+      telefones: [],
+      pessoaJuridica: {
+        id: 10905700,
+        cnpj: '13484296000105',
+      },
+      clientes: {
+        id: 145995,
+      },
+    }));
+
+    const cliente = createTestClient(server);
+
+    const res = await cliente.query({
       query: gql`
-        {
-          findOrdersByCliente(codCliente: 123) {
+        query {
+          findOrdersByCliente(codCliente: "13484296000105") {
             codpedido
+            situacao
+            total
+            qtdItens
+            itens {
+              codpedido
+              codpedidoitem
+              fornecedor_emp
+              fornecedor_cod
+              vl_item
+              produto
+              quantidade
+              vl_item
+              vl_total
+              unidade
+              embalagem
+              qtd_estoque
+            }
           }
         }
       `,
     });
+
     // @ts-ignore
-    expect(res.data.findOrdersByCliente).toEqual([]);
+    expect(res.data.findOrdersByCliente[0]).toHaveProperty('codpedido');
+  });
+
+  it('Should return pedido delivered', async () => {
+    const dbMocks = await {
+      Pedido: {
+        model: {
+          codpedido: 287,
+          codfilial: 34,
+          codcliente: 145995,
+          codfuncionario: 123,
+          condicao: 'XXXXXXX',
+          emissao: Date.now(),
+          situacao: 'E',
+          total: 54.35,
+          observacao: ' ',
+          ordemcompra: '1234984',
+          pedidos_itens: [
+            {
+              codpedido: 287,
+              codpedidoitem: 308,
+              fornecedor_emp: 1,
+              fornecedor_cod: 1416,
+              vl_item: 697.6,
+              produto: '15W40 SELENIA K',
+              quantidade: 4,
+              vl_total: 2790.4,
+              unidade: 'CX',
+              embalagem: 24,
+              qtd_estoque: 3310,
+            },
+          ],
+        },
+      },
+    };
+
+    const { server, pedidoService, pessoaApi, catalogoApi } = constructTestServer({
+      authorization: true,
+      dbMocks,
+    });
+
+    // @ts-ignore
+    catalogoApi.post = jest.fn(() => [
+      {
+        codigo: '1___1416___15W40 SELENIA K',
+        nome: 'LITRO OLEO SELENIA K 15W40 SN PETRONAS',
+      },
+    ]);
+
+    // @ts-ignore
+    pedidoService.getCached = jest.fn(() => []);
+
+    // @ts-ignore
+    pessoaApi.get = jest.fn(() => ({
+      nomeCompleto: 'KATIA',
+      nomeFantasia: 'KATIA',
+      tipoPessoa: 'PJ',
+      dataCadastro: '1542772800000',
+      tipoCadastro: 1,
+      emails: [],
+      enderecos: [],
+      telefones: [],
+      pessoaJuridica: {
+        id: 10905700,
+        cnpj: '13484296000105',
+      },
+      clientes: {
+        id: 145995,
+      },
+    }));
+
+    const cliente = createTestClient(server);
+
+    const res = await cliente.query({
+      query: gql`
+        query {
+          findOrdersByCliente(codCliente: "13484296000105") {
+            codpedido
+            situacao
+            total
+            qtdItens
+            itens {
+              codpedido
+              codpedidoitem
+              fornecedor_emp
+              fornecedor_cod
+              vl_item
+              produto
+              quantidade
+              vl_item
+              vl_total
+              unidade
+              embalagem
+              qtd_estoque
+            }
+          }
+        }
+      `,
+    });
+
+    // @ts-ignore
+    expect(res.data.findOrdersByCliente[0]).toHaveProperty('codpedido');
   });
 
   it('test mutation createOrder ', async () => {

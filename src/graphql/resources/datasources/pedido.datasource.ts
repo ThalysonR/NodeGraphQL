@@ -1,5 +1,5 @@
 import { SQLDataSource } from '../../../models';
-import { PedidoAttributes } from '../../../models/PedidoModel';
+import { PedidoAttributes } from './../../../models/PedidoModel';
 import { handleError } from './../../../utils/utils';
 
 export default class PedidoService extends SQLDataSource {
@@ -8,11 +8,39 @@ export default class PedidoService extends SQLDataSource {
   }
 
   public async findPedidoByCliente(codcliente: number) {
-    const dbFN = this.db.Pedido.findAll.bind(this.db.Pedido);
-    return await this.getCached<PedidoAttributes>(dbFN, {
+    return await this.db.Pedido.findAll<PedidoAttributes>({
       where: {
         codcliente,
       },
+      order: [['codpedido', 'DESC']],
+      attributes: ['codpedido', 'situacao', 'total'],
+      include: [
+        {
+          model: this.db.ItensPedido,
+          as: 'pedidos_itens',
+        },
+      ],
+    }).then(res => {
+      return res.map(value => {
+        if (value.situacao === 'S') {
+          value.situacao = 'SOLICITADO';
+        } else if (value.situacao === 'A') {
+          value.situacao = 'EM ANDAMENTO';
+        } else if (value.situacao === 'E') {
+          value.situacao = 'ENTREGUE';
+        }
+
+        const pedido = value.get({ plain: true });
+
+        return {
+          ...pedido,
+          codpedido: value.codpedido,
+          total: value.total,
+          situacao: value.situacao,
+          qtdItens: value.pedidos_itens.length,
+          itens: value.pedidos_itens,
+        };
+      });
     });
   }
 

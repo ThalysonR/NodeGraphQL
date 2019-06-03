@@ -11,6 +11,7 @@ type Pedido{
   observacao: String
   ordem_compra: String
   itens: [ItensPedido]
+  qtdItens: Int
   endereco: Endereco
   pagamento: PagamentoPedido
 }
@@ -87,7 +88,7 @@ input SetEndereco{
 `;
 
 const pedidoQueries = `
-  findOrdersByCliente(codCliente: Int!): [Pedido]!
+  findOrdersByCliente(codCliente: String!): [Pedido]!
   searchOrder(codPedido: Int!): Pedido!
 `;
 
