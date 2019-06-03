@@ -97,17 +97,17 @@ export const pedidoResolvers = {
 
         const param: any = [];
 
-        resp.map(value => {
-          value.itens.map(res => {
+        resp.forEach(value => {
+          value.itens.forEach(res => {
             param.push(res.fornecedor_emp + '___' + res.fornecedor_cod + '___' + res.produto);
           });
         });
 
         const produto = await dataSources.catalogoApi.searchProductName(param);
 
-        produto.map(value => {
-          resp.map(res => {
-            res.itens.map(vai => {
+        produto.forEach(value => {
+          resp.forEach(res => {
+            res.itens.forEach(vai => {
               const condicao =
                 vai.fornecedor_emp + '___' + vai.fornecedor_cod + '___' + vai.produto;
               if (condicao === value.codigo) {
