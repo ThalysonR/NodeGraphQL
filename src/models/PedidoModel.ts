@@ -1,6 +1,7 @@
 import * as Sequelize from 'sequelize';
 import { BaseModelInterface } from '../interfaces/BaseModelInterface';
 import { ModelsInterface } from './../interfaces/ModelsInterface';
+import { ItensPedidoInstance } from './ItensPedidoModel';
 
 export interface PedidoAttributes {
   codpedido: number;
@@ -15,7 +16,9 @@ export interface PedidoAttributes {
   ordem_compra?: string;
 }
 
-export interface PedidoInstance extends Sequelize.Instance<PedidoAttributes>, PedidoAttributes {}
+export interface PedidoInstance extends Sequelize.Instance<PedidoAttributes>, PedidoAttributes {
+  pedidos_itens: [ItensPedidoInstance];
+}
 
 export interface PedidoModel
   extends BaseModelInterface,

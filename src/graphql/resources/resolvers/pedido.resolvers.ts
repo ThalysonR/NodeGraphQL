@@ -98,7 +98,7 @@ export const pedidoResolvers = {
         const param: any = [];
 
         resp.map(value => {
-          value.pedidos_itens.map(res => {
+          value.itens.map(res => {
             param.push(res.fornecedor_emp + '___' + res.fornecedor_cod + '___' + res.produto);
           });
         });
