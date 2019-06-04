@@ -31,9 +31,11 @@ export const pedidoResolvers = {
         setPedido.itens.map(pedido => {
           const resp: [] = produtosPreco
             .map(itens => {
+              /* istanbul ignore next */
               if (pedido.produto === itens.produto) {
                 return itens.unidade
                   .map(tes => {
+                    /* istanbul ignore if */
                     if (pedido.unidade === tes.tipo) {
                       total += pedido.quantidade * tes.preco;
                       return {
@@ -60,6 +62,14 @@ export const pedidoResolvers = {
           item.push(...resp);
         });
 
+        const pagamento = await dataSources.geralApi.searchPagamento({
+          codigo: setPedido.condicao,
+        });
+
+        const tipoPagamento = await dataSources.geralApi.searchTipoPagamento({
+          codigo: pagamento.documento,
+        });
+
         // TODO Tirar dados Mockados (codtipopagto)
         const order = await dataSources.pedidoService.createOrder({
           ...setPedido,
@@ -72,7 +82,7 @@ export const pedidoResolvers = {
           itens: item,
           total: Number(total).toFixed(2),
           pagamento: {
-            codtipopagto: 4,
+            codtipopagto: tipoPagamento.codigo1,
             situacao: 'S',
             valor_pago: Number(total).toFixed(2),
             cod_adm: '1',
@@ -84,7 +94,13 @@ export const pedidoResolvers = {
           return value.validTipoFiscal === true;
         });
 
-        return { ...order.get({ plain: true }), endereco: end, itens: item };
+        return {
+          ...order.get({ plain: true }),
+          endereco: end,
+          itens: item,
+          descricaoPagamento: pagamento.descricao,
+          qtdItens: item.length,
+        };
       },
     ),
   },

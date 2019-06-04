@@ -368,7 +368,7 @@ describe('Pedido Test', () => {
       },
     };
 
-    const { server, pedidoService, pessoaApi, precoApi } = constructTestServer({
+    const { server, pedidoService, pessoaApi, precoApi, geralApi } = constructTestServer({
       authorization: true,
       dbMocks,
     });
@@ -402,6 +402,38 @@ describe('Pedido Test', () => {
       },
     ]);
 
+    // @ts-ignore
+    geralApi.get = jest.fn(() => [
+      {
+        recnum: 633,
+        codigo: 'A8',
+        nomeCondicaoPagamento: 'ATAC P/ 1 DIA',
+        descricao: 'ATAC P/ 1 DIA',
+        parcelas: 1,
+        periodo: 0,
+        periodoEntrada: 1,
+        valor: 9999999.99,
+        documento: 'F',
+        descontoMedio: 29.4,
+        tipoPreco: 'A',
+        parcelaCartao: 0,
+        ativo: 'S',
+        caf: ' ',
+      },
+      {
+        recnum: 4,
+        codigo: 'F',
+        codigo1: 4,
+        descricao: 'Faturamento',
+        descricao1: 'FATURAMENTO',
+        obs: ' ',
+        de_est_contrib: 'C',
+        de_est_ncontrib: 'C',
+        fo_est_contrib: 'C',
+        caf: ' ',
+      },
+    ]);
+
     const client = createTestClient(server);
 
     const res = await client.mutate({
@@ -412,6 +444,7 @@ describe('Pedido Test', () => {
               observacao: "test"
               ordem_compra: "COMPRA B2B"
               codcliente: "13484296000105"
+              condicao: "A8"
               itens: [
                 {
                   fornecedor_emp: 1
@@ -434,6 +467,17 @@ describe('Pedido Test', () => {
             total
             observacao
             ordem_compra
+            descricaoPagamento
+            itens {
+              codpedido
+              produto
+              fornecedor_emp
+              fornecedor_cod
+              vl_item
+              vl_total
+              unidade
+            }
+            qtdItens
           }
         }
       `,

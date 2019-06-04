@@ -13,6 +13,7 @@ type Pedido{
   itens: [ItensPedido]
   qtdItens: Int
   endereco: Endereco
+  descricaoPagamento: String
   pagamento: PagamentoPedido
 }
 
