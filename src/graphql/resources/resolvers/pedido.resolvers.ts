@@ -31,9 +31,11 @@ export const pedidoResolvers = {
         setPedido.itens.map(pedido => {
           const resp: [] = produtosPreco
             .map(itens => {
+              /* istanbul ignore next */
               if (pedido.produto === itens.produto) {
                 return itens.unidade
                   .map(tes => {
+                    /* istanbul ignore if */
                     if (pedido.unidade === tes.tipo) {
                       total += pedido.quantidade * tes.preco;
                       return {
