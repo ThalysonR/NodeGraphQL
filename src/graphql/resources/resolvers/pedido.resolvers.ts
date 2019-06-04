@@ -70,13 +70,13 @@ export const pedidoResolvers = {
           codigo: pagamento.documento,
         });
 
-        // TODO Tirar dados Mockados (codtipopagto)
+        // TODO Tirar dados Mockados
         const order = await dataSources.pedidoService.createOrder({
           ...setPedido,
           codfuncionario: 1,
           endereco: { codendereco: pessoa.enderecos[0].id },
           codcliente: pessoa.clientes.id,
-          condicao: 'XXXXXXX',
+          condicao: pagamento.codigo,
           situacao: 'S',
           codfilial: 34,
           itens: item,
