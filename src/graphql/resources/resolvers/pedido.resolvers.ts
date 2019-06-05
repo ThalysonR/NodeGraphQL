@@ -10,7 +10,7 @@ export const pedidoResolvers = {
 
         // TODO Tirar dados Mockados
         const buscaProduto = setPedido.itens.map(produto => ({
-          condicao: 'XXXXXXX',
+          condicao: setPedido.condicao,
           descontoItem: 0,
           fatorAumento: pessoa.clientes.percentualAumento,
           filial: 34,
@@ -133,7 +133,19 @@ export const pedidoResolvers = {
           });
         });
 
-        return resp;
+        let pagamento: any = [];
+
+        const retorno = await resp.map(async res => {
+          pagamento = await dataSources.geralApi.searchPagamento({
+            codigo: res.condicao,
+          });
+          return {
+            ...res,
+            descricaoPagamento: pagamento.descricao,
+          };
+        });
+
+        return retorno;
       },
     ),
   },
