@@ -10,9 +10,18 @@ const getProdutosDynamic = {
   ) => {
     const consumidor = await dataSources.pessoaApi.searchPessoa(cpfCnpj);
 
+    const buscaCondicao = {
+      operacao: 2,
+      tipoPreco: consumidor.clientes.tipoPreco,
+      formaPagamento: 'F',
+      prazoMedio: consumidor.clientes.prazoMedio,
+    };
+
+    const condicao = await dataSources.geralApi.searchCondicao(buscaCondicao);
+
     // TODO Tirar dados mockados
     const buscaProduto = produtosPage.produtos.map(produto => ({
-      condicao: 'XXXXXXX',
+      condicao: condicao[0].codigo,
       descontoItem: 0,
       fatorAumento: consumidor.clientes.percentualAumento,
       filial: 34,

@@ -209,6 +209,9 @@ describe('Test Catalog', () => {
         qtd: 31,
         qtdInventario: 31,
       },
+      {
+        codigo: 'XXXXXXX',
+      },
     ]);
 
     const { query } = createTestClient(server);
@@ -288,7 +291,7 @@ describe('Test Catalog', () => {
   });
 
   it('Should return empty image and preco when not found', async () => {
-    const { server, catalogoApi, pessoaApi, precoApi, imagemApi } = constructTestServer({
+    const { server, catalogoApi, pessoaApi, precoApi, imagemApi, geralApi } = constructTestServer({
       authorization: true,
     });
 
@@ -485,6 +488,14 @@ describe('Test Catalog', () => {
         ImgBase64: 'Imagem',
       },
     ]);
+
+    // @ts-ignore
+    geralApi.get = jest.fn(() => [
+      {
+        codigo: 'XXXXXXX',
+      },
+    ]);
+
     const { query } = createTestClient(server);
 
     const res = await query({
