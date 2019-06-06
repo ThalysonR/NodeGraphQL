@@ -58,7 +58,7 @@ export const pedidoResolvers = {
                         vl_total: Number(pedido.quantidade * tes.preco).toFixed(2),
                         unidade: tes.tipo,
                         embalagem: tes.qtd,
-                        qtd_estoque: itens.qtdEstoque,
+                        qtd_estoque: tes.qtd * pedido.quantidade,
                       };
                     } else {
                       return false;
