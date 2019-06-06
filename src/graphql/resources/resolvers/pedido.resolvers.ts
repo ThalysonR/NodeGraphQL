@@ -8,9 +8,18 @@ export const pedidoResolvers = {
       async (parent, { setPedido }, { dataSources }: ResolverContext, info) => {
         const pessoa = await dataSources.pessoaApi.searchPessoa(setPedido.codcliente);
 
+        const buscaCondicao = {
+          operacao: 2,
+          tipoPreco: pessoa.clientes.tipoPreco,
+          formaPagamento: 'F',
+          prazoMedio: pessoa.clientes.prazoMedio,
+        };
+
+        const condicao = await dataSources.geralApi.searchCondicao(buscaCondicao);
+
         // TODO Tirar dados Mockados
         const buscaProduto = setPedido.itens.map(produto => ({
-          condicao: setPedido.condicao,
+          condicao: condicao[0].codigo,
           descontoItem: 0,
           fatorAumento: pessoa.clientes.percentualAumento,
           filial: 34,
@@ -20,6 +29,8 @@ export const pedidoResolvers = {
           tipoPreco: pessoa.clientes.tipoPreco,
           unidadeVenda: 'UN',
         }));
+
+        // console.log(buscaProduto);
 
         const produtosPreco = await dataSources.precoApi.buscaListaProdutosEstoquePreco(
           buscaProduto,
