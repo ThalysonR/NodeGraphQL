@@ -212,6 +212,24 @@ describe('Test Catalog', () => {
       {
         codigo: 'XXXXXXX',
       },
+      [
+        {
+          recnum: 1541,
+          codigo: 'D54',
+          nomeCondicaoPagamento: '07/14/21/28/35',
+          descricao: 'PARA 07/14/21/28/35 DIAS',
+          parcelas: 5,
+          periodo: 7,
+          periodoEntrada: 7,
+          valor: 9999999.99,
+          documento: 'F',
+          descontoMedio: 24.5,
+          tipoPreco: 'N',
+          parcelaCartao: 0,
+          ativo: 'S',
+          caf: ' ',
+        },
+      ],
     ]);
 
     const { query } = createTestClient(server);
