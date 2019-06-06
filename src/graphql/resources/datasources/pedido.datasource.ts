@@ -32,17 +32,13 @@ export default class PedidoService extends SQLDataSource {
 
         const pedido = value.get({ plain: true });
 
-        const itensPedidos = value.pedidos_itens.map(res => {
-          return { ...res, vl_total: (res.vl_item || 0) * (res.quantidade || 0) };
-        });
-
         return {
           ...pedido,
           codpedido: value.codpedido,
           total: value.total,
           situacao: value.situacao,
           qtdItens: value.pedidos_itens.length,
-          itens: itensPedidos,
+          itens: value.pedidos_itens,
         };
       });
     });
