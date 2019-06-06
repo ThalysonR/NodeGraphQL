@@ -13,7 +13,7 @@ const getProdutosDynamic = {
     const buscaCondicao = {
       operacao: 2,
       tipoPreco: consumidor.clientes.tipoPreco,
-      formaPagamento: 'F',
+      formaPagamento: 'I',
       prazoMedio: consumidor.clientes.prazoMedio,
     };
 
