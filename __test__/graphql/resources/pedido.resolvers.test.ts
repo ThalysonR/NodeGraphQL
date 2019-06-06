@@ -36,7 +36,7 @@ describe('Pedido Test', () => {
       },
     };
 
-    const { server, pedidoService, pessoaApi, catalogoApi } = constructTestServer({
+    const { server, pedidoService, pessoaApi, catalogoApi, geralApi } = constructTestServer({
       authorization: true,
       dbMocks,
     });
@@ -70,6 +70,54 @@ describe('Pedido Test', () => {
         id: 145995,
       },
     }));
+
+    // @ts-ignore
+    geralApi.get = jest.fn(() => [
+      {
+        recnum: 633,
+        codigo: 'A8',
+        nomeCondicaoPagamento: 'ATAC P/ 1 DIA',
+        descricao: 'ATAC P/ 1 DIA',
+        parcelas: 1,
+        periodo: 0,
+        periodoEntrada: 1,
+        valor: 9999999.99,
+        documento: 'F',
+        descontoMedio: 29.4,
+        tipoPreco: 'A',
+        parcelaCartao: 0,
+        ativo: 'S',
+        caf: ' ',
+      },
+      {
+        recnum: 4,
+        codigo: 'F',
+        codigo1: 4,
+        descricao: 'Faturamento',
+        descricao1: 'FATURAMENTO',
+        obs: ' ',
+        de_est_contrib: 'C',
+        de_est_ncontrib: 'C',
+        fo_est_contrib: 'C',
+        caf: ' ',
+      },
+      {
+        recnum: 1541,
+        codigo: 'D54',
+        nomeCondicaoPagamento: '07/14/21/28/35',
+        descricao: 'PARA 07/14/21/28/35 DIAS',
+        parcelas: 5,
+        periodo: 7,
+        periodoEntrada: 7,
+        valor: 9999999.99,
+        documento: 'F',
+        descontoMedio: 24.5,
+        tipoPreco: 'N',
+        parcelaCartao: 0,
+        ativo: 'S',
+        caf: ' ',
+      },
+    ]);
 
     const cliente = createTestClient(server);
 
@@ -137,7 +185,7 @@ describe('Pedido Test', () => {
       },
     };
 
-    const { server, pedidoService, pessoaApi, catalogoApi } = constructTestServer({
+    const { server, pedidoService, pessoaApi, catalogoApi, geralApi } = constructTestServer({
       authorization: true,
       dbMocks,
     });
@@ -171,6 +219,54 @@ describe('Pedido Test', () => {
         id: 145995,
       },
     }));
+
+    // @ts-ignore
+    geralApi.get = jest.fn(() => [
+      {
+        recnum: 633,
+        codigo: 'A8',
+        nomeCondicaoPagamento: 'ATAC P/ 1 DIA',
+        descricao: 'ATAC P/ 1 DIA',
+        parcelas: 1,
+        periodo: 0,
+        periodoEntrada: 1,
+        valor: 9999999.99,
+        documento: 'F',
+        descontoMedio: 29.4,
+        tipoPreco: 'A',
+        parcelaCartao: 0,
+        ativo: 'S',
+        caf: ' ',
+      },
+      {
+        recnum: 4,
+        codigo: 'F',
+        codigo1: 4,
+        descricao: 'Faturamento',
+        descricao1: 'FATURAMENTO',
+        obs: ' ',
+        de_est_contrib: 'C',
+        de_est_ncontrib: 'C',
+        fo_est_contrib: 'C',
+        caf: ' ',
+      },
+      {
+        recnum: 1541,
+        codigo: 'D54',
+        nomeCondicaoPagamento: '07/14/21/28/35',
+        descricao: 'PARA 07/14/21/28/35 DIAS',
+        parcelas: 5,
+        periodo: 7,
+        periodoEntrada: 7,
+        valor: 9999999.99,
+        documento: 'F',
+        descontoMedio: 24.5,
+        tipoPreco: 'N',
+        parcelaCartao: 0,
+        ativo: 'S',
+        caf: ' ',
+      },
+    ]);
 
     const cliente = createTestClient(server);
 
@@ -238,7 +334,7 @@ describe('Pedido Test', () => {
       },
     };
 
-    const { server, pedidoService, pessoaApi, catalogoApi } = constructTestServer({
+    const { server, pedidoService, pessoaApi, catalogoApi, geralApi } = constructTestServer({
       authorization: true,
       dbMocks,
     });
@@ -272,6 +368,54 @@ describe('Pedido Test', () => {
         id: 145995,
       },
     }));
+
+    // @ts-ignore
+    geralApi.get = jest.fn(() => [
+      {
+        recnum: 633,
+        codigo: 'A8',
+        nomeCondicaoPagamento: 'ATAC P/ 1 DIA',
+        descricao: 'ATAC P/ 1 DIA',
+        parcelas: 1,
+        periodo: 0,
+        periodoEntrada: 1,
+        valor: 9999999.99,
+        documento: 'F',
+        descontoMedio: 29.4,
+        tipoPreco: 'A',
+        parcelaCartao: 0,
+        ativo: 'S',
+        caf: ' ',
+      },
+      {
+        recnum: 4,
+        codigo: 'F',
+        codigo1: 4,
+        descricao: 'Faturamento',
+        descricao1: 'FATURAMENTO',
+        obs: ' ',
+        de_est_contrib: 'C',
+        de_est_ncontrib: 'C',
+        fo_est_contrib: 'C',
+        caf: ' ',
+      },
+      {
+        recnum: 1541,
+        codigo: 'D54',
+        nomeCondicaoPagamento: '07/14/21/28/35',
+        descricao: 'PARA 07/14/21/28/35 DIAS',
+        parcelas: 5,
+        periodo: 7,
+        periodoEntrada: 7,
+        valor: 9999999.99,
+        documento: 'F',
+        descontoMedio: 24.5,
+        tipoPreco: 'N',
+        parcelaCartao: 0,
+        ativo: 'S',
+        caf: ' ',
+      },
+    ]);
 
     const cliente = createTestClient(server);
 
@@ -430,6 +574,22 @@ describe('Pedido Test', () => {
         de_est_contrib: 'C',
         de_est_ncontrib: 'C',
         fo_est_contrib: 'C',
+        caf: ' ',
+      },
+      {
+        recnum: 1541,
+        codigo: 'D54',
+        nomeCondicaoPagamento: '07/14/21/28/35',
+        descricao: 'PARA 07/14/21/28/35 DIAS',
+        parcelas: 5,
+        periodo: 7,
+        periodoEntrada: 7,
+        valor: 9999999.99,
+        documento: 'F',
+        descontoMedio: 24.5,
+        tipoPreco: 'N',
+        parcelaCartao: 0,
+        ativo: 'S',
         caf: ' ',
       },
     ]);

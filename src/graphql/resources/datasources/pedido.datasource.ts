@@ -13,7 +13,7 @@ export default class PedidoService extends SQLDataSource {
         codcliente,
       },
       order: [['codpedido', 'DESC']],
-      attributes: ['codpedido', 'situacao', 'total'],
+      attributes: ['codpedido', 'situacao', 'total', 'condicao', 'observacao', 'ordem_compra'],
       include: [
         {
           model: this.db.ItensPedido,
