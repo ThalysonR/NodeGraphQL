@@ -41,7 +41,7 @@ export const pedidoResolvers = {
           const resp: [] = produtosPreco
             .map(itens => {
               /* istanbul ignore next */
-              if (pedido.produto === itens.produto) {
+              if ((pedido.produto === itens.produto) && (pedido.fornecedor_cod === itens.fornecedorCodigo) && (pedido.fornecedor_emp === itens.empresa)) {
                 return itens.unidade
                   .map(tes => {
                     /* istanbul ignore if */
