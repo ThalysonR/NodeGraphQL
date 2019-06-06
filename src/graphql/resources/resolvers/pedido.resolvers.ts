@@ -30,8 +30,6 @@ export const pedidoResolvers = {
           unidadeVenda: 'UN',
         }));
 
-        // console.log(buscaProduto);
-
         const produtosPreco = await dataSources.precoApi.buscaListaProdutosEstoquePreco(
           buscaProduto,
         );
@@ -55,7 +53,7 @@ export const pedidoResolvers = {
                         produto: itens.produto,
                         quantidade: pedido.quantidade,
                         vl_item: Number(tes.preco).toFixed(2),
-                        vl_total: Number(pedido.quantidade * tes.preco).toFixed(2),
+                        vl_total: total,
                         unidade: tes.tipo,
                         embalagem: tes.qtd,
                         qtd_estoque: tes.qtd * pedido.quantidade,
