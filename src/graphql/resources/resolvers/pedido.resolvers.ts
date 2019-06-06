@@ -47,13 +47,14 @@ export const pedidoResolvers = {
                     /* istanbul ignore if */
                     if (pedido.unidade === tes.tipo) {
                       total += pedido.quantidade * tes.preco;
+                      console.log(total);
                       return {
                         fornecedor_emp: itens.empresa,
                         fornecedor_cod: itens.fornecedorCodigo,
                         produto: itens.produto,
                         quantidade: pedido.quantidade,
                         vl_item: Number(tes.preco).toFixed(2),
-                        vl_total: total,
+                        vl_total: Number(pedido.quantidade * tes.preco).toFixed(2),
                         unidade: tes.tipo,
                         embalagem: tes.qtd,
                         qtd_estoque: tes.qtd * pedido.quantidade,
