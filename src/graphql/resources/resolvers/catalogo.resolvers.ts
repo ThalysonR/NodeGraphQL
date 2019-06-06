@@ -139,8 +139,11 @@ export const catalogoResolvers = {
     ),
     getSimilares: gqlCompose(...authResolvers)(
       async (parent, { pesqSimilar }, context: ResolverContext, info) => {
+
+        // TODO Tirar dados Mockados (filial 34)
+        const pesquisaSimilar = {...pesqSimilar, filial: 34};
         const similares = await context.dataSources.catalogoApi
-          .searchSimilar(pesqSimilar)
+          .searchSimilar(pesquisaSimilar)
           .catch(handleError);
         const { produtos } = await mapDynamicFields(
           getSimilaresDynamic,
