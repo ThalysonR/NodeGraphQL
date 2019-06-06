@@ -144,7 +144,7 @@ export const pedidoResolvers = {
 
         let pagamento: any = [];
 
-        const retorno = await resp.map(async res => {
+        const retorno = resp.map(async res => {
           pagamento = await dataSources.geralApi.searchPagamento({
             codigo: res.condicao,
           });
