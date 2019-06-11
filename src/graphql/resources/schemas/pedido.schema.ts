@@ -86,11 +86,16 @@ input SetEndereco{
   codpedido: Int
   codendereco: Int
 }
+
+input SetPedPDF{
+  codPedido: Int!
+  cpfCnpj: String!
+}
 `;
 
 const pedidoQueries = `
   findOrdersByCliente(codCliente: String!): [Pedido]!
-  searchOrder(codPedido: Int!): Pedido!
+  getPedPDF(setPedPDF: SetPedPDF!): Pedido!
 `;
 
 const pedidoMutations = `
