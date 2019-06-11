@@ -41,7 +41,11 @@ export const pedidoResolvers = {
           const resp: [] = produtosPreco
             .map(itens => {
               /* istanbul ignore next */
-              if ((pedido.produto === itens.produto) && (pedido.fornecedor_cod === itens.fornecedorCodigo) && (pedido.fornecedor_emp === itens.empresa)) {
+              if (
+                pedido.produto === itens.produto &&
+                pedido.fornecedor_cod === itens.fornecedorCodigo &&
+                pedido.fornecedor_emp === itens.empresa
+              ) {
                 return itens.unidade
                   .map(tes => {
                     /* istanbul ignore if */
@@ -156,6 +160,50 @@ export const pedidoResolvers = {
         });
 
         return retorno;
+      },
+    ),
+    getPedPDF: gqlCompose(...authResolvers)(
+      async (parent, { setPedPDF }, { dataSources }: ResolverContext, info) => {
+        const pessoa = await dataSources.pessoaApi.searchPessoa(setPedPDF.cpfCnpj);
+
+        const buscaPedido = {
+          codcliente: pessoa.clientes.id,
+          codpedido: setPedPDF.codPedido,
+        };
+
+        const resp = await dataSources.pedidoService.findPedidoByCodigo(buscaPedido);
+
+        const param: any = [];
+
+        resp.forEach(value => {
+          value.itens.forEach(res => {
+            param.push(res.fornecedor_emp + '___' + res.fornecedor_cod + '___' + res.produto);
+          });
+        });
+
+        const produto = await dataSources.catalogoApi.searchProductName(param);
+
+        produto.forEach(value => {
+          resp.forEach(res => {
+            res.itens.forEach(vai => {
+              const condicao =
+                vai.fornecedor_emp + '___' + vai.fornecedor_cod + '___' + vai.produto;
+              if (condicao === value.codigo) {
+                vai.produto = value.nome;
+              }
+            });
+          });
+        });
+
+        resp.forEach(async pedido => {
+          pedido.itens.forEach(
+            await (item => {
+              console.log(item);
+            }),
+          );
+        });
+
+        return resp;
       },
     ),
   },
