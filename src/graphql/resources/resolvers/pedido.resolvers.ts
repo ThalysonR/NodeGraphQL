@@ -179,30 +179,30 @@ export const pedidoResolvers = {
           codpedido: setPedPDF.codPedido,
         };
 
-        const resp = await dataSources.pedidoService.findPedidoByCodigo(buscaPedido);
+        const pedido = await dataSources.pedidoService.findPedidoByCodigo(buscaPedido);
 
         const param: any = [];
 
-        resp.forEach(value => {
+        pedido.forEach(value => {
           value.itens.forEach(res => {
             param.push(res.fornecedor_emp + '___' + res.fornecedor_cod + '___' + res.produto);
           });
         });
 
-        const produto = await dataSources.catalogoApi.searchProductName(param);
+        const nameProduto = await dataSources.catalogoApi.searchProductName(param);
 
-        produto.forEach(value => {
-          resp.forEach(res => {
-            res.itens.forEach(vai => {
+        nameProduto.forEach(proName => {
+          pedido.forEach(res => {
+            res.itens.forEach(item => {
               const condicao =
-                vai.fornecedor_emp + '___' + vai.fornecedor_cod + '___' + vai.produto;
-              if (condicao === value.codigo) {
-                vai.produto = value.nome;
+                item.fornecedor_emp + '___' + item.fornecedor_cod + '___' + vai.produto;
+              if (condicao === proName.codigo) {
+                item.produto = proName.nome;
               }
             });
           });
         });
-        return resp;
+        return pedido;
       },
     ),
   },
