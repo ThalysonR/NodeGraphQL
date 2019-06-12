@@ -127,8 +127,8 @@ export const pedidoResolvers = {
           const resp = await dataSources.pedidoService.findPedidoByCliente(pessoa.clientes.id);
 
           const param: any = [];
-
-          if(resp.length === 0){
+          /* istanbul ignore if */
+          if (resp.length === 0) {
             throw new Error('Não há pedidos');
           }
 
@@ -168,6 +168,41 @@ export const pedidoResolvers = {
         } catch (handleError) {
           return [];
         }
+      },
+    ),
+    getPedbyCode: gqlCompose(...authResolvers)(
+      async (parent, { setPedPDF }, { dataSources }: ResolverContext, info) => {
+        const pessoa = await dataSources.pessoaApi.searchPessoa(setPedPDF.cpfCnpj);
+
+        const buscaPedido = {
+          codcliente: pessoa.clientes.id,
+          codpedido: setPedPDF.codPedido,
+        };
+
+        const resp = await dataSources.pedidoService.findPedidoByCodigo(buscaPedido);
+
+        const param: any = [];
+
+        resp.forEach(value => {
+          value.itens.forEach(res => {
+            param.push(res.fornecedor_emp + '___' + res.fornecedor_cod + '___' + res.produto);
+          });
+        });
+
+        const produto = await dataSources.catalogoApi.searchProductName(param);
+
+        produto.forEach(value => {
+          resp.forEach(res => {
+            res.itens.forEach(vai => {
+              const condicao =
+                vai.fornecedor_emp + '___' + vai.fornecedor_cod + '___' + vai.produto;
+              if (condicao === value.codigo) {
+                vai.produto = value.nome;
+              }
+            });
+          });
+        });
+        return resp;
       },
     ),
   },

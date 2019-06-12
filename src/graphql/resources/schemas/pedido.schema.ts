@@ -95,7 +95,7 @@ input SetPedPDF{
 
 const pedidoQueries = `
   findOrdersByCliente(codCliente: String!): [Pedido]!
-  getPedPDF(setPedPDF: SetPedPDF!): Pedido!
+  getPedbyCode(setPedPDF: SetPedPDF!): [Pedido]!
 `;
 
 const pedidoMutations = `

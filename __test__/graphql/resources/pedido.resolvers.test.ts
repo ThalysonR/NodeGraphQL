@@ -646,4 +646,451 @@ describe('Pedido Test', () => {
     // @ts-ignore
     expect(res.data.createOrder).toHaveProperty('codpedido');
   });
+
+  it('Should return request by code', async () => {
+    const dbMocks = await {
+      Pedido: {
+        model: {
+          codpedido: 287,
+          codfilial: 34,
+          codcliente: 145995,
+          codfuncionario: 123,
+          condicao: 'XXXXXXX',
+          emissao: Date.now(),
+          situacao: 'S',
+          total: 200,
+          observacao: ' ',
+          ordemcompra: '1234984',
+          pedidos_itens: [
+            {
+              codpedido: 287,
+              codpedidoitem: 308,
+              fornecedor_emp: 1,
+              fornecedor_cod: 1416,
+              vl_item: 50,
+              produto: '15W40 SELENIA K',
+              quantidade: 4,
+              vl_total: 50 * 4,
+              unidade: 'CX',
+              embalagem: 24,
+              qtd_estoque: 3310,
+            },
+          ],
+        },
+      },
+    };
+
+    const { server, pedidoService, pessoaApi, catalogoApi, geralApi } = constructTestServer({
+      authorization: true,
+      dbMocks,
+    });
+
+    // @ts-ignore
+    catalogoApi.post = jest.fn(() => [
+      {
+        codigo: '1___1416___15W40 SELENIA K',
+        nome: 'LITRO OLEO SELENIA K 15W40 SN PETRONAS',
+      },
+    ]);
+
+    // @ts-ignore
+    pedidoService.getCached = jest.fn(() => []);
+
+    // @ts-ignore
+    pessoaApi.get = jest.fn(() => ({
+      nomeCompleto: 'KATIA',
+      nomeFantasia: 'KATIA',
+      tipoPessoa: 'PJ',
+      dataCadastro: '1542772800000',
+      tipoCadastro: 1,
+      emails: [],
+      enderecos: [],
+      telefones: [],
+      pessoaJuridica: {
+        id: 10905700,
+        cnpj: '13484296000105',
+      },
+      clientes: {
+        id: 145995,
+      },
+    }));
+
+    // @ts-ignore
+    geralApi.get = jest.fn(() => [
+      {
+        recnum: 633,
+        codigo: 'A8',
+        nomeCondicaoPagamento: 'ATAC P/ 1 DIA',
+        descricao: 'ATAC P/ 1 DIA',
+        parcelas: 1,
+        periodo: 0,
+        periodoEntrada: 1,
+        valor: 9999999.99,
+        documento: 'F',
+        descontoMedio: 29.4,
+        tipoPreco: 'A',
+        parcelaCartao: 0,
+        ativo: 'S',
+        caf: ' ',
+      },
+      {
+        recnum: 4,
+        codigo: 'F',
+        codigo1: 4,
+        descricao: 'Faturamento',
+        descricao1: 'FATURAMENTO',
+        obs: ' ',
+        de_est_contrib: 'C',
+        de_est_ncontrib: 'C',
+        fo_est_contrib: 'C',
+        caf: ' ',
+      },
+      {
+        recnum: 1541,
+        codigo: 'D54',
+        nomeCondicaoPagamento: '07/14/21/28/35',
+        descricao: 'PARA 07/14/21/28/35 DIAS',
+        parcelas: 5,
+        periodo: 7,
+        periodoEntrada: 7,
+        valor: 9999999.99,
+        documento: 'F',
+        descontoMedio: 24.5,
+        tipoPreco: 'N',
+        parcelaCartao: 0,
+        ativo: 'S',
+        caf: ' ',
+      },
+    ]);
+
+    const cliente = createTestClient(server);
+
+    const res = await cliente.query({
+      query: gql`
+        query {
+          getPedbyCode(setPedPDF: { codPedido: 492, cpfCnpj: "13484296000105" }) {
+            codpedido
+            situacao
+            total
+            qtdItens
+            itens {
+              codpedido
+              codpedidoitem
+              fornecedor_emp
+              fornecedor_cod
+              vl_item
+              produto
+              quantidade
+              vl_item
+              vl_total
+              unidade
+              embalagem
+              qtd_estoque
+            }
+          }
+        }
+      `,
+    });
+
+    // @ts-ignore
+    expect(res.data.getPedbyCode[0]).toHaveProperty('codpedido');
+  });
+
+  it('Should return request by code in progress', async () => {
+    const dbMocks = await {
+      Pedido: {
+        model: {
+          codpedido: 287,
+          codfilial: 34,
+          codcliente: 145995,
+          codfuncionario: 123,
+          condicao: 'XXXXXXX',
+          emissao: Date.now(),
+          situacao: 'A',
+          total: 200,
+          observacao: ' ',
+          ordemcompra: '1234984',
+          pedidos_itens: [
+            {
+              codpedido: 287,
+              codpedidoitem: 308,
+              fornecedor_emp: 1,
+              fornecedor_cod: 1416,
+              vl_item: 50,
+              produto: '15W40 SELENIA K',
+              quantidade: 4,
+              vl_total: 50 * 4,
+              unidade: 'CX',
+              embalagem: 24,
+              qtd_estoque: 3310,
+            },
+          ],
+        },
+      },
+    };
+
+    const { server, pedidoService, pessoaApi, catalogoApi, geralApi } = constructTestServer({
+      authorization: true,
+      dbMocks,
+    });
+
+    // @ts-ignore
+    catalogoApi.post = jest.fn(() => [
+      {
+        codigo: '1___1416___15W40 SELENIA K',
+        nome: 'LITRO OLEO SELENIA K 15W40 SN PETRONAS',
+      },
+    ]);
+
+    // @ts-ignore
+    pedidoService.getCached = jest.fn(() => []);
+
+    // @ts-ignore
+    pessoaApi.get = jest.fn(() => ({
+      nomeCompleto: 'KATIA',
+      nomeFantasia: 'KATIA',
+      tipoPessoa: 'PJ',
+      dataCadastro: '1542772800000',
+      tipoCadastro: 1,
+      emails: [],
+      enderecos: [],
+      telefones: [],
+      pessoaJuridica: {
+        id: 10905700,
+        cnpj: '13484296000105',
+      },
+      clientes: {
+        id: 145995,
+      },
+    }));
+
+    // @ts-ignore
+    geralApi.get = jest.fn(() => [
+      {
+        recnum: 633,
+        codigo: 'A8',
+        nomeCondicaoPagamento: 'ATAC P/ 1 DIA',
+        descricao: 'ATAC P/ 1 DIA',
+        parcelas: 1,
+        periodo: 0,
+        periodoEntrada: 1,
+        valor: 9999999.99,
+        documento: 'F',
+        descontoMedio: 29.4,
+        tipoPreco: 'A',
+        parcelaCartao: 0,
+        ativo: 'S',
+        caf: ' ',
+      },
+      {
+        recnum: 4,
+        codigo: 'F',
+        codigo1: 4,
+        descricao: 'Faturamento',
+        descricao1: 'FATURAMENTO',
+        obs: ' ',
+        de_est_contrib: 'C',
+        de_est_ncontrib: 'C',
+        fo_est_contrib: 'C',
+        caf: ' ',
+      },
+      {
+        recnum: 1541,
+        codigo: 'D54',
+        nomeCondicaoPagamento: '07/14/21/28/35',
+        descricao: 'PARA 07/14/21/28/35 DIAS',
+        parcelas: 5,
+        periodo: 7,
+        periodoEntrada: 7,
+        valor: 9999999.99,
+        documento: 'F',
+        descontoMedio: 24.5,
+        tipoPreco: 'N',
+        parcelaCartao: 0,
+        ativo: 'S',
+        caf: ' ',
+      },
+    ]);
+
+    const cliente = createTestClient(server);
+
+    const res = await cliente.query({
+      query: gql`
+        query {
+          getPedbyCode(setPedPDF: { codPedido: 492, cpfCnpj: "13484296000105" }) {
+            codpedido
+            situacao
+            total
+            qtdItens
+            itens {
+              codpedido
+              codpedidoitem
+              fornecedor_emp
+              fornecedor_cod
+              vl_item
+              produto
+              quantidade
+              vl_item
+              vl_total
+              unidade
+              embalagem
+              qtd_estoque
+            }
+          }
+        }
+      `,
+    });
+
+    // @ts-ignore
+    expect(res.data.getPedbyCode[0]).toHaveProperty('codpedido');
+  });
+
+  it('Should return request by code delivered', async () => {
+    const dbMocks = await {
+      Pedido: {
+        model: {
+          codpedido: 287,
+          codfilial: 34,
+          codcliente: 145995,
+          codfuncionario: 123,
+          condicao: 'XXXXXXX',
+          emissao: Date.now(),
+          situacao: 'E',
+          total: 200,
+          observacao: ' ',
+          ordemcompra: '1234984',
+          pedidos_itens: [
+            {
+              codpedido: 287,
+              codpedidoitem: 308,
+              fornecedor_emp: 1,
+              fornecedor_cod: 1416,
+              vl_item: 50,
+              produto: '15W40 SELENIA K',
+              quantidade: 4,
+              vl_total: 50 * 4,
+              unidade: 'CX',
+              embalagem: 24,
+              qtd_estoque: 3310,
+            },
+          ],
+        },
+      },
+    };
+
+    const { server, pedidoService, pessoaApi, catalogoApi, geralApi } = constructTestServer({
+      authorization: true,
+      dbMocks,
+    });
+
+    // @ts-ignore
+    catalogoApi.post = jest.fn(() => [
+      {
+        codigo: '1___1416___15W40 SELENIA K',
+        nome: 'LITRO OLEO SELENIA K 15W40 SN PETRONAS',
+      },
+    ]);
+
+    // @ts-ignore
+    pedidoService.getCached = jest.fn(() => []);
+
+    // @ts-ignore
+    pessoaApi.get = jest.fn(() => ({
+      nomeCompleto: 'KATIA',
+      nomeFantasia: 'KATIA',
+      tipoPessoa: 'PJ',
+      dataCadastro: '1542772800000',
+      tipoCadastro: 1,
+      emails: [],
+      enderecos: [],
+      telefones: [],
+      pessoaJuridica: {
+        id: 10905700,
+        cnpj: '13484296000105',
+      },
+      clientes: {
+        id: 145995,
+      },
+    }));
+
+    // @ts-ignore
+    geralApi.get = jest.fn(() => [
+      {
+        recnum: 633,
+        codigo: 'A8',
+        nomeCondicaoPagamento: 'ATAC P/ 1 DIA',
+        descricao: 'ATAC P/ 1 DIA',
+        parcelas: 1,
+        periodo: 0,
+        periodoEntrada: 1,
+        valor: 9999999.99,
+        documento: 'F',
+        descontoMedio: 29.4,
+        tipoPreco: 'A',
+        parcelaCartao: 0,
+        ativo: 'S',
+        caf: ' ',
+      },
+      {
+        recnum: 4,
+        codigo: 'F',
+        codigo1: 4,
+        descricao: 'Faturamento',
+        descricao1: 'FATURAMENTO',
+        obs: ' ',
+        de_est_contrib: 'C',
+        de_est_ncontrib: 'C',
+        fo_est_contrib: 'C',
+        caf: ' ',
+      },
+      {
+        recnum: 1541,
+        codigo: 'D54',
+        nomeCondicaoPagamento: '07/14/21/28/35',
+        descricao: 'PARA 07/14/21/28/35 DIAS',
+        parcelas: 5,
+        periodo: 7,
+        periodoEntrada: 7,
+        valor: 9999999.99,
+        documento: 'F',
+        descontoMedio: 24.5,
+        tipoPreco: 'N',
+        parcelaCartao: 0,
+        ativo: 'S',
+        caf: ' ',
+      },
+    ]);
+
+    const cliente = createTestClient(server);
+
+    const res = await cliente.query({
+      query: gql`
+        query {
+          getPedbyCode(setPedPDF: { codPedido: 492, cpfCnpj: "13484296000105" }) {
+            codpedido
+            situacao
+            total
+            qtdItens
+            itens {
+              codpedido
+              codpedidoitem
+              fornecedor_emp
+              fornecedor_cod
+              vl_item
+              produto
+              quantidade
+              vl_item
+              vl_total
+              unidade
+              embalagem
+              qtd_estoque
+            }
+          }
+        }
+      `,
+    });
+
+    // @ts-ignore
+    expect(res.data.getPedbyCode[0]).toHaveProperty('codpedido');
+  });
 });
