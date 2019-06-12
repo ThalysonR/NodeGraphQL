@@ -647,7 +647,7 @@ describe('Pedido Test', () => {
     expect(res.data.createOrder).toHaveProperty('codpedido');
   });
 
-  it('Should return request by code', async () => {
+  it('Should return request by code and cpfcnpj', async () => {
     const dbMocks = await {
       Pedido: {
         model: {
@@ -796,7 +796,7 @@ describe('Pedido Test', () => {
     expect(res.data.getPedbyCode[0]).toHaveProperty('codpedido');
   });
 
-  it('Should return request by code in progress', async () => {
+  it('Should return request by code and cpfcnpj in progress', async () => {
     const dbMocks = await {
       Pedido: {
         model: {
@@ -945,7 +945,7 @@ describe('Pedido Test', () => {
     expect(res.data.getPedbyCode[0]).toHaveProperty('codpedido');
   });
 
-  it('Should return request by code delivered', async () => {
+  it('Should return request by code and cpfcnpj delivered', async () => {
     const dbMocks = await {
       Pedido: {
         model: {
