@@ -121,89 +121,49 @@ export const pedidoResolvers = {
   Query: {
     findOrdersByCliente: gqlCompose(...authResolvers)(
       async (parent, { codCliente }, { dataSources }: ResolverContext, info) => {
-        const pessoa = await dataSources.pessoaApi.searchPessoa(codCliente);
+        try {
+          const pessoa = await dataSources.pessoaApi.searchPessoa(codCliente);
 
-        const resp = await dataSources.pedidoService.findPedidoByCliente(pessoa.clientes.id);
+          const resp = await dataSources.pedidoService.findPedidoByCliente(pessoa.clientes.id);
 
-        const param: any = [];
+          const param: any = [];
 
-        resp.forEach(value => {
-          value.itens.forEach(res => {
-            param.push(res.fornecedor_emp + '___' + res.fornecedor_cod + '___' + res.produto);
-          });
-        });
-
-        const produto = await dataSources.catalogoApi.searchProductName(param);
-
-        produto.forEach(value => {
-          resp.forEach(res => {
-            res.itens.forEach(vai => {
-              const condicao =
-                vai.fornecedor_emp + '___' + vai.fornecedor_cod + '___' + vai.produto;
-              if (condicao === value.codigo) {
-                vai.produto = value.nome;
-              }
+          resp.forEach(value => {
+            value.itens.forEach(res => {
+              param.push(res.fornecedor_emp + '___' + res.fornecedor_cod + '___' + res.produto);
             });
           });
-        });
 
-        let pagamento: any = [];
+          const produto = await dataSources.catalogoApi.searchProductName(param);
 
-        const retorno = resp.map(async res => {
-          pagamento = await dataSources.geralApi.searchPagamento({
-            codigo: res.condicao,
-          });
-          return {
-            ...res,
-            descricaoPagamento: pagamento.descricao,
-          };
-        });
-
-        return retorno;
-      },
-    ),
-    getPedPDF: gqlCompose(...authResolvers)(
-      async (parent, { setPedPDF }, { dataSources }: ResolverContext, info) => {
-        const pessoa = await dataSources.pessoaApi.searchPessoa(setPedPDF.cpfCnpj);
-
-        const buscaPedido = {
-          codcliente: pessoa.clientes.id,
-          codpedido: setPedPDF.codPedido,
-        };
-
-        const resp = await dataSources.pedidoService.findPedidoByCodigo(buscaPedido);
-
-        const param: any = [];
-
-        resp.forEach(value => {
-          value.itens.forEach(res => {
-            param.push(res.fornecedor_emp + '___' + res.fornecedor_cod + '___' + res.produto);
-          });
-        });
-
-        const produto = await dataSources.catalogoApi.searchProductName(param);
-
-        produto.forEach(value => {
-          resp.forEach(res => {
-            res.itens.forEach(vai => {
-              const condicao =
-                vai.fornecedor_emp + '___' + vai.fornecedor_cod + '___' + vai.produto;
-              if (condicao === value.codigo) {
-                vai.produto = value.nome;
-              }
+          produto.forEach(value => {
+            resp.forEach(res => {
+              res.itens.forEach(vai => {
+                const condicao =
+                  vai.fornecedor_emp + '___' + vai.fornecedor_cod + '___' + vai.produto;
+                if (condicao === value.codigo) {
+                  vai.produto = value.nome;
+                }
+              });
             });
           });
-        });
 
-        resp.forEach(async pedido => {
-          pedido.itens.forEach(
-            await (item => {
-              console.log(item);
-            }),
-          );
-        });
+          let pagamento: any = [];
 
-        return resp;
+          const retorno = resp.map(async res => {
+            pagamento = await dataSources.geralApi.searchPagamento({
+              codigo: res.condicao,
+            });
+            return {
+              ...res,
+              descricaoPagamento: pagamento.descricao,
+            };
+          });
+
+          return retorno;
+        } catch (handleError) {
+          return 'Sem Pedido';
+        }
       },
     ),
   },
