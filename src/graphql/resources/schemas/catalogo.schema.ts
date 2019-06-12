@@ -87,7 +87,6 @@ input PesqProduto{
 }
 
 input PesqSimilar {
-  filial: Int!
   empresa: Int!
   fornecedor: Int!
   produto: String!
