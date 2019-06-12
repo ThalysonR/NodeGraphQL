@@ -128,6 +128,10 @@ export const pedidoResolvers = {
 
           const param: any = [];
 
+          if(resp.length === 0){
+            throw new Error('Não há pedidos');
+          }
+
           resp.forEach(value => {
             value.itens.forEach(res => {
               param.push(res.fornecedor_emp + '___' + res.fornecedor_cod + '___' + res.produto);
@@ -162,7 +166,7 @@ export const pedidoResolvers = {
 
           return retorno;
         } catch (handleError) {
-          return 'Sem Pedido';
+          return [];
         }
       },
     ),
