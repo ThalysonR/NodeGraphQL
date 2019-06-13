@@ -45,7 +45,7 @@ pipeline {
 
             steps {
                 withSonarQubeEnv('SonarQubeScanner') {
-                    sh "${scannerHome}/bin/sonar-scanner"
+                    sh "${scannerHome}/bin/sonar-scanner -Dsonar.branch.name=${BRANCH_NAME}"
                 }
 
                 timeout(time: 10, unit: 'MINUTES') {
@@ -54,6 +54,7 @@ pipeline {
             }
         }
         stage('Build') {
+            when { anyOf { branch 'master'; branch 'desenvolvimento' } }
             steps {
                 script {
                     sh 'rm -rf dist'
@@ -65,19 +66,13 @@ pipeline {
             }
         }
         stage('Publish') {
-            when {
-                expression {
-                    currentBuild.result == null || currentBuild.result == 'SUCCESS'
-                }
-            }
+            when { anyOf { branch 'master'; branch 'desenvolvimento' } }
             steps {
                 nexusPublisher nexusInstanceId: 'Nexus_Local', nexusRepositoryId: "${REPOSITORY}", packages: [[$class: 'MavenPackage', mavenAssetList: [[classifier: '', extension: '', filePath: "dist.tar.gz"]], mavenCoordinate: [artifactId: "${PKG_NAME}", groupId: "br.com.pemaza", packaging: 'tar.gz', version: "${PKG_VERSION}"]]]
             }
         }
         stage('Deploy') {
-            when {
-                expression { GIT_BRANCH ==~/.*(desenvolvimento)$/ }
-            }
+            when { branch 'desenvolvimento' }
             steps {
                 ansibleTower(
                     towerServer: 'AWX Local',
