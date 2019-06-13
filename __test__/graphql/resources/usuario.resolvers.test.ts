@@ -165,6 +165,14 @@ describe('Test token resolvers', () => {
           instanceMethods: UsuarioMethods,
         },
       },
+      ParametroCliente: {
+        model: {
+          codparametro: 1,
+          codcliente: 111,
+          codfilial: 34,
+          codfuncionario: 222,
+        },
+      },
     };
 
     const { server, pessoaApi, geralApi } = constructTestServer({ authorization: true, dbMocks });
@@ -176,6 +184,9 @@ describe('Test token resolvers', () => {
       nomeFantasia: 'MARIO ALMEIDA',
       tipoPessoa: 'PF',
       dataCadastro: '1542772800000',
+      clientes: {
+        id: 111
+      },
       pessoaFisica: {
         id: 10905700,
         cpf: '33517308293',
@@ -249,6 +260,9 @@ describe('Test token resolvers', () => {
       nomeFantasia: 'MARIO ALMEIDA',
       tipoPessoa: 'PF',
       dataCadastro: '1542772800000',
+      clientes: {
+        id: 222
+      },
       pessoaFisica: {
         id: 10905700,
         cpf: '33517308293',
@@ -311,6 +325,9 @@ describe('Test token resolvers', () => {
       nomeFantasia: 'MARIO ALMEIDA',
       tipoPessoa: 'PJ',
       dataCadastro: '1542772800000',
+      clientes: {
+        id: 333
+      },
       pessoaFisica: {
         id: 10905700,
         cpf: '33517308298',
@@ -378,6 +395,101 @@ describe('Test token resolvers', () => {
           instanceMethods: UsuarioMethods,
         },
       },
+      ParametroCliente: {
+        model: {
+          codparametro: 1,
+          codcliente: 444,
+          codfilial: 34,
+          codfuncionario: 222,
+        }
+      }
+    };
+    const { server, pessoaApi, geralApi } = constructTestServer({ authorization: true, dbMocks });
+
+    // @ts-ignore
+    pessoaApi.get = jest.fn(() => ({
+      id: 96809,
+      nomeCompleto: 'INTEGRACAO TRANSPORTES LTDA',
+      nomeFantasia: 'EUCATTUR',
+      tipoPessoa: 'PJ',
+      clientes: {
+        id: 444
+      },
+      pessoaJuridica: {
+        cnpj: '13484296000105',
+        id: '33006',
+        inscricaoMunicipal: ' ',
+        cgf: ' ',
+      },
+    }));
+    // @ts-ignore
+    geralApi.get = jest.fn(() => [
+      {
+        limite: 0,
+        em_aberto: 0,
+        saldo: 0,
+        aviso: null,
+        permissao: null,
+        bloqueado: '',
+      },
+    ]);
+
+    const { mutate } = createTestClient(server);
+
+    const res = await mutate({
+      mutation: gql`
+        mutation {
+          createToken(login: "13484296000105", senha: "123") {
+            token
+            refreshToken
+            usuario {
+              login
+              perfil {
+                nome_perfil
+              }
+              pessoa {
+                nomeCompleto
+                nomeFantasia
+                tipoPessoa
+                saldo {
+                  saldo
+                }
+                pessoaCadastro {
+                  ... on PessoaFisica {
+                    cpf
+                  }
+                  ... on PessoaJuridica {
+                    cnpj
+                  }
+                }
+              }
+            }
+          }
+        }
+      `,
+    });
+    // @ts-ignore
+    expect(res.data.createToken).toHaveProperty('token');
+    // @ts-ignore
+    expect(res.data.createToken.usuario.pessoa.tipoPessoa).toBe('PJ');
+  });
+
+  it('Should return null when not exist parametro do cliente', async () => {
+    const dbMocks = {
+      Usuario: {
+        model: {
+          id_usuario: 1,
+          nome_usuario: 'EUCATTUR',
+          login: '13484296000105',
+          email: 'teste@teste.com',
+          senha: hashSync('123'),
+          status_usuario: 'A',
+          perfis: [{ nome_perfil: 'Teste' }],
+        },
+        options: {
+          instanceMethods: UsuarioMethods,
+        },
+      }
     };
     const { server, pessoaApi, geralApi } = constructTestServer({ authorization: true, dbMocks });
 
@@ -441,8 +553,6 @@ describe('Test token resolvers', () => {
       `,
     });
     // @ts-ignore
-    expect(res.data.createToken).toHaveProperty('token');
-    // @ts-ignore
-    expect(res.data.createToken.usuario.pessoa.tipoPessoa).toBe('PJ');
+    expect(res.data.createToken).toBeNull();
   });
 });
