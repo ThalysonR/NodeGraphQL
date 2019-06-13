@@ -144,7 +144,7 @@ export const pedidoResolvers = {
     getPedbyCode: gqlCompose(...authResolvers)(
       async (parent, { setPedPDF }, { dataSources }: ResolverContext, info) => {
         try {
-          return getPedido(dataSources, setPedPDF);
+          return await getPedido(dataSources, setPedPDF);
         } catch (handleError) {
           return [];
         }
