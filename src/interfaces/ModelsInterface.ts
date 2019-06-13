@@ -4,6 +4,7 @@ import { PagamentoPedidoModel } from '../models/PagamentoPedidoModel';
 import { PedidoModel } from '../models/PedidoModel';
 import { PerfilModel } from '../models/PerfilModel';
 import { UsuarioModel } from '../models/UsuarioModel';
+import { ParametroClienteModel } from '../models/ParametroClienteModel';
 
 export interface ModelsInterface {
   Usuario: UsuarioModel;
@@ -12,4 +13,5 @@ export interface ModelsInterface {
   ItensPedido: ItensPedidoModel;
   Endereco: EnderecoPedidoModel;
   Pagamento: PagamentoPedidoModel;
+  ParametroCliente: ParametroClienteModel;
 }
