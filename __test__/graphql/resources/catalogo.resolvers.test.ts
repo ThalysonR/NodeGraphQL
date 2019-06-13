@@ -929,7 +929,7 @@ describe('Test Catalog', () => {
       query: gql`
         {
           getSimilares(
-            pesqSimilar: { filial: 34, empresa: 1, fornecedor: 144, produto: "B47097" }
+            pesqSimilar: { empresa: 1, fornecedor: 144, produto: "B47097" }
           ) {
             id
             idEmpresa

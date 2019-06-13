@@ -43,7 +43,7 @@ getDbConnection()
         // @ts-ignore
         pedidoService.initialize({});
 
-        const resp = await pedidoService.findPedidoByCodigo(buscaPedido);
+        const resp = await pedidoService.findPedidoByCliente(buscaPedido);
 
         const param: any = [];
 
@@ -144,6 +144,13 @@ getDbConnection()
               text: 'TOTAL: ' + resp[0].total,
               alignment: 'center',
               bold: true,
+            },
+            {
+              fontSize: 7,
+              alignment: 'center',
+              margin: [0, 10, 0, 10],
+              text:
+                'ESTE ORÇAMENTO TEM VALIDADE POR UM DIA. NÃO E DOCUMENTO FISCAL, EXIJA O CUPOM OU NOTA FISCAL',
             },
           ],
           styles: {
