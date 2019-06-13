@@ -10,9 +10,18 @@ const getProdutosDynamic = {
   ) => {
     const consumidor = await dataSources.pessoaApi.searchPessoa(cpfCnpj);
 
+    const buscaCondicao = {
+      operacao: 2,
+      tipoPreco: consumidor.clientes.tipoPreco,
+      formaPagamento: 'I',
+      prazoMedio: consumidor.clientes.prazoMedio,
+    };
+
+    const condicao = await dataSources.geralApi.searchCondicao(buscaCondicao);
+
     // TODO Tirar dados mockados
     const buscaProduto = produtosPage.produtos.map(produto => ({
-      condicao: 'XXXXXXX',
+      condicao: condicao[0].codigo,
       descontoItem: 0,
       fatorAumento: consumidor.clientes.percentualAumento,
       filial: 34,
@@ -130,8 +139,11 @@ export const catalogoResolvers = {
     ),
     getSimilares: gqlCompose(...authResolvers)(
       async (parent, { pesqSimilar }, context: ResolverContext, info) => {
+
+        // TODO Tirar dados Mockados (filial 34)
+        const pesquisaSimilar = {...pesqSimilar, filial: 34};
         const similares = await context.dataSources.catalogoApi
-          .searchSimilar(pesqSimilar)
+          .searchSimilar(pesquisaSimilar)
           .catch(handleError);
         const { produtos } = await mapDynamicFields(
           getSimilaresDynamic,

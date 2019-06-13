@@ -11,7 +11,9 @@ type Pedido{
   observacao: String
   ordem_compra: String
   itens: [ItensPedido]
+  qtdItens: Int
   endereco: Endereco
+  descricaoPagamento: String
   pagamento: PagamentoPedido
 }
 
@@ -84,11 +86,16 @@ input SetEndereco{
   codpedido: Int
   codendereco: Int
 }
+
+input SetPedPDF{
+  codPedido: Int!
+  cpfCnpj: String!
+}
 `;
 
 const pedidoQueries = `
-  findOrdersByCliente(codCliente: Int!): [Pedido]!
-  searchOrder(codPedido: Int!): Pedido!
+  findOrdersByCliente(codCliente: String!): [Pedido]!
+  getPedbyCode(setPedPDF: SetPedPDF!): [Pedido]!
 `;
 
 const pedidoMutations = `

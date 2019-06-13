@@ -40,6 +40,18 @@ class CatalogoAPI extends RESTDataSource {
     const autocomplete = await this.get('produto/autocomplete?text=' + request);
     return autocomplete;
   }
+
+  public async searchProductName(codigoProduto) {
+    const produtos = await this.post('produto/groupProduct', codigoProduto);
+
+    const response = produtos.map(res => {
+      return {
+        codigo: res.codigo,
+        nome: res.nome,
+      };
+    });
+    return response;
+  }
 }
 
 export default CatalogoAPI;

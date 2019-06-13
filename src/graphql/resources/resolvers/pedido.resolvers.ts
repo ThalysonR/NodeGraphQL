@@ -8,9 +8,18 @@ export const pedidoResolvers = {
       async (parent, { setPedido }, { dataSources }: ResolverContext, info) => {
         const pessoa = await dataSources.pessoaApi.searchPessoa(setPedido.codcliente);
 
+        const buscaCondicao = {
+          operacao: 2,
+          tipoPreco: pessoa.clientes.tipoPreco,
+          formaPagamento: 'F',
+          prazoMedio: pessoa.clientes.prazoMedio,
+        };
+
+        const condicao = await dataSources.geralApi.searchCondicao(buscaCondicao);
+
         // TODO Tirar dados Mockados
         const buscaProduto = setPedido.itens.map(produto => ({
-          condicao: 'XXXXXXX',
+          condicao: condicao[0].codigo,
           descontoItem: 0,
           fatorAumento: pessoa.clientes.percentualAumento,
           filial: 34,
@@ -31,21 +40,28 @@ export const pedidoResolvers = {
         setPedido.itens.map(pedido => {
           const resp: [] = produtosPreco
             .map(itens => {
-              if (pedido.produto === itens.produto) {
+              /* istanbul ignore next */
+              if (
+                pedido.produto === itens.produto &&
+                pedido.fornecedor_cod === itens.fornecedorCodigo &&
+                pedido.fornecedor_emp === itens.empresa
+              ) {
                 return itens.unidade
                   .map(tes => {
+                    /* istanbul ignore if */
                     if (pedido.unidade === tes.tipo) {
                       total += pedido.quantidade * tes.preco;
+                      console.log(total);
                       return {
                         fornecedor_emp: itens.empresa,
                         fornecedor_cod: itens.fornecedorCodigo,
                         produto: itens.produto,
                         quantidade: pedido.quantidade,
-                        vl_item: tes.preco,
-                        vl_total: pedido.quantidade * tes.preco,
+                        vl_item: Number(tes.preco).toFixed(2),
+                        vl_total: Number(pedido.quantidade * tes.preco).toFixed(2),
                         unidade: tes.tipo,
                         embalagem: tes.qtd,
-                        qtd_estoque: itens.qtdEstoque,
+                        qtd_estoque: tes.qtd * pedido.quantidade,
                       };
                     } else {
                       return false;
@@ -60,21 +76,29 @@ export const pedidoResolvers = {
           item.push(...resp);
         });
 
-        // TODO Tirar dados Mockados (codtipopagto)
+        const pagamento = await dataSources.geralApi.searchPagamento({
+          codigo: setPedido.condicao,
+        });
+
+        const tipoPagamento = await dataSources.geralApi.searchTipoPagamento({
+          codigo: pagamento.documento,
+        });
+
+        // TODO Tirar dados Mockados
         const order = await dataSources.pedidoService.createOrder({
           ...setPedido,
           codfuncionario: 1,
           endereco: { codendereco: pessoa.enderecos[0].id },
           codcliente: pessoa.clientes.id,
-          condicao: 'XXXXXXX',
+          condicao: pagamento.codigo,
           situacao: 'S',
           codfilial: 34,
           itens: item,
-          total,
+          total: Number(total).toFixed(2),
           pagamento: {
-            codtipopagto: 4,
+            codtipopagto: tipoPagamento.codigo1,
             situacao: 'S',
-            valor_pago: total,
+            valor_pago: Number(total).toFixed(2),
             cod_adm: '1',
             parcela: setPedido.pagamento.parcela,
           },
@@ -84,14 +108,101 @@ export const pedidoResolvers = {
           return value.validTipoFiscal === true;
         });
 
-        return { ...order.get({ plain: true }), endereco: end };
+        return {
+          ...order.get({ plain: true }),
+          endereco: end,
+          itens: item,
+          descricaoPagamento: pagamento.descricao,
+          qtdItens: item.length,
+        };
       },
     ),
   },
   Query: {
     findOrdersByCliente: gqlCompose(...authResolvers)(
       async (parent, { codCliente }, { dataSources }: ResolverContext, info) => {
-        return await dataSources.pedidoService.findPedidoByCliente(codCliente);
+        try {
+          const pessoa = await dataSources.pessoaApi.searchPessoa(codCliente);
+
+          const resp = await dataSources.pedidoService.findPedidoByCliente(pessoa.clientes.id);
+
+          const param: any = [];
+          /* istanbul ignore if */
+          if (resp.length === 0) {
+            throw new Error('Não há pedidos');
+          }
+
+          resp.forEach(value => {
+            value.itens.forEach(res => {
+              param.push(res.fornecedor_emp + '___' + res.fornecedor_cod + '___' + res.produto);
+            });
+          });
+
+          const produto = await dataSources.catalogoApi.searchProductName(param);
+
+          produto.forEach(value => {
+            resp.forEach(res => {
+              res.itens.forEach(vai => {
+                const condicao =
+                  vai.fornecedor_emp + '___' + vai.fornecedor_cod + '___' + vai.produto;
+                if (condicao === value.codigo) {
+                  vai.produto = value.nome;
+                }
+              });
+            });
+          });
+
+          let pagamento: any = [];
+
+          const retorno = resp.map(async res => {
+            pagamento = await dataSources.geralApi.searchPagamento({
+              codigo: res.condicao,
+            });
+            return {
+              ...res,
+              descricaoPagamento: pagamento.descricao,
+            };
+          });
+
+          return retorno;
+        } catch (handleError) {
+          return [];
+        }
+      },
+    ),
+    getPedbyCode: gqlCompose(...authResolvers)(
+      async (parent, { setPedPDF }, { dataSources }: ResolverContext, info) => {
+        const pessoa = await dataSources.pessoaApi.searchPessoa(setPedPDF.cpfCnpj);
+
+        const buscaPedido = {
+          codcliente: pessoa.clientes.id,
+          codpedido: setPedPDF.codPedido,
+        };
+
+        const pedido = await dataSources.pedidoService.findPedidoByCodigo(buscaPedido);
+
+        const param: any = [];
+
+        pedido.forEach(value => {
+          value.itens.forEach(res => {
+            param.push(res.fornecedor_emp + '___' + res.fornecedor_cod + '___' + res.produto);
+          });
+        });
+
+        const nameProduto = await dataSources.catalogoApi.searchProductName(param);
+
+        nameProduto.forEach(proName => {
+          pedido.forEach(res => {
+            res.itens.forEach(item => {
+              const condicao =
+                item.fornecedor_emp + '___' + item.fornecedor_cod + '___' + vai.produto;
+              if (condicao === proName.codigo) {
+                item.produto = proName.nome;
+              }
+            });
+          });
+        });
+        return pedido;
       },
     ),
   },

@@ -209,6 +209,27 @@ describe('Test Catalog', () => {
         qtd: 31,
         qtdInventario: 31,
       },
+      {
+        codigo: 'XXXXXXX',
+      },
+      [
+        {
+          recnum: 1541,
+          codigo: 'D54',
+          nomeCondicaoPagamento: '07/14/21/28/35',
+          descricao: 'PARA 07/14/21/28/35 DIAS',
+          parcelas: 5,
+          periodo: 7,
+          periodoEntrada: 7,
+          valor: 9999999.99,
+          documento: 'F',
+          descontoMedio: 24.5,
+          tipoPreco: 'N',
+          parcelaCartao: 0,
+          ativo: 'S',
+          caf: ' ',
+        },
+      ],
     ]);
 
     const { query } = createTestClient(server);
@@ -288,7 +309,7 @@ describe('Test Catalog', () => {
   });
 
   it('Should return empty image and preco when not found', async () => {
-    const { server, catalogoApi, pessoaApi, precoApi, imagemApi } = constructTestServer({
+    const { server, catalogoApi, pessoaApi, precoApi, imagemApi, geralApi } = constructTestServer({
       authorization: true,
     });
 
@@ -485,6 +506,14 @@ describe('Test Catalog', () => {
         ImgBase64: 'Imagem',
       },
     ]);
+
+    // @ts-ignore
+    geralApi.get = jest.fn(() => [
+      {
+        codigo: 'XXXXXXX',
+      },
+    ]);
+
     const { query } = createTestClient(server);
 
     const res = await query({
@@ -900,7 +929,7 @@ describe('Test Catalog', () => {
       query: gql`
         {
           getSimilares(
-            pesqSimilar: { filial: 34, empresa: 1, fornecedor: 144, produto: "B47097" }
+            pesqSimilar: { empresa: 1, fornecedor: 144, produto: "B47097" }
           ) {
             id
             idEmpresa

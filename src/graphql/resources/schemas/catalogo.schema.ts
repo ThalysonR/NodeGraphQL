@@ -72,6 +72,11 @@ type ModelTipos{
     eixoMotriz: String
 }
 
+type ProductName{
+  codigo: String
+  nome: String
+}
+
 input PesqProduto{
     page: Int!
     count: Int!
@@ -82,7 +87,6 @@ input PesqProduto{
 }
 
 input PesqSimilar {
-  filial: Int!
   empresa: Int!
   fornecedor: Int!
   produto: String!
@@ -93,6 +97,7 @@ input PesqSimilar {
 const produtoQueries = `
     getProdutos(pesqProduto: PesqProduto!): ProdutosPage!
     getSimilares(pesqSimilar: PesqSimilar): [Produto]!
+    getProductName(codigoProduto: [String]!): [ProductName]
 `;
 
 const produtoMutations = `
