@@ -43,10 +43,19 @@ export const usuarioResolvers = {
       }
       const [newToken, newRefreshToken] = await createTokens({ id: usuarioId });
       const pessoa = await dataSources.pessoaApi.searchPessoa(cpfCnpj);
+
       /* istanbul ignore if */
       if (!pessoa) {
         throw new Error(ERROR.USER.DOES_NOT_EXIST);
       }
+
+      const parametroUsuario = await dataSources.usuarioService.getParametroUserByCodCliente(pessoa.clientes.id);
+
+      /* istanbul ignore if */
+      if (!parametroUsuario) {
+        throw new Error(ERROR.USER.SEM_PARAMETRO);
+      }
+
       const saldo = await dataSources.geralApi.findSaldoClienteByCpfCnpj(cpfCnpj);
       const objFinal = {
         token: newToken,

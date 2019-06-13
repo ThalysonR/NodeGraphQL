@@ -6,5 +6,6 @@ export const ERROR = {
     EMPTY_CREDENTIALS: 'É necessário informar os campos de login e senha!',
     EMPTY_PERFIL: 'Não foi possível encontrar um perfil para o usuário!',
     ACCESS_INACTIVE: 'Seu cadastro está inativo, entre em contato conosco.',
+    SEM_PARAMETRO: "Seu cadastro está incompleto, entre em contato conosco."
   }
 };
