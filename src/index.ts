@@ -60,7 +60,7 @@ getDbConnection()
         const produto = await catalogoApi.searchProductName(param);
 
         let docDefinition;
-        const test: any = [
+        const bodyTable: any = [
           [
             { text: 'FORN', style: 'tableHeader' },
             { text: 'PRODUTO', style: 'tableHeader' },
@@ -78,19 +78,38 @@ getDbConnection()
                 produto.fornecedor_emp + '___' + produto.fornecedor_cod + '___' + produto.produto;
 
               if (condicao === value.codigo) {
-                test.push([
+                bodyTable.push([
                   '' + produto.fornecedor_cod,
                   produto.produto,
                   '' + produto.quantidade,
-                  '' + produto.vl_item,
-                  '' + produto.vl_total,
+                  {
+                    text: new Intl.NumberFormat('pt-BR', {
+                      style: 'currency',
+                      currency: 'BRL',
+                    })
+                      .format(produto.vl_item || 0)
+                      .replace('.', '*')
+                      .replace(',', '.')
+                      .replace('*', ','),
+                    alignment: 'right',
+                  },
+                  {
+                    text: new Intl.NumberFormat('pt-BR', {
+                      style: 'currency',
+                      currency: 'BRL',
+                    })
+                      .format(produto.vl_total || 0)
+                      .replace('.', '*')
+                      .replace(',', '.')
+                      .replace('*', ','),
+                    alignment: 'right',
+                  },
                   value.nome,
                 ]);
               }
             });
           });
         });
-
         docDefinition = {
           content: [
             {
@@ -113,7 +132,9 @@ getDbConnection()
               style: 'name',
               alignment: 'center',
             },
-            { canvas: [{ type: 'line', x1: 0, y1: 0, x2: 515, y2: 0, lineWidth: 1 }] },
+            {
+              canvas: [{ type: 'line', x1: 0, y1: 0, x2: 750, y2: 0, lineWidth: 1 }],
+            },
             {
               style: 'info',
               text: 'PMZ DISTRIBUIDORA S.A - 22.763.502/0002-98',
@@ -130,18 +151,26 @@ getDbConnection()
               fontSize: 10,
               text: 'OBS: ' + resp[0].observacao,
             },
-
             {
               style: 'tableExample',
               table: {
-                body: test,
+                body: bodyTable,
               },
               fontSize: 9,
               layout: 'lightHorizontalLines',
             },
             {
               fontSize: 20,
-              text: 'TOTAL: ' + resp[0].total,
+              text:
+                'TOTAL: ' +
+                new Intl.NumberFormat('pt-BR', {
+                  style: 'currency',
+                  currency: 'BRL',
+                })
+                  .format(resp[0].total || 0)
+                  .replace('.', '*')
+                  .replace(',', '.')
+                  .replace('*', ','),
               alignment: 'center',
               bold: true,
             },
@@ -153,6 +182,7 @@ getDbConnection()
                 'ESTE ORÇAMENTO TEM VALIDADE POR UM DIA. NÃO E DOCUMENTO FISCAL, EXIJA O CUPOM OU NOTA FISCAL',
             },
           ],
+          pageOrientation: 'landscape',
           styles: {
             header: {
               fontSize: 20,
