@@ -133,7 +133,7 @@ getDbConnection()
               alignment: 'center',
             },
             {
-              canvas: [{ type: 'line', x1: 0, y1: 0, x2: 750, y2: 0, lineWidth: 1 }],
+              canvas: [{ type: 'line', x1: 0, y1: 0, x2: 760, y2: 0, lineWidth: 1 }],
             },
             {
               style: 'info',
@@ -154,6 +154,7 @@ getDbConnection()
             {
               style: 'tableExample',
               table: {
+                widths: ['auto', 'auto', 'auto', 'auto', 'auto', '*'],
                 body: bodyTable,
               },
               fontSize: 9,
@@ -193,7 +194,7 @@ getDbConnection()
             },
             tableHeader: {
               bold: true,
-              alignment: 'center',
+              alignment: 'left',
             },
             data: {
               fontSize: 10,
