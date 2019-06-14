@@ -65,6 +65,7 @@ getDbConnection()
             { text: 'FORN', style: 'tableHeader' },
             { text: 'PRODUTO', style: 'tableHeader' },
             { text: 'QTDE', style: 'tableHeader' },
+            { text: 'UNIDADE', style: 'tableHeader' },
             { text: 'LIQUIDO', style: 'tableHeader' },
             { text: 'TOTAL', style: 'tableHeader' },
             { text: 'DESCRICAO', style: 'tableHeader' },
@@ -79,9 +80,10 @@ getDbConnection()
 
               if (condicao === value.codigo) {
                 bodyTable.push([
-                  '' + produto.fornecedor_cod,
+                  { text: produto.fornecedor_cod, alignment: 'right' },
                   produto.produto,
-                  '' + produto.quantidade,
+                  { text: produto.quantidade, alignment: 'right' },
+                  { text: produto.unidade, alignment: 'left' },
                   {
                     text: new Intl.NumberFormat('pt-BR', {
                       style: 'currency',
@@ -154,7 +156,7 @@ getDbConnection()
             {
               style: 'tableExample',
               table: {
-                widths: ['auto', 'auto', 'auto', 'auto', 'auto', '*'],
+                widths: ['auto', 'auto', 'auto', 'auto', 'auto', 'auto', '*'],
                 body: bodyTable,
               },
               fontSize: 9,
@@ -179,8 +181,7 @@ getDbConnection()
               fontSize: 7,
               alignment: 'center',
               margin: [0, 10, 0, 10],
-              text:
-                'ESTE ORÇAMENTO TEM VALIDADE POR UM DIA. NÃO E DOCUMENTO FISCAL, EXIJA O CUPOM OU NOTA FISCAL',
+              text: 'NÃO E DOCUMENTO FISCAL, EXIJA O CUPOM OU NOTA FISCAL',
             },
           ],
           pageOrientation: 'landscape',
