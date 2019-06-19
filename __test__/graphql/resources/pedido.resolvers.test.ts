@@ -183,6 +183,14 @@ describe('Pedido Test', () => {
           ],
         },
       },
+      ParametroCliente: {
+        model: {
+          codparametro: 4,
+          codcliente: 3214,
+          codfilial: 34,
+          codfuncionario: 1654,
+        },
+      },
     };
 
     const { server, pedidoService, pessoaApi, catalogoApi, geralApi } = constructTestServer({
@@ -1001,6 +1009,14 @@ describe('Pedido Test', () => {
       },
       Endereco: {
         model: { codendereco: 96810 },
+      },
+      ParametroCliente: {
+        model: {
+          codparametro: 4,
+          codcliente: 3214,
+          codfilial: 34,
+          codfuncionario: 1654,
+        },
       },
     };
 

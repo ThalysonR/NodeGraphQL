@@ -17,12 +17,15 @@ export const pedidoResolvers = {
 
         const condicao = await dataSources.geralApi.searchCondicao(buscaCondicao);
 
-        // TODO Tirar dados Mockados
+        const paramClient = await dataSources.usuarioService.getParametroUserByCodCliente(
+          pessoa.clientes.id,
+        );
+
         const buscaProduto = setPedido.itens.map(produto => ({
           condicao: condicao[0].codigo,
           descontoItem: 0,
           fatorAumento: pessoa.clientes.percentualAumento,
-          filial: 34,
+          filial: paramClient ? paramClient.codfilial : null,
           fornecedorCodigo: produto.fornecedor_cod,
           fornecedorEmpresa: produto.fornecedor_emp,
           produto: produto.produto,
@@ -83,7 +86,7 @@ export const pedidoResolvers = {
           codigo: pagamento.documento,
         });
 
-        // TODO Tirar dados Mockados
+        // TODO Tirar dados Mockados (cod_adm)
         const order = await dataSources.pedidoService.createOrder({
           ...setPedido,
           codfuncionario: 1,
@@ -91,7 +94,7 @@ export const pedidoResolvers = {
           codcliente: pessoa.clientes.id,
           condicao: pagamento.codigo,
           situacao: 'S',
-          codfilial: 34,
+          codfilial: paramClient ? paramClient.codfilial : null,
           itens: item,
           total: Number(total).toFixed(2),
           pagamento: {

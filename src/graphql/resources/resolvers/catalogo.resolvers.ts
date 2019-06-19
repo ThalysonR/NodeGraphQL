@@ -19,12 +19,15 @@ const getProdutosDynamic = {
 
     const condicao = await dataSources.geralApi.searchCondicao(buscaCondicao);
 
-    // TODO Tirar dados mockados
+    const paramClient = await dataSources.usuarioService.getParametroUserByCodCliente(
+      consumidor.clientes.id,
+    );
+
     const buscaProduto = produtosPage.produtos.map(produto => ({
       condicao: condicao[0].codigo,
       descontoItem: 0,
       fatorAumento: consumidor.clientes.percentualAumento,
-      filial: 34,
+      filial: paramClient ? paramClient.codfilial : null,
       fornecedorCodigo: produto.idFornecedor,
       fornecedorEmpresa: produto.idEmpresa,
       produto: produto.codigoProduto,
@@ -139,9 +142,16 @@ export const catalogoResolvers = {
     ),
     getSimilares: gqlCompose(...authResolvers)(
       async (parent, { pesqSimilar }, context: ResolverContext, info) => {
+        const consumidor = await context.dataSources.pessoaApi.searchPessoa(pesqSimilar.cpfCnpj);
 
-        // TODO Tirar dados Mockados (filial 34)
-        const pesquisaSimilar = {...pesqSimilar, filial: 34};
+        const paramClient = await context.dataSources.usuarioService.getParametroUserByCodCliente(
+          consumidor.clientes.id,
+        );
+
+        const pesquisaSimilar = {
+          ...pesqSimilar,
+          filial: paramClient ? paramClient.codfilial : null,
+        };
         const similares = await context.dataSources.catalogoApi
           .searchSimilar(pesquisaSimilar)
           .catch(handleError);
