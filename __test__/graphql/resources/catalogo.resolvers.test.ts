@@ -206,9 +206,6 @@ describe('Test Catalog', () => {
     ]);
 
     // @ts-ignore
-    usuarioService.getCached = jest.fn(() => []);
-
-    // @ts-ignore
     imagemApi.post = jest.fn(() => [
       {
         CodFornecedor: '144',
