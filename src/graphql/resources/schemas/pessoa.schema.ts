@@ -91,7 +91,7 @@ type PessoaFisica implements PessoaCadastro {
 }
 
 type Clientes {
-  id: Int
+  id: ID
   bloqueio: String
   agruparNotas: String
   cobrador: String

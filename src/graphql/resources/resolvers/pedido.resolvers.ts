@@ -21,9 +21,10 @@ export const pedidoResolvers = {
           pessoa.clientes.id,
         );
 
-        let filial;
         /* istanbul ignore next */
-        filial = paramClient ? paramClient.codfilial : null;
+        const filial = paramClient ? paramClient.codfilial : null;
+        const funcionario = paramClient ? paramClient.codfuncionario : null;
+
         const buscaProduto = setPedido.itens.map(produto => ({
           condicao: condicao[0].codigo,
           descontoItem: 0,
@@ -92,7 +93,7 @@ export const pedidoResolvers = {
         // TODO Tirar dados Mockados (cod_adm)
         const order = await dataSources.pedidoService.createOrder({
           ...setPedido,
-          codfuncionario: 1,
+          codfuncionario: funcionario,
           endereco: { codendereco: pessoa.enderecos[0].id },
           codcliente: pessoa.clientes.id,
           condicao: pagamento.codigo,
@@ -113,9 +114,20 @@ export const pedidoResolvers = {
           return value.validTipoFiscal === true;
         });
 
+        // Envia pro service do Kafka
+        dataSources.kafkaService.sendKafka({
+          ...order.get({ plain: true }),
+          emissao: new Date().toLocaleString(),
+          endereco: end,
+          itens: item,
+          descricaoPagamento: pagamento.descricao,
+          qtdItens: item.length,
+        });
+
         return {
           ...order.get({ plain: true }),
           endereco: end,
+          emissao: new Date().toLocaleString(),
           itens: item,
           descricaoPagamento: pagamento.descricao,
           qtdItens: item.length,

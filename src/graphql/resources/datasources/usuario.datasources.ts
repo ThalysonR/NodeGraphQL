@@ -32,7 +32,7 @@ export default class UsuarioService extends SQLDataSource {
   public async getParametroUserByCodCliente(codcliente) {
     return await this.db.ParametroCliente.findOne<ParametroClienteAttributes>({
       where: { codcliente },
-      attributes: ['codcliente', 'codfilial'],
+      attributes: ['codcliente', 'codfilial', 'codfuncionario'],
     });
   }
 }
