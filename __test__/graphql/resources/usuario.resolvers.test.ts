@@ -15,6 +15,14 @@ describe('Test usuario resolvers', () => {
         senha: 123456,
       },
     },
+    ParametroCliente: {
+      model: {
+        codparametro: 4,
+        codcliente: 3214,
+        codfilial: 34,
+        codfuncionario: 1654,
+      },
+    },
   };
   const { server } = constructTestServer({ authorization: true, dbMocks });
 
@@ -185,7 +193,7 @@ describe('Test token resolvers', () => {
       tipoPessoa: 'PF',
       dataCadastro: '1542772800000',
       clientes: {
-        id: 111
+        id: 111,
       },
       pessoaFisica: {
         id: 10905700,
@@ -261,7 +269,7 @@ describe('Test token resolvers', () => {
       tipoPessoa: 'PF',
       dataCadastro: '1542772800000',
       clientes: {
-        id: 222
+        id: 222,
       },
       pessoaFisica: {
         id: 10905700,
@@ -326,7 +334,7 @@ describe('Test token resolvers', () => {
       tipoPessoa: 'PJ',
       dataCadastro: '1542772800000',
       clientes: {
-        id: 333
+        id: 333,
       },
       pessoaFisica: {
         id: 10905700,
@@ -401,8 +409,8 @@ describe('Test token resolvers', () => {
           codcliente: 444,
           codfilial: 34,
           codfuncionario: 222,
-        }
-      }
+        },
+      },
     };
     const { server, pessoaApi, geralApi } = constructTestServer({ authorization: true, dbMocks });
 
@@ -413,7 +421,7 @@ describe('Test token resolvers', () => {
       nomeFantasia: 'EUCATTUR',
       tipoPessoa: 'PJ',
       clientes: {
-        id: 444
+        id: 444,
       },
       pessoaJuridica: {
         cnpj: '13484296000105',
@@ -489,7 +497,7 @@ describe('Test token resolvers', () => {
         options: {
           instanceMethods: UsuarioMethods,
         },
-      }
+      },
     };
     const { server, pessoaApi, geralApi } = constructTestServer({ authorization: true, dbMocks });
 

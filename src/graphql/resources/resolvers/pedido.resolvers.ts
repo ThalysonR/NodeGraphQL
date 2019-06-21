@@ -17,15 +17,18 @@ export const pedidoResolvers = {
 
         const condicao = await dataSources.geralApi.searchCondicao(buscaCondicao);
 
-        const paramClient = await dataSources.usuarioService.getParametroUserByCodCliente(
+        const paramClient: any = await dataSources.usuarioService.getParametroUserByCodCliente(
           pessoa.clientes.id,
         );
 
+        let filial;
+        /* istanbul ignore next */
+        filial = paramClient ? paramClient.codfilial : null;
         const buscaProduto = setPedido.itens.map(produto => ({
           condicao: condicao[0].codigo,
           descontoItem: 0,
           fatorAumento: pessoa.clientes.percentualAumento,
-          filial: paramClient ? paramClient.codfilial : null,
+          filial,
           fornecedorCodigo: produto.fornecedor_cod,
           fornecedorEmpresa: produto.fornecedor_emp,
           produto: produto.produto,
@@ -94,7 +97,7 @@ export const pedidoResolvers = {
           codcliente: pessoa.clientes.id,
           condicao: pagamento.codigo,
           situacao: 'S',
-          codfilial: paramClient ? paramClient.codfilial : null,
+          codfilial: filial,
           itens: item,
           total: Number(total).toFixed(2),
           pagamento: {
@@ -127,7 +130,7 @@ export const pedidoResolvers = {
 
         let pagamento: any = [];
 
-        if (resp !== []) {
+        if (resp.length > 0) {
           const retorno = resp.map(async res => {
             pagamento = await dataSources.geralApi.searchPagamento({
               codigo: res.condicao,
@@ -147,7 +150,11 @@ export const pedidoResolvers = {
     getPedbyCode: gqlCompose(...authResolvers)(
       async (parent, { setPedPDF }, { dataSources }: ResolverContext, info) => {
         try {
-          return await getPedido(dataSources, setPedPDF);
+          const pedido = await getPedido(dataSources, setPedPDF);
+          if (pedido.length === 0) {
+            throw new Error('Sem pedido');
+          }
+          return pedido;
         } catch (handleError) {
           return [];
         }

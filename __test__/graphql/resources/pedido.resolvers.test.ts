@@ -44,7 +44,14 @@ describe('Pedido Test', () => {
       },
     };
 
-    const { server, pedidoService, pessoaApi, catalogoApi, geralApi } = constructTestServer({
+    const {
+      server,
+      pedidoService,
+      pessoaApi,
+      catalogoApi,
+      usuarioService,
+      geralApi,
+    } = constructTestServer({
       authorization: true,
       dbMocks,
     });
@@ -59,6 +66,9 @@ describe('Pedido Test', () => {
 
     // @ts-ignore
     pedidoService.getCached = jest.fn(() => []);
+
+    // @ts-ignore
+    usuarioService.getCached = jest.fn(() => []);
 
     // @ts-ignore
     pessoaApi.get = jest.fn(() => ({
@@ -1004,7 +1014,7 @@ describe('Pedido Test', () => {
         model: {
           emissao: null,
           codpedido: '169',
-          codcliente: '34223',
+          codcliente: 123123,
           observacao: 'test',
           ordem_compra: 'COMPRA B2B',
           codfuncionario: '1',
@@ -1060,22 +1070,31 @@ describe('Pedido Test', () => {
       },
       ParametroCliente: {
         model: {
-          codparametro: 4,
-          codcliente: 3214,
+          codcliente: 123123,
           codfilial: 34,
-          codfuncionario: 1654,
         },
       },
     };
 
-    const { server, pedidoService, pessoaApi, precoApi, geralApi } = constructTestServer({
+    const {
+      server,
+      pedidoService,
+      usuarioService,
+      pessoaApi,
+      precoApi,
+      geralApi,
+    } = constructTestServer({
       authorization: true,
       dbMocks,
     });
 
     // @ts-ignore
     pedidoService.getCached = jest.fn(() => []);
+
     // @ts-ignore
+    usuarioService.getCached = jest.fn(() => []);
+    // @ts-ignore
+
     pessoaApi.get = jest.fn(() => ({
       clientes: {
         id: 123123,
@@ -1159,7 +1178,7 @@ describe('Pedido Test', () => {
             setPedido: {
               observacao: "test"
               ordem_compra: "COMPRA B2B"
-              codcliente: "13484296000105"
+              codcliente: "05484571000162"
               condicao: "A8"
               itens: [
                 {
@@ -1201,5 +1220,288 @@ describe('Pedido Test', () => {
 
     // @ts-ignore
     expect(res.data.createOrder).toHaveProperty('codpedido');
+  });
+
+  it('Should return null pedido', async () => {
+    const dbMocks = {
+      Pedido: {
+        model: {},
+      },
+      ItensPedido: {
+        model: {},
+      },
+      Pagamento: {
+        model: {
+          codtipopagto: 4,
+          situacao: 'S',
+          valor_pago: 15.2,
+          cod_adm: '1',
+          parcela: 1,
+        },
+      },
+      Endereco: {
+        model: { codendereco: 96810 },
+      },
+      ParametroCliente: {
+        model: {
+          codcliente: 3214,
+          codfilial: 34,
+        },
+      },
+    };
+
+    const { server, pedidoService, pessoaApi, catalogoApi, geralApi } = constructTestServer({
+      authorization: true,
+      dbMocks,
+    });
+
+    // @ts-ignore
+    catalogoApi.post = jest.fn(() => [
+      {
+        codigo: '1___1416___15W40 SELENIA K',
+        nome: 'LITRO OLEO SELENIA K 15W40 SN PETRONAS',
+      },
+    ]);
+
+    // @ts-ignore
+    pedidoService.getCached = jest.fn(() => []);
+
+    // @ts-ignore
+    pessoaApi.get = jest.fn(() => ({
+      nomeCompleto: 'KATIA',
+      nomeFantasia: 'KATIA',
+      tipoPessoa: 'PJ',
+      dataCadastro: '1542772800000',
+      tipoCadastro: 1,
+      emails: [],
+      enderecos: [],
+      telefones: [],
+      pessoaJuridica: {
+        id: 10905700,
+        cnpj: '13484296000105',
+      },
+      clientes: {
+        id: 3214,
+      },
+    }));
+
+    // @ts-ignore
+    geralApi.get = jest.fn(() => [
+      {
+        recnum: 633,
+        codigo: 'A8',
+        nomeCondicaoPagamento: 'ATAC P/ 1 DIA',
+        descricao: 'ATAC P/ 1 DIA',
+        parcelas: 1,
+        periodo: 0,
+        periodoEntrada: 1,
+        valor: 9999999.99,
+        documento: 'F',
+        descontoMedio: 29.4,
+        tipoPreco: 'A',
+        parcelaCartao: 0,
+        ativo: 'S',
+        caf: ' ',
+      },
+      {
+        recnum: 4,
+        codigo: 'F',
+        codigo1: 4,
+        descricao: 'Faturamento',
+        descricao1: 'FATURAMENTO',
+        obs: ' ',
+        de_est_contrib: 'C',
+        de_est_ncontrib: 'C',
+        fo_est_contrib: 'C',
+        caf: ' ',
+      },
+      {
+        recnum: 1541,
+        codigo: 'A8',
+        nomeCondicaoPagamento: '07/14/21/28/35',
+        descricao: 'PARA 07/14/21/28/35 DIAS',
+        parcelas: 5,
+        periodo: 7,
+        periodoEntrada: 7,
+        valor: 9999999.99,
+        documento: 'F',
+        descontoMedio: 24.5,
+        tipoPreco: 'N',
+        parcelaCartao: 0,
+        ativo: 'S',
+        caf: ' ',
+      },
+    ]);
+
+    const cliente = createTestClient(server);
+
+    const res = await cliente.query({
+      query: gql`
+        query {
+          findOrdersByCliente(codCliente: "13484296000105") {
+            codpedido
+            situacao
+            total
+            qtdItens
+            itens {
+              codpedido
+              codpedidoitem
+              fornecedor_emp
+              fornecedor_cod
+              vl_item
+              produto
+              quantidade
+              vl_item
+              vl_total
+              unidade
+              embalagem
+              qtd_estoque
+            }
+          }
+        }
+      `,
+    });
+
+    // @ts-ignore
+    expect(res.data.findOrdersByCliente[0]).toBeUndefined();
+  });
+
+  it('Should return null pedidoPDF', async () => {
+    const dbMocks = {
+      Pedido: {
+        model: {},
+      },
+      ItensPedido: {
+        model: {},
+      },
+      Pagamento: {
+        model: {
+          codtipopagto: 4,
+          situacao: 'S',
+          valor_pago: 15.2,
+          cod_adm: '1',
+          parcela: 1,
+        },
+      },
+      Endereco: {
+        model: { codendereco: 96810 },
+      },
+      ParametroCliente: {
+        model: {},
+      },
+    };
+
+    const { server, pedidoService, pessoaApi, catalogoApi, geralApi } = constructTestServer({
+      authorization: true,
+      dbMocks,
+    });
+
+    // @ts-ignore
+    catalogoApi.post = jest.fn(() => [
+      {
+        codigo: '1___1416___15W40 SELENIA K',
+        nome: 'LITRO OLEO SELENIA K 15W40 SN PETRONAS',
+      },
+    ]);
+
+    // @ts-ignore
+    pedidoService.getCached = jest.fn(() => []);
+
+    // @ts-ignore
+    pessoaApi.get = jest.fn(() => ({
+      nomeCompleto: 'KATIA',
+      nomeFantasia: 'KATIA',
+      tipoPessoa: 'PJ',
+      dataCadastro: '1542772800000',
+      tipoCadastro: 1,
+      emails: [],
+      enderecos: [],
+      telefones: [],
+      pessoaJuridica: {
+        id: 10905700,
+        cnpj: '13484296000105',
+      },
+      clientes: {
+        id: 3214,
+      },
+    }));
+
+    // @ts-ignore
+    geralApi.get = jest.fn(() => [
+      {
+        recnum: 633,
+        codigo: 'A8',
+        nomeCondicaoPagamento: 'ATAC P/ 1 DIA',
+        descricao: 'ATAC P/ 1 DIA',
+        parcelas: 1,
+        periodo: 0,
+        periodoEntrada: 1,
+        valor: 9999999.99,
+        documento: 'F',
+        descontoMedio: 29.4,
+        tipoPreco: 'A',
+        parcelaCartao: 0,
+        ativo: 'S',
+        caf: ' ',
+      },
+      {
+        recnum: 4,
+        codigo: 'F',
+        codigo1: 4,
+        descricao: 'Faturamento',
+        descricao1: 'FATURAMENTO',
+        obs: ' ',
+        de_est_contrib: 'C',
+        de_est_ncontrib: 'C',
+        fo_est_contrib: 'C',
+        caf: ' ',
+      },
+      {
+        recnum: 1541,
+        codigo: 'A8',
+        nomeCondicaoPagamento: '07/14/21/28/35',
+        descricao: 'PARA 07/14/21/28/35 DIAS',
+        parcelas: 5,
+        periodo: 7,
+        periodoEntrada: 7,
+        valor: 9999999.99,
+        documento: 'F',
+        descontoMedio: 24.5,
+        tipoPreco: 'N',
+        parcelaCartao: 0,
+        ativo: 'S',
+        caf: ' ',
+      },
+    ]);
+
+    const cliente = createTestClient(server);
+
+    const res = await cliente.query({
+      query: gql`
+        query {
+          getPedbyCode(setPedPDF: { codPedido: 591, cpfCnpj: "13484296000105" }) {
+            codpedido
+            codfilial
+            codcliente
+            itens {
+              codpedido
+              codpedidoitem
+              fornecedor_emp
+              fornecedor_cod
+              produto
+              quantidade
+              vl_item
+              vl_total
+              unidade
+              embalagem
+              qtd_estoque
+            }
+          }
+        }
+      `,
+    });
+
+    // @ts-ignore
+    expect(res.data.getPedbyCode[0]).toBeUndefined();
   });
 });

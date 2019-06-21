@@ -3,7 +3,7 @@ type Pedido{
   codpedido: ID
   codfilial: Int
   codfuncionario: Int
-  codcliente: Int
+  codcliente: ID
   condicao: String
   emissao: String
   situacao: String
