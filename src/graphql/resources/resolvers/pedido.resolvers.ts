@@ -23,6 +23,7 @@ export const pedidoResolvers = {
 
         /* istanbul ignore next */
         const filial = paramClient ? paramClient.codfilial : null;
+        /* istanbul ignore next */
         const funcionario = paramClient ? paramClient.codfuncionario : null;
 
         const buscaProduto = setPedido.itens.map(produto => ({
@@ -112,16 +113,6 @@ export const pedidoResolvers = {
 
         const end = pessoa.enderecos.find(value => {
           return value.validTipoFiscal === true;
-        });
-
-        // Envia pro service do Kafka
-        dataSources.kafkaService.sendKafka({
-          ...order.get({ plain: true }),
-          emissao: new Date().toLocaleString(),
-          endereco: end,
-          itens: item,
-          descricaoPagamento: pagamento.descricao,
-          qtdItens: item.length,
         });
 
         return {
