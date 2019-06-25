@@ -198,7 +198,6 @@ async function getPedido(dataSources, infPedido) {
       pedido.forEach(res => {
         res.itens.forEach(item => {
           const condicao = item.fornecedor_emp + '___' + item.fornecedor_cod + '___' + item.produto;
-          /* istanbul ignore if */
           if (condicao === proName.codigo) {
             item.produto = proName.nome;
           }
