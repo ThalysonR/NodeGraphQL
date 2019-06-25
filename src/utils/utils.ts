@@ -46,6 +46,7 @@ export const mapDynamicFields = async (
 ) => {
   let obj = object;
   for (const field in dynamicResolvers) {
+    /* istanbul ignore if */
     if (dynamicResolvers.hasOwnProperty(field)) {
       if (findGraphQLSelectionField(info.operation, field)) {
         obj = await dynamicResolvers[field](args, context, obj);

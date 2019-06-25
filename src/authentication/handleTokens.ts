@@ -77,6 +77,7 @@ export const refreshTokens = async refreshToken => {
   const refreshTokenSecret = userId + JWT_TOKEN_REFRESH_SECRET;
   const { ok, id }: any = await verifyToken(refreshToken, refreshTokenSecret, addSecurityChecks);
 
+  /* istanbul ignore if */
   if (ok) {
     const [newToken, newRefreshToken] = await createTokens(
       { id, refreshTokenSecret },
