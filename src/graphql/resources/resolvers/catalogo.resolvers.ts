@@ -79,9 +79,18 @@ const getProdutosDynamic = {
     produtosPage,
   ) => {
     const consumidor = await dataSources.pessoaApi.searchPessoa(cpfCnpj);
+    let uf;
+    for (const endereco of consumidor.enderecos) {
+      const estado = await dataSources.geralApi.searchCodigoUf(endereco.codUf);
+      /* istanbul ignore if */
+      if (endereco.codUf === estado.codigoUF) {
+        uf = estado.codigo;
+      }
+    }
+
     const produtosComEstoque = await produtosPage.produtos.map(async produto => {
       const buscaEstoque = {
-        uf: consumidor['enderecos']['codUf'] || 'AM',
+        uf,
         produto: produto.codigoProduto,
         empresa: produto.idEmpresa,
         fornecedor: produto.idFornecedor,

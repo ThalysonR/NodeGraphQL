@@ -59,6 +59,12 @@ export const pessoaResolvers = {
         return dataSources.geralApi.searchTipoPagamento(codigo).catch(handleError);
       },
     ),
+
+    getCodigoUf: gqlCompose(...authResolvers)(
+      async (parent, codigo, { dataSources }: ResolverContext, info) => {
+        return dataSources.geralApi.searchCodigoUf(codigo).catch(handleError);
+      },
+    ),
   },
   PessoaCadastro: {
     __resolveType(obj, context, info) {

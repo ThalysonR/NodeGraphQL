@@ -557,4 +557,40 @@ describe('Test Pessoa', () => {
     // @ts-ignore
     expect(res.data.getTipoPagamento).toHaveProperty('descricao');
   });
+
+  it('test getCodigoUf', async () => {
+    const { server, geralApi } = constructTestServer({ authorization: true });
+
+    // @ts-ignore
+    geralApi.get = jest.fn(() => [
+      {
+        codigo: 'RO',
+        nome: 'RONDONIA',
+        regiao: 'NO',
+        codigoPais: 1058,
+        codigoUF: 11,
+        recnum: 21,
+      },
+    ]);
+
+    const { query } = createTestClient(server);
+
+    const res = await query({
+      query: gql`
+        {
+          getCodigoUf(text: 11) {
+            codigo
+            nome
+            regiao
+            codigoPais
+            codigoUF
+            recnum
+          }
+        }
+      `,
+    });
+
+    // @ts-ignore
+    expect(res.data.getCodigoUf).toHaveProperty('codigo');
+  });
 });

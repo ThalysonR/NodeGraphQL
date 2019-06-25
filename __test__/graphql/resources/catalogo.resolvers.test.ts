@@ -221,6 +221,7 @@ describe('Test Catalog', () => {
         qtd: 31,
         qtdInventario: 31,
       },
+      { codigo: 'AM', nome: 'AMAZONAS', regiao: 'NO', codigoPais: 1058, codigoUF: 13, recnum: 3 },
       {
         codigo: 'XXXXXXX',
       },
@@ -308,6 +309,8 @@ describe('Test Catalog', () => {
               imagem
               estoque {
                 qtd
+                qtdInventario
+                qtdDisponivel
               }
             }
             tags
@@ -1130,6 +1133,7 @@ describe('Test Catalog', () => {
         ativo: 'S',
         endereco: 'AV.KAKO CAMINHA',
       },
+      { codigo: 'AM', nome: 'AMAZONAS', regiao: 'NO', codigoPais: 1058, codigoUF: 13, recnum: 3 },
     ]);
 
     const { query } = createTestClient(server);

@@ -33,6 +33,11 @@ class GeralAPI extends RESTDataSource {
     const tipopagamento = await this.get('/tipoPagamentoPemaza/formaPagamento', codigo);
     return tipopagamento;
   }
+
+  public async searchCodigoUf(codigo) {
+    const estado = await this.get('/estado/codigoUF/' + codigo);
+    return estado;
+  }
 }
 
 export default GeralAPI;

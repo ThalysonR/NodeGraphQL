@@ -130,10 +130,20 @@ type Emails {
   finalidade: Int
   contato: String
 }
+
+type Estado{
+  codigo: String,
+  nome: String,
+  regiao: String,
+  codigoPais: Int,
+  codigoUF: Int,
+  recnum: Int
+}
 `;
 
 const pessoaQueries = `
   getPessoa(text: String): Pessoa!
+  getCodigoUf(text: Int): Estado
 `;
 
 const pessoaMutations = `
