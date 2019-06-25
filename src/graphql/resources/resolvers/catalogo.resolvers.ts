@@ -79,18 +79,19 @@ const getProdutosDynamic = {
     produtosPage,
   ) => {
     const consumidor = await dataSources.pessoaApi.searchPessoa(cpfCnpj);
-    let uf;
-    for (const endereco of consumidor.enderecos) {
-      const estado = await dataSources.geralApi.searchCodigoUf(endereco.codUf);
-      /* istanbul ignore if */
-      if (endereco.codUf === estado.codigoUF) {
-        uf = estado.codigo;
-      }
-    }
+
+    const paramClient = await dataSources.usuarioService.getParametroUserByCodCliente(
+      consumidor.clientes.id,
+    );
+
+    /* istanbul ignore next */
+    const filial = paramClient ? paramClient.codfilial : null;
+
+    const uf = await dataSources.geralApi.searchFilial({ filial });
 
     const produtosComEstoque = await produtosPage.produtos.map(async produto => {
       const buscaEstoque = {
-        uf,
+        uf: uf.estado,
         produto: produto.codigoProduto,
         empresa: produto.idEmpresa,
         fornecedor: produto.idFornecedor,

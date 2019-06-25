@@ -34,8 +34,8 @@ class GeralAPI extends RESTDataSource {
     return tipopagamento;
   }
 
-  public async searchCodigoUf(codigo) {
-    const estado = await this.get('/estado/codigoUF/' + codigo);
+  public async searchFilial(codigo) {
+    const estado = await this.get('/filialPemaza/filial', codigo);
     return estado;
   }
 }

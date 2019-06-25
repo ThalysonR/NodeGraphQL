@@ -62,7 +62,7 @@ export const pessoaResolvers = {
 
     getCodigoUf: gqlCompose(...authResolvers)(
       async (parent, codigo, { dataSources }: ResolverContext, info) => {
-        return dataSources.geralApi.searchCodigoUf(codigo).catch(handleError);
+        return dataSources.geralApi.searchFilial(codigo).catch(handleError);
       },
     ),
   },
