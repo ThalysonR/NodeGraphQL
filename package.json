@@ -1,6 +1,6 @@
 {
   "name": "ws-gateway-b2b",
-  "version": "0.0.1",
+  "version": "1.0.0",
   "description": "Servico de entrada do b2b",
   "main": "index.js",
   "scripts": {
