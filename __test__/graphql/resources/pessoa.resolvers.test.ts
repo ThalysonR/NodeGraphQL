@@ -460,4 +460,137 @@ describe('Test Pessoa', () => {
     // @ts-ignore
     expect(res.data.getCondicao[0]).toHaveProperty('descricao');
   });
+
+  it('pemaza payment test', async () => {
+    const { server, geralApi } = constructTestServer({ authorization: true });
+
+    // @ts-ignore
+    geralApi.get = jest.fn(() => [
+      {
+        recnum: 633,
+        codigo: 'A8',
+        nomeCondicaoPagamento: 'ATAC P/ 1 DIA',
+        descricao: 'ATAC P/ 1 DIA',
+        parcelas: 1,
+        periodo: 0,
+        periodoEntrada: 1,
+        valor: 9999999.99,
+        documento: 'F',
+        descontoMedio: 29.4,
+        tipoPreco: 'A',
+        parcelaCartao: 0,
+        ativo: 'S',
+        caf: '',
+      },
+    ]);
+
+    const { query } = createTestClient(server);
+
+    const res = await query({
+      query: gql`
+        {
+          getPagamentoPemaza {
+            recnum
+            codigo
+            nomeCondicaoPagamento
+            descricao
+            parcelas
+            periodo
+            periodoEntrada
+            valor
+            documento
+            descontoMedio
+            tipoPreco
+            parcelaCartao
+            ativo
+            caf
+          }
+        }
+      `,
+    });
+
+    // @ts-ignore
+    expect(res.data.getPagamentoPemaza).toHaveProperty('codigo');
+  });
+
+  it('type payment test', async () => {
+    const { server, geralApi } = constructTestServer({ authorization: true });
+
+    // @ts-ignore
+    geralApi.get = jest.fn(() => [
+      {
+        recnum: 4,
+        codigo: 'F',
+        codigo1: 4,
+        descricao: 'Faturamento',
+        descricao1: 'FATURAMENTO',
+        obs: ' ',
+        de_est_contrib: 'C',
+        de_est_ncontrib: 'C',
+        fo_est_contrib: 'C',
+        fo_est_ncontrib: 'C',
+        caf: ' ',
+      },
+    ]);
+
+    const { query } = createTestClient(server);
+
+    const res = await query({
+      query: gql`
+        {
+          getTipoPagamento {
+            recnum
+            codigo
+            codigo1
+            descricao
+            descricao1
+            obs
+            de_est_contrib
+            de_est_ncontrib
+            fo_est_contrib
+            caf
+          }
+        }
+      `,
+    });
+
+    // @ts-ignore
+    expect(res.data.getTipoPagamento).toHaveProperty('descricao');
+  });
+
+  it('test getCodigoUf', async () => {
+    const { server, geralApi } = constructTestServer({ authorization: true });
+
+    // @ts-ignore
+    geralApi.get = jest.fn(() => [
+      {
+        codigo: 'RO',
+        nome: 'RONDONIA',
+        regiao: 'NO',
+        codigoPais: 1058,
+        codigoUF: 11,
+        recnum: 21,
+      },
+    ]);
+
+    const { query } = createTestClient(server);
+
+    const res = await query({
+      query: gql`
+        {
+          getCodigoUf(text: 11) {
+            codigo
+            nome
+            regiao
+            codigoPais
+            codigoUF
+            recnum
+          }
+        }
+      `,
+    });
+
+    // @ts-ignore
+    expect(res.data.getCodigoUf).toHaveProperty('codigo');
+  });
 });

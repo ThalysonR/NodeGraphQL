@@ -7,7 +7,7 @@ type Pessoa{
   dataCadastro: String
   tipoCadastro: Int
   emails: [Emails]
-  enderecos: [Enderecos]
+  enderecos: [Endereco]
   telefones: [Telefones]
   pessoaCadastro: PessoaCadastro
   clientes: Clientes
@@ -35,7 +35,7 @@ type Email {
   contato: String
 }
 
-type Enderecos {
+type Endereco {
   id: Int
   inscricaoEstadual: InscricaoEstadual
   codPais: Int
@@ -91,7 +91,7 @@ type PessoaFisica implements PessoaCadastro {
 }
 
 type Clientes {
-  id: Int
+  id: ID
   bloqueio: String
   agruparNotas: String
   cobrador: String
@@ -130,10 +130,20 @@ type Emails {
   finalidade: Int
   contato: String
 }
+
+type Estado{
+  codigo: String,
+  nome: String,
+  regiao: String,
+  codigoPais: Int,
+  codigoUF: Int,
+  recnum: Int
+}
 `;
 
 const pessoaQueries = `
   getPessoa(text: String): Pessoa!
+  getCodigoUf(text: Int): Estado
 `;
 
 const pessoaMutations = `

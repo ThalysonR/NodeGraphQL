@@ -4,8 +4,19 @@ import { constructTestServer } from '../../__utils';
 
 describe('Test Catalog', () => {
   it('test on request response', async () => {
+    const dbMocks = await {
+      ParametroCliente: {
+        model: {
+          codparametro: 4,
+          codcliente: 3214,
+          codfilial: 34,
+          codfuncionario: 1654,
+        },
+      },
+    };
     const { server, catalogoApi, pessoaApi, precoApi, imagemApi, geralApi } = constructTestServer({
       authorization: true,
+      dbMocks,
     });
 
     // @ts-ignore
@@ -193,6 +204,7 @@ describe('Test Catalog', () => {
         ],
       },
     ]);
+
     // @ts-ignore
     imagemApi.post = jest.fn(() => [
       {
@@ -209,6 +221,28 @@ describe('Test Catalog', () => {
         qtd: 31,
         qtdInventario: 31,
       },
+      { codigo: 'AM', nome: 'AMAZONAS', regiao: 'NO', codigoPais: 1058, codigoUF: 13, recnum: 3 },
+      {
+        codigo: 'XXXXXXX',
+      },
+      [
+        {
+          recnum: 1541,
+          codigo: 'D54',
+          nomeCondicaoPagamento: '07/14/21/28/35',
+          descricao: 'PARA 07/14/21/28/35 DIAS',
+          parcelas: 5,
+          periodo: 7,
+          periodoEntrada: 7,
+          valor: 9999999.99,
+          documento: 'F',
+          descontoMedio: 24.5,
+          tipoPreco: 'N',
+          parcelaCartao: 0,
+          ativo: 'S',
+          caf: ' ',
+        },
+      ],
     ]);
 
     const { query } = createTestClient(server);
@@ -275,6 +309,8 @@ describe('Test Catalog', () => {
               imagem
               estoque {
                 qtd
+                qtdInventario
+                qtdDisponivel
               }
             }
             tags
@@ -288,9 +324,31 @@ describe('Test Catalog', () => {
   });
 
   it('Should return empty image and preco when not found', async () => {
-    const { server, catalogoApi, pessoaApi, precoApi, imagemApi } = constructTestServer({
+    const dbMocks = await {
+      ParametroCliente: {
+        model: {
+          codparametro: 4,
+          codcliente: 3214,
+          codfilial: 34,
+          codfuncionario: 1654,
+        },
+      },
+    };
+    const {
+      server,
+      usuarioService,
+      catalogoApi,
+      pessoaApi,
+      precoApi,
+      imagemApi,
+      geralApi,
+    } = constructTestServer({
       authorization: true,
+      dbMocks,
     });
+
+    // @ts-ignore
+    usuarioService.getCached = jest.fn(() => []);
 
     // @ts-ignore
     catalogoApi.get = jest.fn(() => ({
@@ -465,6 +523,8 @@ describe('Test Catalog', () => {
       },
     }));
     // @ts-ignore
+    usuarioService.getCached = jest.fn(() => []);
+    // @ts-ignore
     precoApi.post = jest.fn(() => [
       {
         fornecedorCodigo: 144,
@@ -485,6 +545,14 @@ describe('Test Catalog', () => {
         ImgBase64: 'Imagem',
       },
     ]);
+
+    // @ts-ignore
+    geralApi.get = jest.fn(() => [
+      {
+        codigo: 'XXXXXXX',
+      },
+    ]);
+
     const { query } = createTestClient(server);
 
     const res = await query({
@@ -839,7 +907,109 @@ describe('Test Catalog', () => {
   });
 
   it('similar catalog endpoint testing', async () => {
-    const { server, catalogoApi } = constructTestServer({ authorization: true });
+    const dbMocks = await {
+      ParametroCliente: {
+        model: {
+          codparametro: 4,
+          codcliente: 3214,
+          codfilial: 34,
+          codfuncionario: 1654,
+        },
+      },
+    };
+    const { server, catalogoApi, pessoaApi } = constructTestServer({
+      authorization: true,
+      dbMocks,
+    });
+
+    // @ts-ignore
+    pessoaApi.get = jest.fn(() => ({
+      nomeCompleto: 'KATIA',
+      nomeFantasia: 'KATIA',
+      tipoPessoa: 'PF',
+      dataCadastro: '1542772800000',
+      tipoCadastro: 1,
+      emails: [
+        {
+          id: 926562,
+          descricao: 'antonio_igor13@hotmail.com',
+          finalidade: 1,
+          contato: 'NAO TEM',
+        },
+      ],
+      enderecos: [
+        {
+          id: 319536,
+          inscricaoEstadual: {
+            id: 150005,
+            inscricao: 'ISENTO',
+            contribuinte: 'N',
+            validContribuinte: true,
+          },
+          codPais: 1058,
+          infobusca: 0,
+          logradouro: 'RUA RIO CUNIUA',
+          codUf: 13,
+          codMunicipio: 1302603,
+          cep: '69089180',
+          bairro: 'ARMANDO MENDES',
+          numero: '12',
+          contato: '-',
+          complemento: '-',
+          tipo: 1,
+          validInfoBusca: true,
+          validTipoEndereco: true,
+          numeroNulo: false,
+          validTipoFiscal: false,
+        },
+      ],
+      telefones: [
+        {
+          id: 1432263,
+          numero: 222222222,
+          ddd: 22,
+          tipo: 3,
+          contato: 'NAO TEM',
+        },
+      ],
+      pessoaFisica: {
+        id: 10905700,
+        cpf: '02570039241',
+        numeroRg: '21112545',
+        emissaoRg: '819864000000',
+        emissorRg: 'SSP',
+        cgf: null,
+        inscricaoMunicipal: ' ',
+        operIsenta: 'N',
+        calcIpi: 'N',
+      },
+      clientes: {
+        id: 145995,
+        bloqueio: 'N',
+        agruparNotas: 'N',
+        cobrador: 'CAR',
+        tipoPreco: 'N',
+        cartaFianca: 'N',
+        valorCarta: 0,
+        prazoMedio: 0,
+        conceito: 'XX',
+        exignfdv: 'N',
+        observacao: '-',
+        limiteCredito: 0,
+        tpEmpresa: '4',
+        qtdElevador: 0,
+        qtdMecanico: 0,
+        qtdVeiculos: 0,
+        qtdVendedor: 0,
+        linhaLeve: 'S',
+        linhaPesada: 'N',
+        linhaMedia: 'N',
+        linhaOutras: 'N',
+        metragemAuto: 0,
+        metragemOfic: 0,
+        percentualAumento: 0,
+      },
+    }));
 
     // @ts-ignore
     catalogoApi.get = jest.fn(() => [
@@ -899,9 +1069,7 @@ describe('Test Catalog', () => {
     const res = await query({
       query: gql`
         {
-          getSimilares(
-            pesqSimilar: { filial: 34, empresa: 1, fornecedor: 144, produto: "B47097" }
-          ) {
+          getSimilares(pesqSimilar: { empresa: 1, fornecedor: 144, produto: "B47097" }) {
             id
             idEmpresa
             idFornecedor
@@ -965,6 +1133,7 @@ describe('Test Catalog', () => {
         ativo: 'S',
         endereco: 'AV.KAKO CAMINHA',
       },
+      { codigo: 'AM', nome: 'AMAZONAS', regiao: 'NO', codigoPais: 1058, codigoUF: 13, recnum: 3 },
     ]);
 
     const { query } = createTestClient(server);

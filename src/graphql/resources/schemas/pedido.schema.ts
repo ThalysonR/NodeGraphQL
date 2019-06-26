@@ -1,20 +1,24 @@
 const pedidoType = `
-
 type Pedido{
-  codpedido: ID!
-  codfilial: Int!
-  codfuncionario: Int!
-  codcliente: Int!
-  condicao: String!
+  codpedido: ID
+  codfilial: Int
+  codfuncionario: Int
+  codcliente: ID
+  condicao: String
   emissao: String
-  situacao: String!
-  total: Float!
-  observacao: String!
-  ordem_compra: String!
+  situacao: String
+  total: Float
+  observacao: String
+  ordem_compra: String
+  itens: [ItensPedido]
+  qtdItens: Int
+  endereco: Endereco
+  descricaoPagamento: String
+  pagamento: PagamentoPedido
 }
 
 type ItensPedido{
-  codpedido: ID!
+  codpedido: ID
   codpedidoitem: Int!
   fornecedor_emp: Int!
   fornecedor_cod: Int!
@@ -27,16 +31,10 @@ type ItensPedido{
   qtd_estoque: Int!
 }
 
-type EnderecoPedido{
-  codpedend: ID!
-  codpedido: Int!
-  codendereco: Int!
-}
-
 type PagamentoPedido{
-  codpedido: Int!
+  codpedido: Int
   codpedpagto: ID!
-  codtipopagto: Int!
+  codtipopagto: Int
   valor_pago: Float!
   parcela: Int!
   situacao: String!
@@ -44,10 +42,10 @@ type PagamentoPedido{
 }
 
 input SetPedido{
-  codpedido: ID!
+  codpedido: ID
   codfilial: Int
   codfuncionario: Int
-  codcliente: Int
+  codcliente: String
   condicao: String
   emissao: String
   situacao: String
@@ -55,12 +53,11 @@ input SetPedido{
   observacao: String
   ordem_compra: String
   itens: [SetItensPedido]
-  endereco: ID
   pagamento: SetPagamento
 }
 
 input SetItensPedido{
-  codpedido: ID!
+  codpedido: ID
   codpedidoitem: Int
   fornecedor_emp: Int
   fornecedor_cod: Int
@@ -74,22 +71,31 @@ input SetItensPedido{
 }
 
 input SetPagamento{
-  codpedido: Int!
-  codpedpagto: ID!
-  codtipopagto: Int!
-  valor_pago: Float!
-  parcela: Int!
-  situacao: String!
-  cod_adm: Int!
+  codpedido: Int
+  codpedpagto: ID
+  codtipopagto: Int
+  valor_pago: Float
+  parcela: Int
+  codigo: String
+  situacao: String
+  cod_adm: Int
 }
 
+input SetEndereco{
+  codpedend: Int
+  codpedido: Int
+  codendereco: Int
+}
 
-
+input SetPedPDF{
+  codPedido: Int!
+  cpfCnpj: String!
+}
 `;
 
 const pedidoQueries = `
-  findOrdersByCliente(codCliente: Int!): [Pedido]!
-  searchOrder(codPedido: Int!): Pedido!
+  findOrdersByCliente(codCliente: String!): [Pedido]!
+  getPedbyCode(setPedPDF: SetPedPDF!): [Pedido]!
 `;
 
 const pedidoMutations = `

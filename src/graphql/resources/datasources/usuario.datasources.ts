@@ -1,4 +1,5 @@
 import { SQLDataSource } from '../../../models';
+import { ParametroClienteAttributes } from '../../../models/ParametroClienteModel';
 import { UsuarioAttributes } from '../../../models/UsuarioModel';
 
 export default class UsuarioService extends SQLDataSource {
@@ -26,5 +27,12 @@ export default class UsuarioService extends SQLDataSource {
   public async findAll() {
     const dbFn = this.db.Usuario.findAll.bind(this.db.Usuario);
     return await this.getCached<UsuarioAttributes>(dbFn, {});
+  }
+
+  public async getParametroUserByCodCliente(codcliente) {
+    return await this.db.ParametroCliente.findOne<ParametroClienteAttributes>({
+      where: { codcliente },
+      attributes: ['codcliente', 'codfilial', 'codfuncionario'],
+    });
   }
 }

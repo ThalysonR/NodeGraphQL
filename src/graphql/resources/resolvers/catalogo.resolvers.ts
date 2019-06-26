@@ -10,12 +10,24 @@ const getProdutosDynamic = {
   ) => {
     const consumidor = await dataSources.pessoaApi.searchPessoa(cpfCnpj);
 
-    // TODO Tirar dados mockados
+    const buscaCondicao = {
+      operacao: 2,
+      tipoPreco: consumidor.clientes.tipoPreco,
+      formaPagamento: 'I',
+      prazoMedio: consumidor.clientes.prazoMedio,
+    };
+
+    const condicao = await dataSources.geralApi.searchCondicao(buscaCondicao);
+
+    const paramClient = await dataSources.usuarioService.getParametroUserByCodCliente(
+      consumidor.clientes.id,
+    );
+
     const buscaProduto = produtosPage.produtos.map(produto => ({
-      condicao: 'XXXXXXX',
+      condicao: condicao[0].codigo,
       descontoItem: 0,
       fatorAumento: consumidor.clientes.percentualAumento,
-      filial: 34,
+      filial: paramClient ? paramClient.codfilial : null,
       fornecedorCodigo: produto.idFornecedor,
       fornecedorEmpresa: produto.idEmpresa,
       produto: produto.codigoProduto,
@@ -67,9 +79,19 @@ const getProdutosDynamic = {
     produtosPage,
   ) => {
     const consumidor = await dataSources.pessoaApi.searchPessoa(cpfCnpj);
+
+    const paramClient = await dataSources.usuarioService.getParametroUserByCodCliente(
+      consumidor.clientes.id,
+    );
+
+    /* istanbul ignore next */
+    const filial = paramClient ? paramClient.codfilial : null;
+
+    const uf = await dataSources.geralApi.searchFilial({ filial });
+
     const produtosComEstoque = await produtosPage.produtos.map(async produto => {
       const buscaEstoque = {
-        uf: consumidor['enderecos']['codUf'] || 'AM',
+        uf: uf.estado,
         produto: produto.codigoProduto,
         empresa: produto.idEmpresa,
         fornecedor: produto.idFornecedor,
@@ -130,8 +152,18 @@ export const catalogoResolvers = {
     ),
     getSimilares: gqlCompose(...authResolvers)(
       async (parent, { pesqSimilar }, context: ResolverContext, info) => {
+        const consumidor = await context.dataSources.pessoaApi.searchPessoa(pesqSimilar.cpfCnpj);
+
+        const paramClient = await context.dataSources.usuarioService.getParametroUserByCodCliente(
+          consumidor.clientes.id,
+        );
+
+        const pesquisaSimilar = {
+          ...pesqSimilar,
+          filial: paramClient ? paramClient.codfilial : null,
+        };
         const similares = await context.dataSources.catalogoApi
-          .searchSimilar(pesqSimilar)
+          .searchSimilar(pesquisaSimilar)
           .catch(handleError);
         const { produtos } = await mapDynamicFields(
           getSimilaresDynamic,

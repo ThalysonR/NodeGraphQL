@@ -1,9 +1,10 @@
 import * as Sequelize from 'sequelize';
 import { BaseModelInterface } from '../interfaces/BaseModelInterface';
 import { ModelsInterface } from './../interfaces/ModelsInterface';
+import { ItensPedidoInstance } from './ItensPedidoModel';
 
 export interface PedidoAttributes {
-  codpedido?: number;
+  codpedido: number;
   codfilial?: number;
   codfuncionario?: number;
   codcliente?: number;
@@ -15,7 +16,9 @@ export interface PedidoAttributes {
   ordem_compra?: string;
 }
 
-export interface PedidoInstance extends Sequelize.Instance<PedidoAttributes>, PedidoAttributes {}
+export interface PedidoInstance extends Sequelize.Instance<PedidoAttributes>, PedidoAttributes {
+  pedidos_itens: [ItensPedidoInstance];
+}
 
 export interface PedidoModel
   extends BaseModelInterface,
@@ -27,7 +30,7 @@ export default (sequelize: Sequelize.Sequelize, DataTypes: Sequelize.DataTypes):
     {
       codpedido: {
         type: DataTypes.BIGINT,
-        allowNull: false,
+        allowNull: true,
         primaryKey: true,
         autoIncrement: false,
       },

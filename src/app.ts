@@ -1,5 +1,5 @@
-import { ApolloServer, gql } from 'apollo-server';
 import { DataSources } from 'apollo-server-core/dist/requestPipeline';
+import { ApolloServer, gql } from 'apollo-server-express';
 import * as jwt from 'jsonwebtoken';
 import { refreshTokens } from './authentication/handleTokens';
 import { JWT } from './environment';
